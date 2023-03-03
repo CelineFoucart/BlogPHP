@@ -1,18 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Exception\BadRequestException;
 use App\exception\ForbiddenException;
 use App\Exception\NotFoundException;
 use App\router\Router;
+use App\Twig\PathExtension;
 use GuzzleHttp\Psr7\Response;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
 abstract class AbstractController
 {
-    private Router $router;
+    protected Router $router;
 
     private array $twigVariables;
 
@@ -24,6 +27,7 @@ abstract class AbstractController
         $this->twigVariables = require dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'twig.php';
         $loader = new FilesystemLoader(PATH.DIRECTORY_SEPARATOR.'templates');
         $this->twig = new Environment($loader);
+        $this->twig->addExtension(new PathExtension($this->router));
     }
 
     /**
@@ -31,7 +35,7 @@ abstract class AbstractController
      */
     public function render(string $template, array $params = [], int $statusCode = 200): Response
     {
-        $params = array_merge(['router' => $this->router], $this->twigVariables, $params);
+        $params = array_merge(['router' => $this->router], $this->twigVariables['twig_variables'], $params);
 
         return new Response($statusCode, [], $this->twig->render($template, $params));
     }

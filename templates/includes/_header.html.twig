@@ -1,0 +1,21 @@
+<header class="main-header">
+    <nav class="navbar navbar-expand-lg navbar-dark container">
+        <a href="{{ path('app_home') }}" class="navbar-brand">&lt; {{ website_name }} &gt;</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ path('app_article_index') }}">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">Connexion</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('app_register') }}">Inscription</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="titles">
+        <h1>&lt; {{ website_name }} &gt;</h1>
+        <h2>{{ website_description }}</h2>
+    </div>
+</header>

@@ -4,16 +4,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="/img/logo.png" type="image/png">
     <link rel="stylesheet" href="/bootstrap/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/css2?family=Cardo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
     {% block stylesheets %}{% endblock %}
     {% block javascripts %}{% endblock %}
-    <title>{% block title %}Mon blog{% endblock %}</title>
+    <title>{% block title %} {{ website_name }} {% endblock %}</title>
 </head>
 <body>
-    <main class="container">
+    {% include "includes/_header.html.twig" %}
+
+    <main class="container-fluid py-4 px-5">
         {% block body %}{% endblock %}
     </main>
 
-    <script src="/bootstrap/bootstrap.bundle.min.css"></script>
+    {% include "includes/_footer.html.twig" %}
+
+    <script src="/bootstrap/bootstrap.bundle.min.js"></script>
 </body>
 </html>
