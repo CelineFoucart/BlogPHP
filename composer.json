@@ -1,0 +1,26 @@
+{
+    "name": "celine/blog-php",
+    "description": "Projet 5 du Parcours Openclassrooms PHP/Symfony",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Céline Foucart",
+            "email": "celinefoucart@yahoo.fr"
+        }
+    ],
+    "require": {
+        "guzzlehttp/psr7": "^2.4",
+        "http-interop/response-sender": "^1.0",
+        "twig/twig": "^3.5"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^6.0",
+        "filp/whoops": "^2.14"
+    }
+}

@@ -1,0 +1,9 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Erreur {{ code is defined ? code : '400' }}
+{% endblock %}
+
+{% block body %}
+    <h1 class="text-danger">Erreur {{ code is defined ? code : '400' }}</h1>
+{% endblock %}
