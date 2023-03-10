@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use DateTime;
 
-class Comment extends AbstractEntity
+final class Comment extends AbstractEntity
 {
     private ?string $pseudo = null;
 
@@ -12,7 +12,12 @@ class Comment extends AbstractEntity
 
     private ?DateTime $createdAt = null;
 
-    private ?Post $post = null;
+    private ?BlogPost $post = null;
+
+    public function __construct()
+    {
+        $this->post = new BlogPost();
+    }
 
     /**
      * Get the value of pseudo.
@@ -82,20 +87,16 @@ class Comment extends AbstractEntity
 
     /**
      * Get the value of post.
-     *
-     * @return ?Post
      */
-    public function getPost(): ?Post
+    public function getPost(): ?BlogPost
     {
         return $this->post;
     }
 
     /**
      * Set the value of post.
-     *
-     * @param ?Post $post
      */
-    public function setPost(?Post $post): self
+    public function setPost(?BlogPost $post): self
     {
         $this->post = $post;
 

@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use DateTime;
 
-class Post extends AbstractEntity
+final class BlogPost extends AbstractEntity
 {
     private ?string $title = null;
+
+    private ?string $slug = null;
 
     private ?string $description = null;
 
@@ -16,7 +20,7 @@ class Post extends AbstractEntity
 
     private ?DateTime $updatedAt = null;
 
-    private ?User $author = null;
+    private ?BlogUser $author = null;
 
     /**
      * Get the value of title.
@@ -36,6 +40,30 @@ class Post extends AbstractEntity
     public function setTitle(?string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of slug
+     *
+     * @return ?string
+     */
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Set the value of slug
+     *
+     * @param ?string $slug
+     *
+     * @return self
+     */
+    public function setSlug(?string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }
@@ -97,11 +125,15 @@ class Post extends AbstractEntity
     /**
      * Set the value of createdAt.
      *
-     * @param ?DateTime $createdAt
+     * @param DateTime|string|null $createdAt
      */
-    public function setCreatedAt(?DateTime $createdAt): self
+    public function setCreatedAt($createdAt): self
     {
-        $this->createdAt = $createdAt;
+        if ($createdAt instanceof DateTime) {
+            $this->createdAt = $createdAt;
+        } elseif (is_string($createdAt)) {
+            $this->createdAt = new DateTime($createdAt);
+        }
 
         return $this;
     }
@@ -119,11 +151,15 @@ class Post extends AbstractEntity
     /**
      * Set the value of updatedAt.
      *
-     * @param ?DateTime $updatedAt
+     * @param DateTime|string|null $updatedAt
      */
-    public function setUpdatedAt(?DateTime $updatedAt): self
+    public function setUpdatedAt($updatedAt): self
     {
-        $this->updatedAt = $updatedAt;
+        if ($updatedAt instanceof DateTime) {
+            $this->updatedAt = $updatedAt;
+        } elseif (is_string($updatedAt)) {
+            $this->updatedAt = new DateTime($updatedAt);
+        }
 
         return $this;
     }
@@ -131,19 +167,23 @@ class Post extends AbstractEntity
     /**
      * Get the value of author.
      *
-     * @return ?User
+     * @return ?BlogUser
      */
-    public function getAuthor(): ?User
+    public function getAuthor(): ?BlogUser
     {
+        if (!$this->author) {        
+            $this->author = new BlogUser();
+        }
+        
         return $this->author;
     }
 
     /**
      * Set the value of author.
      *
-     * @param ?User $author
+     * @param ?BlogUser $author
      */
-    public function setAuthor(?User $author): self
+    public function setAuthor(?BlogUser $author): self
     {
         $this->author = $author;
 

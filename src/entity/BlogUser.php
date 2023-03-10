@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use DateTime;
 
-class User extends AbstractEntity
+final class BlogUser extends AbstractEntity
 {
     private ?string $username = null;
 
-    private ?string $firstName = null;
+    private ?string $firstname = null;
 
-    private ?string $lastName = null;
+    private ?string $lastname = null;
 
     private ?string $password = null;
 
@@ -18,7 +20,12 @@ class User extends AbstractEntity
 
     private ?DateTime $createdAt = null;
 
-    private ?string $role = 'ROLE_USER';
+    private ?UserRole $role;
+
+    public function __construct()
+    {
+        $this->role = new UserRole();
+    }
 
     /**
      * Get the value of username.
@@ -47,9 +54,9 @@ class User extends AbstractEntity
      *
      * @return ?string
      */
-    public function getFirstName(): ?string
+    public function getFirstname(): ?string
     {
-        return $this->firstName;
+        return $this->firstname;
     }
 
     /**
@@ -57,9 +64,9 @@ class User extends AbstractEntity
      *
      * @param ?string $firstName
      */
-    public function setFirstName(?string $firstName): self
+    public function setFirstname(?string $firstname): self
     {
-        $this->firstName = $firstName;
+        $this->firstname = $firstname;
 
         return $this;
     }
@@ -69,9 +76,9 @@ class User extends AbstractEntity
      *
      * @return ?string
      */
-    public function getLastName(): ?string
+    public function getLastname(): ?string
     {
-        return $this->lastName;
+        return $this->lastname;
     }
 
     /**
@@ -79,9 +86,9 @@ class User extends AbstractEntity
      *
      * @param ?string $lastName
      */
-    public function setLastName(?string $lastName): self
+    public function setLastname(?string $lastname): self
     {
-        $this->lastName = $lastName;
+        $this->lastname = $lastname;
 
         return $this;
     }
@@ -154,20 +161,16 @@ class User extends AbstractEntity
 
     /**
      * Get the value of role.
-     *
-     * @return ?string
      */
-    public function getRole(): ?string
+    public function getRole(): ?UserRole
     {
         return $this->role;
     }
 
     /**
      * Set the value of role.
-     *
-     * @param ?string $role
      */
-    public function setRole(?string $role): self
+    public function setRole(?UserRole $role): self
     {
         $this->role = $role;
 

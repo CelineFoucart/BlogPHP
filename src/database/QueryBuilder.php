@@ -1,6 +1,6 @@
 <?php
 
-namespace App\database;
+namespace App\Database;
 
 /**
  * Class QueryBuilder generates a SQL query.
@@ -58,20 +58,41 @@ class QueryBuilder
     }
 
     /**
+     * Define the left join part.
+     */
+    public function leftJoin(string $table, string $condition): self
+    {
+        $this->joins[] = "LEFT JOIN $table ON $condition";
+
+        return $this;
+    }
+
+    /**
+     * Define the inner join part.
+     */
+    public function innerJoin(string $table, string $condition): self
+    {
+        $this->joins[] = "INNER JOIN $table ON $condition";
+
+        return $this;
+    }
+
+    /**
+     * Define the right join part.
+     */
+    public function rightJoin(string $table, string $condition): self
+    {
+        $this->joins[] = "RIGHT JOIN $table ON $condition";
+
+        return $this;
+    }
+
+    /**
      * Define the join part.
      */
-    public function join(string $table, string $condition, ?string $type = null): self
+    public function join(string $table, string $condition): self
     {
-        $validatedTypes = ['LEFT', 'RIGHT', 'INNER'];
-        $join = '';
-        if (null !== $type) {
-            $type = strtoupper($type);
-            if (in_array($type, $validatedTypes)) {
-                $join .= "$type ";
-            }
-        }
-        $join .= "JOIN $table ON $condition";
-        $this->joins[] = $join;
+        $this->joins[] = "JOIN $table ON $condition";
 
         return $this;
     }

@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Exception\BadRequestException;
-use App\exception\ForbiddenException;
-use App\Exception\NotFoundException;
+use Twig\Environment;
 use App\router\Router;
 use App\Twig\PathExtension;
 use GuzzleHttp\Psr7\Response;
-use Twig\Environment;
+use App\Manager\ManagerInterface;
 use Twig\Loader\FilesystemLoader;
+use App\Exception\NotFoundException;
+use App\exception\ForbiddenException;
+use App\Exception\BadRequestException;
 
 abstract class AbstractController
 {
@@ -33,11 +34,32 @@ abstract class AbstractController
     /**
      * Return the template in a response.
      */
-    public function render(string $template, array $params = [], int $statusCode = 200): Response
+    protected function render(string $template, array $params = [], int $statusCode = 200): Response
     {
         $params = array_merge(['router' => $this->router], $this->twigVariables['twig_variables'], $params);
 
         return new Response($statusCode, [], $this->twig->render($template, $params));
+    }
+
+    /**
+     * Returns a Manager object.
+     */
+    protected function getManager(string $classManager, ?string $entityClass = null, ?string $table = null): ManagerInterface
+    {
+        if (!$entityClass) {
+            $parts = explode('\\', $classManager);
+            $class = $parts[count($parts) -1];
+            $managerNameParts = explode('Manager', $class);
+            $entityClass = $managerNameParts[0];
+        }
+
+        if (!$table) {
+            $tableNameParts = preg_split('/(?=[A-Z])/', $entityClass);
+            $table = join('_', $tableNameParts);
+            $table = strtolower(trim($table, '_'));
+        }
+
+        return new $classManager('\\App\\Entity\\' .  $entityClass, $table);
     }
 
     /**
