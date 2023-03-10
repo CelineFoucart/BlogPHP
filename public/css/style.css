@@ -13,7 +13,7 @@ body {
 }
 
 /* ===================== 
- # FORMS
+ * FORMS
 /* ===================== */
 
 .input {
@@ -67,7 +67,7 @@ body {
 }
 
 /* ===================== 
- # HEADER
+ * HEADER
 /* ===================== */
 nav a {
 	font-weight: 700;
@@ -114,7 +114,7 @@ nav a.nav-link {
 }
 
 /* ===================== 
- # MAIN SECTIONS
+ * MAIN SECTIONS
 /* ===================== */
 
 .body-page {
@@ -165,14 +165,13 @@ nav a.nav-link {
 }
 
 /* ===================== 
- # CARD
+ * CARD
 /* ===================== */
 .news .date {
-	padding: 10px 0;
+	padding-bottom: 10px;
 	font-size: 15px;
 	margin-bottom: 5px;
 	font-family: 'Cardo', serif;
-	font-style: italic;
 }
 
 .news .author:hover {
@@ -194,7 +193,7 @@ nav a.nav-link {
 }
 
 /* ===================== 
- # COMMENTS
+ * COMMENTS
 /* ===================== */
 
 .comments {
@@ -227,7 +226,7 @@ nav a.nav-link {
 }
 
 /* ===================== 
- # ASIDE
+ * ASIDE
 /* ===================== */
 .aside {
 	padding: 0 20px;
@@ -280,7 +279,7 @@ aside a:hover {
 }
 
 /* ===================== 
- # FOOTER
+ * CONTACT
 /* ===================== */
 
 .about-title {
@@ -297,7 +296,7 @@ aside a:hover {
 
 .title-about-me {
 	text-transform: uppercase;
-	margin-bottom: 25px;
+	margin-bottom: 5px;
 	font-weight: bold;
 	text-align: center;
 	color: #404042;
@@ -309,7 +308,7 @@ aside a:hover {
 	width: 200px;
 	height: 3px;
 	background: #404042;
-	margin: 30px auto 35px;
+	margin: 30px auto;
 }
 .about-page .card  {
 	transition: all 0.2s ease-in-out;
@@ -319,8 +318,14 @@ aside a:hover {
 translate: 0 -10px 0;
 }
 
+.social-icon {
+	text-decoration: none;
+	color: inherit;
+	font-size: 1.8rem;
+}
+
 /* ===================== 
- # FOOTER
+ * FOOTER
 /* ===================== */
 
 footer.main-footer {
@@ -336,7 +341,7 @@ footer.main-footer p {
 }
 
 /* ===================== 
- # MEDIA QUERIES
+ * MEDIA QUERIES
 /* ===================== */
 @media (max-width: 767px) {
 	.aside {
