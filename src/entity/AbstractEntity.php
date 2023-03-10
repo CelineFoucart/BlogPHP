@@ -35,15 +35,14 @@ abstract class AbstractEntity
             if (empty($parts)) {
                 return;
             }
-
+            
             $class = $parts[0];
-
+            
             if (property_exists($this, $class)) {
                 $classGetter = "get" . ucwords($class);
                 $propertyMethod = "set" . str_replace(" ", "", ucwords(str_replace("_", " ", $parts[1])));
                 
                 $this->$classGetter()->$propertyMethod($value);
-                
             }
         }
     }

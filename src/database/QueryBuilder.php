@@ -12,6 +12,11 @@ class QueryBuilder
      */
     private string  $from;
     /**
+     * @var string|null the table name alias
+     */
+    private ?string  $alias = null;
+
+    /**
      * @var array the where parts
      */
     private array   $where = [];
@@ -54,6 +59,7 @@ class QueryBuilder
         $this->from = "$table";
         if (null !== $alias) {
             $this->from .= " AS $alias";
+            $this->alias = $alias;
         }
 
         return $this;
@@ -339,5 +345,15 @@ class QueryBuilder
         $this->params = $params;
 
         return $this;
+    }
+
+    /**
+     * Get the value of alias
+     *
+     * @return ?string
+     */
+    public function getAlias(): ?string
+    {
+        return $this->alias;
     }
 }

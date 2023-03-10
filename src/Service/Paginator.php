@@ -22,7 +22,7 @@ class Paginator {
 
     public function getPagination(string $link, int $current, int $perPage = 3): Pagination
     {
-        $countSQL = $this->queryBuilder->count('id');
+        $countSQL = $this->queryBuilder->count($this->queryBuilder->getAlias() . '.id');
         $this->numberItems = $this->statementBuilder->fetch($countSQL, $this->queryBuilder->getParams(), 'num')[0];
         $this->perPage = $perPage; 
         $this->totalPage = ceil($this->numberItems / $this->perPage);
