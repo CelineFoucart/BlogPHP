@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Connexion | {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div class="body-page about-page gap">
+        <h2 class="about-title">Connectez-vous</h2>
+
+        <form action="" method="post" class="comment-form">
+            <div class="mb-3">
+                <label for="pseudo">Pseudo<sup>*</sup></label>
+                <input type="text" class="form-control" id="pseudo" aria-describedby="pseudo" name="pseudo"
+                    placeholder="Votre pseudo" required>
+            </div>
+            <div class="mb-3">
+                <label for="password">Mot de passe<sup>*</sup></label>
+                <input type="password" class="form-control" id="password" aria-describedby="password"
+                    name="password" placeholder="mot de passe" required>
+            </div>
+            <button type="submit" class="button">Se connecter</button>
+        </form>
+
+    </div>
+{% endblock %}

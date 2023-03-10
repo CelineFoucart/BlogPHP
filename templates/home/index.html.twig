@@ -5,5 +5,93 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Bienvenue sur l'accueil</h1>
+	<div class="body-page about-page">
+		<h2 class="title-about-me h1"><img src="img/logo.png" width="60" alt="logo CF"> Qui suis-je ?</h2>
+
+		<div class="row justify-content-center mb-4">
+			<div class="col-md-3">
+				<div class="card shadow">
+					<img src="/img/JavaScript.png" class="card-img-top" alt="logo de javascript">
+					<div class="card-body">
+						<h3 class="card-title h5">Javascript</h3>
+						<p class="card-text">Je développe en javascript avec le framework Vue.js.</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card shadow">
+					<img src="/img/php-symfony-mysql-sample.png" class="card-img-top" alt=".logos de PHP et Symfony">
+					<div class="card-body">
+						<h3 class="card-title h5">PHP et Symfony</h3>
+						<p class="card-text">Je développe côté serveur en utilisant PHP et le framework Symfony.</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card shadow">
+					<img src="/img/css.png" class="card-img-top" alt="logo de CSS et HTML">
+					<div class="card-body">
+						<h3 class="card-title h5">CSS et HTML</h3>
+						<p class="card-text">J'intègre des maquettes que je réalise sur figma.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<p class="lead">
+			Développeuse web fullstack, je développe des projets en PHP avec le framework Symfony, par exemple un blog, 
+			une application à destination des auteurs et des créateurs de campagne de jeu de rôle 
+			(gestion des lieux, des personnages, galerie, partie encyclopédie avec des types d'articles personnalisés), 
+			j'ai aussi travaillé sur un forum et sur une application à destination des organisateurs d'événements (avec gestion des ressources,
+			des événements, envois de mails et SMS).
+		</p>
+
+		<h2 class="title-about-me h1 mt-5">Contactez-moi</h2>
+		<p class="text-center">
+			<a href="https://www.linkedin.com/in/c%C3%A9line-foucart-a177b115a/" title="linkedin" class="social-icon">
+				<span class="sr-only">linkedin</span>
+				<i class="fa-fw fab fa-linkedin"></i>
+			</a>
+			<a href="https://github.com/CelineFoucart" title="github" class="social-icon">
+				<span class="sr-only">github</span>
+				<i class="fa-fw fab fa-github"></i>
+			</a>
+		</p>
+		<p class="text-center">Envie d'en savoir plus ? Télécharger mon <a href="/assets/CV_Céline_Foucart.pdf">CV</a> ou remplissez le formulaire suivant pour m'envoyer un message.</p>
+		<form action="" method="post" class="comment-form">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="mb-3">
+						<label for="firstname">Prénom<sup>*</sup></label>
+						<input type="text" class="form-control" id="firstname" aria-describedby="firstname" name="firstname"
+							placeholder="Votre prénom" required>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="mb-3">
+						<label for="lastname">Nom<sup>*</sup></label>
+						<input type="text" class="form-control" id="lastname" aria-describedby="lastname" name="lastname"
+							placeholder="Votre nom" required>
+					</div>
+				</div>
+			</div>
+			<div class="mb-3">
+				<label for="mail">Mail<sup>*</sup></label>
+				<input type="text" class="form-control" id="mail" aria-describedby="mail" name="mail"
+					placeholder="votre e-mail" required>
+			</div>
+			<div class="mb-3">
+				<label for="contentComment">Message<sup>*</sup></label>
+				<textarea class="form-control" id="contentComment" name="contentComment"
+					placeholder="votre commentaire..." rows="5" required></textarea>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" value="" id="book-agree">
+				<label class="form-check-label" for="book-agree">
+					J’autorise ce site à conserver mes données transmises via ce formulaire. 
+					Voir notre <a href="{{ path('app_privacy') }}">Politique de confidentialité</a>.
+				</label>
+			</div>
+			<button type="submit" class="button">Soumettre</button>
+		</form>
+	</div>
 {% endblock %}
