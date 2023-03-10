@@ -44,6 +44,8 @@ class QueryBuilder
      */
     private string  $sql;
 
+    private array $params = [];
+
     /**
      * Define the value of $from.
      */
@@ -319,5 +321,23 @@ class QueryBuilder
             $from = $this->from;
         }
         $this->sql = "DELETE FROM {$from}";
+    }
+
+    /**
+     * Get the value of params.
+     */
+    public function getParams(): array
+    {
+        return $this->params;
+    }
+
+    /**
+     * Set the value of params.
+     */
+    public function setParams(array $params): self
+    {
+        $this->params = $params;
+
+        return $this;
     }
 }

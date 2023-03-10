@@ -26,4 +26,4 @@ define('CONTACT_EMAIL', 'contact@celine-foucart.com');
 /**
  * Pagination confuration
  */
-define('PER_PAGE', 15);
+define('PER_PAGE', 10);

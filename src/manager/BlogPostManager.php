@@ -5,22 +5,22 @@ declare(strict_types=1);
 namespace App\manager;
 
 use App\Entity\BlogPost;
+use App\Service\Pagination;
+use App\Service\Paginator;
 
 final class BlogPostManager extends AbstractManager
 {
-    public function findPaginated(int $offset = 0)
+    public function findPaginated(string $link, int $page = 1): Pagination
     {
-        $sql = $this->getQuery()
+        $this->getQuery()
             ->select('b.title', 'b.slug', 'b.title', 'b.id', 'b.description', 'b.created_at', 'b.updated_at')
             ->select('u.id AS author_id', 'u.username AS author_username')
             ->leftJoin('blog_user u', 'u.id = b.author_id')
-            ->limit(PER_PAGE)
-            ->offset($offset)
             ->orderBy('b.updated_at', 'DESC')
-            ->toSQL()
         ;
+        $paginator = new Paginator($this->getQuery(), $this->getBuilder());
 
-        return $this->getBuilder()->fetchAll($sql);
+        return $paginator->getPagination($link, $page, PER_PAGE);
     }
 
     public function findBySlug(string $slug): ?BlogPost

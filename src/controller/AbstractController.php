@@ -13,6 +13,7 @@ use Twig\Loader\FilesystemLoader;
 use App\Exception\NotFoundException;
 use App\exception\ForbiddenException;
 use App\Exception\BadRequestException;
+use App\Twig\PaginationExtension;
 
 abstract class AbstractController
 {
@@ -29,6 +30,7 @@ abstract class AbstractController
         $loader = new FilesystemLoader(PATH.DIRECTORY_SEPARATOR.'templates');
         $this->twig = new Environment($loader);
         $this->twig->addExtension(new PathExtension($this->router));
+        $this->twig->addExtension(new PaginationExtension());
     }
 
     /**

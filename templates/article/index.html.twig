@@ -7,7 +7,7 @@
 {% block body %}
 <div class="row gap">
     <div class="col-md-7 col-lg-8 body-page news">
-        {% for post in posts %}
+        {% for post in pagination.elements %}
             <article class="border-bottom pb-3 mb-2">
                 <header>
                     <h2 class="h4">{{ post.title }}</h2>
@@ -25,16 +25,13 @@
             </article>
         {% endfor %}
 
-        <div class="navigation">
-            <div class="btn-group" role="group" aria-label="Basic outlined example">
-                <a type="button" class="btn button-outline init" href="#">Début</a>
-                <a type="button" class="btn button-outline number" href="#">1</a>
-                <a type="button" class="btn button-outline number" href="#">2</a>
-                <a type="button" class="btn button-outline number" href="#">3</a>
-                <a type="button" class="btn button-outline number" href="#">4</a>
-                <a type="button" class="btn button-outline init" href="#">Fin</a>
-            </div>
-        </div>
+        {% set count = pagination.count %}
+        <p>
+            <strong>{{ count }}</strong> article{{ count > 1 ? 's' : '' }} sur 
+            <strong>{{ pagination.numberItems }}</strong> article{{ pagination.numberItems > 1 ? 's' : '' }}.
+        </p>
+
+        {{ pagination(pagination) }}
     </div>
 
     {% include "includes/_aside.html.twig" %}

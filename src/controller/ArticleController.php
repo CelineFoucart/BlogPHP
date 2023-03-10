@@ -13,10 +13,14 @@ class ArticleController extends AbstractController
     public function index(ServerRequest $request): ResponseInterface
     {
         $manager = $this->getPostManager();
-        $blogPosts = $manager->findPaginated();
+
+        $link = (string) $request->getUri();
+        $params = $request->getQueryParams();
+        $page = isset($params['page']) ? (int)$params['page'] : 1;
+        $pagination = $manager->findPaginated($link, $page);
 
         return $this->render('article/index.html.twig', [
-            'posts' => $blogPosts,
+            'pagination' => $pagination,
         ]);
     }
     
