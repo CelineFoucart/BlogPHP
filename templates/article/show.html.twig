@@ -8,100 +8,53 @@
 <div class="row gap">
     <div class="col-md-7 col-lg-8 body-page news">
         <article>
+            <p class="mb-0 text-end">
+                <a href="{{ path('app_article_index') }}" class="text-decoration-none">
+                    <i class="fas fa-arrow-left me-1"></i> Retour à la liste des articles
+                </a>
+            </p>
             <header>
-                <p class="text-uppercase"><a href="#">Catégorie 1</a></p>
-                <h2 class="h4">Article 1</h2>
-                <p class="date text-muted">
-                    <i class="fas fa-user"></i> <strong class="author me-2">Ermina</strong> 
-                    <i class="fas fa-calendar-alt"></i><strong>12/06/20</strong>
-                </p>
+                <h2 class="h4">{{ post.title }}</h2>
             </header>
             <div class="content">
-                <p>Lorem ipsum dolor sit, amet, consectetur adipisicing elit. Unde fuga blanditiis ipsa
-                    molestiae aperiam tempore delectus voluptate nisi facilis illo, incidunt, mollitia voluptas
-                    quo voluptates sequi alias, iste numquam nam!</p>
+                <p>{{ post.description|nl2br }}</p>
 
-                <h3>Titre 1</h3>
-                <p>Dignissimos libero blanditiis et rerum quasi labore facere ut asperiores eius quam, inventore
-                    ex sed, iste, molestias eaque molestiae optio quia tempore sapiente in cupiditate. Animi,
-                    quas autem officia obcaecati.</p>
-                <p>Laboriosam maiores repellat incidunt repellendus rem fugiat autem quas magni quibusdam ex
-                    facilis, aspernatur nostrum amet nesciunt consequuntur error. Mollitia, laborum, nesciunt.
-                    Distinctio nulla rerum iste rem eveniet recusandae debitis repudiandae tempora suscipit
-                    cumque accusantium nobis laboriosam incidunt pariatur a ut, excepturi ipsum deserunt.
-                    Doloribus quod veritatis facilis hic voluptatum. Vitae, quas.</p>
-                <p>Esse iusto libero et provident fugiat labore quia, beatae necessitatibus ullam? Maxime
-                    officia perferendis rem ullam iure reprehenderit. Voluptatem error laudantium amet tempora
-                    vitae quibusdam id mollitia necessitatibus natus nam.</p>
-                <blockquote class="quote">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                </blockquote>
-                <p>Natus vel, vitae omnis itaque accusamus officia iure quaerat sequi nisi blanditiis veritatis
-                    voluptate suscipit consequatur quam ipsam, quis explicabo ab accusantium a illo amet.
-                    Corrupti, quasi ducimus optio modi.
-                    Facilis, maiores expedita quam illum consequuntur rerum dicta nostrum aspernatur sequi ex
-                    reprehenderit fuga beatae voluptas sit tempore et maxime commodi, quae neque dolor. Vitae
-                    voluptatum ex non totam amet?</p>
-                <p>Alias consectetur numquam tempora dolore tenetur unde. Exercitationem inventore harum
-                    consectetur illum, reprehenderit beatae voluptatem dolor rerum ipsa veritatis esse
-                    dignissimos minus, tempore eveniet optio porro nulla fugiat? Pariatur, inventore!</p>
-                <h3>Titre 2</h3>
-                <p>Vero, deleniti voluptatibus mollitia consequatur deserunt est fugiat, quia. Deleniti
-                    aspernatur inventore iste at nam exercitationem laboriosam esse, adipisci iure, alias ipsum
-                    consectetur odit necessitatibus, quia. Qui est facilis similique. Impedit, sequi molestiae
-                    eos quisquam nostrum veritatis temporibus recusandae dignissimos sunt praesentium
-                    consectetur facere sapiente ducimus dicta nulla nesciunt fugiat quae mollitia ex alias ipsa
-                    iste quibusdam. Excepturi, nihil. Reiciendis.</p>
-                <p>Laboriosam porro accusantium in quis quidem modi alias, beatae, blanditiis totam asperiores
-                    quibusdam? Ullam sint consequuntur deleniti optio nisi, dicta dolorum temporibus voluptates
-                    maiores in, officia ratione a. Error, aut.</p>
+                {{ post.content|nl2br }}
             </div>
-
             <div class="post-footer">
-                <p><strong>Catégorie :</strong> <a href="#" class="labels">lorem ipsum</a></p>
-                <p><strong>Auteur :</strong> <span class="author">Ermina</span></p>
+                <p><strong>Publication :</strong> le {{ post.createdAt|date('d/m/Y à H:i') }}, par {{ post.author.username }}</p>
+                <p><strong>Dernière mise à jour :</strong> le {{ post.updatedAt|date('d/m/Y à H:i') }}</p>
             </div>
         </article>
 
         <article class="comments">
-            <h2 class="comment-title">3 commentaires</h2>
+            {% set total_comment = commentPagination.numberItems ? commentPagination.numberItems : 0 %}
+            <h2 class="comment-title">{{ total_comment }} commentaire{{ total_comment > 1 ? 's' : '' }}</h2>
 
-            <div class="comment">
-                <h3 class="author">Bibu</h3>
-                <p class="date-comment">Publié le 30/10/20</p>
-                <p class="body">Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse assumenda fugiat
-                    suscipit commodi dicta. Ea quae facere quis incidunt at enim nesciunt cupiditate
-                    perspiciatis aperiam. Alias rem, saepe id quidem?</p>
-            </div>
-            <div class="comment">
-                <h3 class="author">Bibu</h3>
-                <p class="date-comment">Publié le 30/10/20</p>
-                <p class="body">Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse assumenda fugiat
-                    suscipit commodi dicta. Ea quae facere quis incidunt at enim nesciunt cupiditate
-                    perspiciatis aperiam. Alias rem, saepe id quidem?</p>
-            </div>
-            <div class="comment">
-                <h3 class="author">Bibu</h3>
-                <p class="date-comment">Publié le 30/10/20</p>
-                <p class="body">Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse assumenda fugiat
-                    suscipit commodi dicta. Ea quae facere quis incidunt at enim nesciunt cupiditate
-                    perspiciatis aperiam. Alias rem, saepe id quidem?</p>
-            </div>
+            {% for comment in commentPagination.elements %}
+                {% include "comment/_comment_card.html.twig" %}
+            {% else %}
+                <p class="text-muted text-center">Aucun commentaire n'a été publié sur cet article.</p>
+            {% endfor %}
 
+            {{ pagination(commentPagination) }}
+            
+            
             <h2 class="comment-title h4">Laissez un commentaire</h2>
-            <form action="" method="post" class="comment-form">
-                <div class="mb-3">
-                    <label for="pseudo">Pseudo<sup>*</sup></label>
-                    <input type="text" class="form-control" id="pseudo" aria-describedby="pseudo" name="pseudo"
-                        placeholder="pseudo" required>
-                </div>
-                <div class="mb-3">
-                    <label for="contentComment">Commentaire<sup>*</sup></label>
-                    <textarea class="form-control" id="contentComment" name="contentComment"
-                        placeholder="votre commentaire..." rows="5" required></textarea>
-                </div>
-                <button type="submit" class="button">Soumettre</button>
-            </form>
+
+            {% if has_role('ROLE_USER') %}
+                <form action="" method="post" class="comment-form">
+                    {# Poster avec le pseudo <strong>Pseudo</strong> #}
+                    <div class="mb-3">
+                        <label for="contentComment">Commentaire<sup>*</sup></label>
+                        <textarea class="form-control" id="contentComment" name="contentComment"
+                            placeholder="votre commentaire..." rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="button">Soumettre</button>
+                </form>
+            {% else %}
+                <p class="text-danger text-center">Pour poster un commentaire, connectez-vous.</p>
+            {% endif %}
         </article>
     </div>
 

@@ -2,7 +2,7 @@
 
 namespace App\router;
 
-use Psr\Http\Message\RequestInterface;
+use GuzzleHttp\Psr7\ServerRequest;
 
 final class Route
 {
@@ -66,7 +66,7 @@ final class Route
     /**
      * @return string|RedirectResponse
      */
-    public function call(Router $router, RequestInterface $request)
+    public function call(Router $router, ServerRequest $request)
     {
         if (is_string($this->callable)) {
             $params = explode('#', $this->callable);

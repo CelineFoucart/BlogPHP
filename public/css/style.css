@@ -57,7 +57,7 @@ body {
 }
 
 .btn-group .init {
-	width: 80px;
+	width: 120px;
 }
 
 .comment-form .button {
@@ -99,8 +99,7 @@ nav a.nav-link {
 }
 
 .main-header .titles h1 {
-	letter-spacing: 11px;
-	font-size: 4rem;
+	font-size: 3rem;
 	font-family: inherit;
 	font-weight: 700;
 	margin-bottom: 1rem;
@@ -160,22 +159,13 @@ nav a.nav-link {
 	font-size: 15px;
 }
 
-.post-footer .labels {
-	font-style: italic;
-}
-
 /* ===================== 
  * CARD
 /* ===================== */
 .news .date {
 	padding-bottom: 10px;
-	font-size: 15px;
+	font-size: 0.9rem;
 	margin-bottom: 5px;
-	font-family: 'Cardo', serif;
-}
-
-.news .author:hover {
-	text-decoration: underline;
 }
 
 .news h2 {
@@ -221,8 +211,11 @@ nav a.nav-link {
 }
 
 .body {
-	padding: 0 10px;
+	padding: 10px;
 	margin-left: 20px;
+	background-color: rgba(237,237,237, 0.3);
+	border-radius: 8px;
+	border: 1px solid rgba(0,0,0,.125);
 }
 
 /* ===================== 
@@ -242,56 +235,14 @@ aside form input {
 	width: calc(100% - 38px);
 }
 
-aside ul {
-	list-style: none;
-    padding-left: 0;
-}
-
-aside li {
-	padding-bottom: 10px;
-	overflow-wrap: break-word;
-	position: relative;
-	padding-right: 35px;
-}
-aside li:after {
-	content: attr(data-count);
-	display: block;
-	position: absolute;
-	top: 0;
-	right: 0;
-	background: linear-gradient(to right, rgba(0,133,161,0.2), rgba(0,133,161,0.7));
-	box-shadow: 2px 2px rgba(0,133,161,1);
-	font-size: 14px;
-	padding: 2px 5px;
-	margin-left: 5px;
-	width: 35px;
-	text-align: center;
-}
-
-aside a {
-	color: inherit;
-	text-decoration: none;
-}
-
-aside a:hover {
-	color: inherit;
-	text-decoration: underline;
-}
-
 /* ===================== 
  * CONTACT
 /* ===================== */
 
 .about-title {
 	font-family: 'Cardo', serif;
-	font-size: 50px;
 	margin-bottom: 25px;
 	border-bottom: 1px solid rgba(0,0,0,.125);
-}
-
-.about-page {
-	width: 80%;
-	margin: 0 auto;
 }
 
 .title-about-me {
@@ -347,5 +298,21 @@ footer.main-footer p {
 	.aside {
 		max-width: 482px;
 		margin: 0 auto;
+	}
+}
+
+@media (min-width: 992px) {
+	.main-header .titles h1 {
+		letter-spacing: 11px;
+		font-size: 4rem;
+	}
+
+	.about-page {
+		width: 80%;
+		margin: 0 auto;
+	}
+
+	.about-title {
+		font-size: 50px;
 	}
 }

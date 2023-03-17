@@ -1,50 +1,40 @@
 <?php
 
-namespace App\manager;
+declare(strict_types=1);
 
-use App\database\Database\Database;
-use App\database\QueryBuilder;
-use App\database\StatementBuilder;
+namespace App\Manager;
 
-class AbstractManager
+use App\Database\Database;
+use App\Database\QueryBuilder;
+use App\Database\StatementBuilder;
+
+class AbstractManager implements ManagerInterface
 {
     protected \PDO $pdo;
     protected string $class;
     protected string $table;
 
-    public function __construct(string $class)
+    public function __construct(string $class, string $table)
     {
         $this->pdo = Database::getPDO();
         $this->class = $class;
-        $parts = explode('\\', $class);
-        $this->table = strtolower(end($parts));
+        $this->table = $table;
     }
-
-    /**
-     * Return the result of a prepared request or null.
-     *
-     * @return mixed
-     */
+    
     public function findBy(string $column, mixed $value)
     {
         $sql = $this->getQuery()->where($this->table[0].'.'.$column.' = ?')->toSQL();
 
         return $this->getBuilder()->fetch($sql, [$value]);
     }
-
-    /**
-     * Return the result as an array of entities.
-     */
+    
     public function findAll(): array
     {
         $sql = $this->getQuery()->toSQL();
 
         return $this->getBuilder()->fetchAll($sql);
     }
-
-    /**
-     * Count entities.
-     */
+    
     public function count(?string $where = null, array $params = []): int
     {
         $count = $this->table[0].'.id';

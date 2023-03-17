@@ -1,6 +1,6 @@
 <?php
 
-namespace App\database;
+namespace App\Database;
 
 /**
  * Class QueryBuilder generates a SQL query.
@@ -11,6 +11,11 @@ class QueryBuilder
      * @var string the table name
      */
     private string  $from;
+    /**
+     * @var string|null the table name alias
+     */
+    private ?string  $alias = null;
+
     /**
      * @var array the where parts
      */
@@ -44,6 +49,8 @@ class QueryBuilder
      */
     private string  $sql;
 
+    private array $params = [];
+
     /**
      * Define the value of $from.
      */
@@ -52,7 +59,38 @@ class QueryBuilder
         $this->from = "$table";
         if (null !== $alias) {
             $this->from .= " AS $alias";
+            $this->alias = $alias;
         }
+
+        return $this;
+    }
+
+    /**
+     * Define the left join part.
+     */
+    public function leftJoin(string $table, string $condition): self
+    {
+        $this->joins[] = "LEFT JOIN $table ON $condition";
+
+        return $this;
+    }
+
+    /**
+     * Define the inner join part.
+     */
+    public function innerJoin(string $table, string $condition): self
+    {
+        $this->joins[] = "INNER JOIN $table ON $condition";
+
+        return $this;
+    }
+
+    /**
+     * Define the right join part.
+     */
+    public function rightJoin(string $table, string $condition): self
+    {
+        $this->joins[] = "RIGHT JOIN $table ON $condition";
 
         return $this;
     }
@@ -60,18 +98,9 @@ class QueryBuilder
     /**
      * Define the join part.
      */
-    public function join(string $table, string $condition, ?string $type = null): self
+    public function join(string $table, string $condition): self
     {
-        $validatedTypes = ['LEFT', 'RIGHT', 'INNER'];
-        $join = '';
-        if (null !== $type) {
-            $type = strtoupper($type);
-            if (in_array($type, $validatedTypes)) {
-                $join .= "$type ";
-            }
-        }
-        $join .= "JOIN $table ON $condition";
-        $this->joins[] = $join;
+        $this->joins[] = "JOIN $table ON $condition";
 
         return $this;
     }
@@ -298,5 +327,33 @@ class QueryBuilder
             $from = $this->from;
         }
         $this->sql = "DELETE FROM {$from}";
+    }
+
+    /**
+     * Get the value of params.
+     */
+    public function getParams(): array
+    {
+        return $this->params;
+    }
+
+    /**
+     * Set the value of params.
+     */
+    public function setParams(array $params): self
+    {
+        $this->params = $params;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of alias
+     *
+     * @return ?string
+     */
+    public function getAlias(): ?string
+    {
+        return $this->alias;
     }
 }
