@@ -11,4 +11,5 @@ return [
     ['mixed', '/category/:slug', 'App\\Controller\\ArticleController#category', ['slug' => "([a-z-]+)"], 'app_category_show'],
     ['mixed', '/login', 'App\\Controller\\UserController#login', [], 'app_login'],
     ['mixed', '/register', 'App\\Controller\\UserController#register', [], 'app_register'],
+    ['mixed', '/logout', 'App\\Controller\\UserController#logout', [], 'app_logout'],
 ];

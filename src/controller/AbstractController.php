@@ -13,12 +13,18 @@ use Twig\Loader\FilesystemLoader;
 use App\Exception\NotFoundException;
 use App\exception\ForbiddenException;
 use App\Exception\BadRequestException;
+use App\Service\Session\Auth;
+use App\Service\Session\Session;
 use App\Twig\PaginationExtension;
 use App\Twig\UserExtension;
 
 abstract class AbstractController
 {
     protected Router $router;
+
+    protected Session $session;
+
+    protected Auth $auth;
 
     private array $twigVariables;
 
@@ -27,12 +33,16 @@ abstract class AbstractController
     public function __construct(Router $router)
     {
         $this->router = $router;
+        $this->session = new Session();
+        $this->session->start();
+        $this->auth = new Auth($this->session);
+
         $this->twigVariables = require dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'twig.php';
         $loader = new FilesystemLoader(PATH.DIRECTORY_SEPARATOR.'templates');
         $this->twig = new Environment($loader);
         $this->twig->addExtension(new PathExtension($this->router));
         $this->twig->addExtension(new PaginationExtension());
-        $this->twig->addExtension(new UserExtension());
+        $this->twig->addExtension(new UserExtension($this->session, $this->auth));
     }
 
     /**
