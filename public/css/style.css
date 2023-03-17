@@ -168,10 +168,6 @@ nav a.nav-link {
 	margin-bottom: 5px;
 }
 
-.news .author:hover {
-	text-decoration: underline;
-}
-
 .news h2 {
 	color: inherit;
 	font-weight: 700;
@@ -215,8 +211,11 @@ nav a.nav-link {
 }
 
 .body {
-	padding: 0 10px;
+	padding: 10px;
 	margin-left: 20px;
+	background-color: rgba(237,237,237, 0.3);
+	border-radius: 8px;
+	border: 1px solid rgba(0,0,0,.125);
 }
 
 /* ===================== 

@@ -14,6 +14,7 @@ use App\Exception\NotFoundException;
 use App\exception\ForbiddenException;
 use App\Exception\BadRequestException;
 use App\Twig\PaginationExtension;
+use App\Twig\UserExtension;
 
 abstract class AbstractController
 {
@@ -31,6 +32,7 @@ abstract class AbstractController
         $this->twig = new Environment($loader);
         $this->twig->addExtension(new PathExtension($this->router));
         $this->twig->addExtension(new PaginationExtension());
+        $this->twig->addExtension(new UserExtension());
     }
 
     /**

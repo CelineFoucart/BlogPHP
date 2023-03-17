@@ -24,6 +24,7 @@ class Paginator {
     {
         $countSQL = $this->queryBuilder->count($this->queryBuilder->getAlias() . '.id');
         $this->numberItems = $this->statementBuilder->fetch($countSQL, $this->queryBuilder->getParams(), 'num')[0];
+
         $this->perPage = $perPage; 
         $this->totalPage = ceil($this->numberItems / $this->perPage);
         $this->current = $this->setCurrent((int)$current);

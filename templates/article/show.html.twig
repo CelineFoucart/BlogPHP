@@ -28,44 +28,33 @@
         </article>
 
         <article class="comments">
-            <h2 class="comment-title">3 commentaires</h2>
+            {% set total_comment = commentPagination.numberItems ? commentPagination.numberItems : 0 %}
+            <h2 class="comment-title">{{ total_comment }} commentaire{{ total_comment > 1 ? 's' : '' }}</h2>
 
-            <div class="comment">
-                <h3 class="author">Bibu</h3>
-                <p class="date-comment">Publié le 30/10/20</p>
-                <p class="body">Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse assumenda fugiat
-                    suscipit commodi dicta. Ea quae facere quis incidunt at enim nesciunt cupiditate
-                    perspiciatis aperiam. Alias rem, saepe id quidem?</p>
-            </div>
-            <div class="comment">
-                <h3 class="author">Bibu</h3>
-                <p class="date-comment">Publié le 30/10/20</p>
-                <p class="body">Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse assumenda fugiat
-                    suscipit commodi dicta. Ea quae facere quis incidunt at enim nesciunt cupiditate
-                    perspiciatis aperiam. Alias rem, saepe id quidem?</p>
-            </div>
-            <div class="comment">
-                <h3 class="author">Bibu</h3>
-                <p class="date-comment">Publié le 30/10/20</p>
-                <p class="body">Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse assumenda fugiat
-                    suscipit commodi dicta. Ea quae facere quis incidunt at enim nesciunt cupiditate
-                    perspiciatis aperiam. Alias rem, saepe id quidem?</p>
-            </div>
+            {% for comment in commentPagination.elements %}
+                {% include "comment/_comment_card.html.twig" %}
+            {% else %}
+                <p class="text-muted text-center">Aucun commentaire n'a été publié sur cet article.</p>
+            {% endfor %}
 
+            {{ pagination(commentPagination) }}
+            
+            
             <h2 class="comment-title h4">Laissez un commentaire</h2>
-            <form action="" method="post" class="comment-form">
-                <div class="mb-3">
-                    <label for="pseudo">Pseudo<sup>*</sup></label>
-                    <input type="text" class="form-control" id="pseudo" aria-describedby="pseudo" name="pseudo"
-                        placeholder="pseudo" required>
-                </div>
-                <div class="mb-3">
-                    <label for="contentComment">Commentaire<sup>*</sup></label>
-                    <textarea class="form-control" id="contentComment" name="contentComment"
-                        placeholder="votre commentaire..." rows="5" required></textarea>
-                </div>
-                <button type="submit" class="button">Soumettre</button>
-            </form>
+
+            {% if has_role('ROLE_USER') %}
+                <form action="" method="post" class="comment-form">
+                    {# Poster avec le pseudo <strong>Pseudo</strong> #}
+                    <div class="mb-3">
+                        <label for="contentComment">Commentaire<sup>*</sup></label>
+                        <textarea class="form-control" id="contentComment" name="contentComment"
+                            placeholder="votre commentaire..." rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="button">Soumettre</button>
+                </form>
+            {% else %}
+                <p class="text-danger text-center">Pour poster un commentaire, connectez-vous.</p>
+            {% endif %}
         </article>
     </div>
 

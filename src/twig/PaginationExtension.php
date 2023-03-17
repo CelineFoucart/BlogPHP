@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use App\router\Router;
 use App\Service\Pagination;
 use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
@@ -18,8 +17,12 @@ class PaginationExtension extends AbstractExtension
         ];
     }
 
-    public function getPagination(Pagination $pagination): string
+    public function getPagination(?Pagination $pagination): string
     {
+        if (null === $pagination) {
+            return '';
+        }
+        
         $previous = $pagination->getPreviousLink();
         $next = $pagination->getNextLink();
         if($next === null && $previous === null) {

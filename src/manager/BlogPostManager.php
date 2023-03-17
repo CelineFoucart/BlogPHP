@@ -13,7 +13,7 @@ final class BlogPostManager extends AbstractManager
     public function findPaginated(string $link, int $page = 1): Pagination
     {
         $queryBuilder = $this->getQuery()
-            ->select('b.title', 'b.slug', 'b.title', 'b.id', 'b.description', 'b.created_at', 'b.updated_at')
+            ->select('b.title', 'b.slug', 'b.id', 'b.description', 'b.created_at', 'b.updated_at')
             ->select('u.username AS author_username', 'u.id AS author_id')
             ->leftJoin('blog_user u', 'u.id = b.author_id')
             ->orderBy('b.updated_at', 'DESC')
