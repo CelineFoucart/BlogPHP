@@ -29,6 +29,7 @@ class Paginator {
         $this->totalPage = ceil($this->numberItems / $this->perPage);
         $this->current = $this->setCurrent((int)$current);
         $offset = $this->perPage * ($this->current - 1);
+        $offset = ($offset < 0) ? 0 : $offset;
         $sql = $this->queryBuilder->limit($this->perPage)->offset($offset)->toSQL();
         $elements = $this->statementBuilder->fetchAll($sql, $this->queryBuilder->getParams());
 
