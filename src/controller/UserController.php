@@ -36,7 +36,7 @@ class UserController extends AbstractController
                     $isAdmin = ($userRole !== null && $userRole->getAlias() === 'ROLE_ADMIN') ? 1 : 0;
                     $this->auth->session($user->getId(), $isAdmin);
 
-                    return $this->redirect('app_home');
+                    return $this->redirect('app_profile');
                 } else {
                     $error = true;
                 }
@@ -57,6 +57,28 @@ class UserController extends AbstractController
     
     public function register(ServerRequest $request): ResponseInterface
     {
+        if ($this->auth->logged()) {
+            return $this->redirect('app_home');
+        }
+
+        
         return $this->render('user/register.html.twig');
+    }
+
+    public function profile(): ResponseInterface
+    {
+        $userId = $this->auth->getUserId();
+        if (null === $userId) {
+            return $this->redirect('app_login');
+        }
+
+        $userManager = $this->getManager(BlogUserManager::class);
+        $user = $userManager->findBy('id', $userId);
+
+        if (null === $user) {
+            return $this->redirect('app_login');
+        }
+
+        return $this->render('user/profile.html.twig', ['user' => $user]);
     }
 }

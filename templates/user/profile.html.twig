@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Bienvenue | {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div class="body-page about-page gap">
+        <h2 class="about-title">Bienvenue, {{ user.username }}</h2>
+
+        <div class="alert alert-success">
+            Vous êtes bien connecté à votre compte sur <strong>{{ website_name }}</strong>.
+        </div>
+    </div>
+{% endblock %}
