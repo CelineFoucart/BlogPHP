@@ -11,23 +11,24 @@
         <form action="" method="post" class="comment-form">
             <div class="mb-3">
                 <label for="pseudo">Pseudo<sup>*</sup></label>
-                <input type="text" class="form-control" id="pseudo" aria-describedby="pseudo" name="pseudo"
-                    placeholder="Votre pseudo" required>
+                <input type="text" class="form-control {{ errors.pseudo is defined ? 'is-invalid' : '' }}" id="pseudo" name="pseudo" placeholder="Votre pseudo" required>
+                {% if errors.pseudo is defined %}
+                    <div class="invalid-feedback">
+                        Please choose a username.
+                    </div>
+                {% endif %}
             </div>
             <div class="mb-3">
                 <label for="pseudo">Email<sup>*</sup></label>
-                <input type="email" class="form-control" id="pseudo" aria-describedby="email" name="email"
-                    placeholder="Votre email" required>
+                <input type="email" class="form-control" id="pseudo" name="email" placeholder="Votre email" required>
             </div>
             <div class="mb-3">
                 <label for="password">Mot de passe<sup>*</sup></label>
-                <input type="password" class="form-control" id="password" aria-describedby="password"
-                    name="password" placeholder="mot de passe" required>
+                <input type="password" class="form-control" id="password" name="password" placeholder="mot de passe" required>
             </div>
             <div class="mb-3">
                 <label for="password">Confirmer le mot de passe<sup>*</sup></label>
-                <input type="password" class="form-control" id="password" aria-describedby="password"
-                    name="password" placeholder="confirmer le mot de passe" required>
+                <input type="password" class="form-control" id="password-confirm" name="password-confirm" placeholder="confirmer le mot de passe" required>
             </div>
             <button type="submit" class="button">Se connecter</button>
         </form>

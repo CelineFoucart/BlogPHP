@@ -6,6 +6,8 @@ namespace App\Controller;
 
 use App\Entity\BlogUser;
 use App\manager\BlogUserManager;
+use App\manager\RoleManager;
+use App\Service\Validator;
 use GuzzleHttp\Psr7\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
 
@@ -61,8 +63,33 @@ class UserController extends AbstractController
             return $this->redirect('app_home');
         }
 
-        
-        return $this->render('user/register.html.twig');
+        $errors = [];
+
+        if ($request->getMethod() === 'POST') {
+            $data = $request->getParsedBody();
+            $errors = $this->validateForRegistration($data);
+
+            if (empty($errors)) {
+                $password = password_hash($data['password'], PASSWORD_DEFAULT);
+                $roleManager = $this->getManager(RoleManager::class);
+                $role = $roleManager->findBy('alias', 'ROLE_USER');
+
+                $user = (new BlogUser())
+                    ->setUsername(htmlspecialchars($data['pseudo']))
+                    ->setEmail(htmlspecialchars($data['email']))
+                    ->setPassword($password)
+                ;
+
+                /** @var BlogUserManager */
+                $userManager = $this->getManager(BlogUserManager::class);
+                $userId = $userManager->createUser($user, $role->getId());
+                $this->auth->session($userId, 0);
+
+                return $this->redirect('app_profile');
+            }
+        }
+
+        return $this->render('user/register.html.twig', ['errors' => $errors]);
     }
 
     public function profile(): ResponseInterface
@@ -80,5 +107,19 @@ class UserController extends AbstractController
         }
 
         return $this->render('user/profile.html.twig', ['user' => $user]);
+    }
+
+    private function validateForRegistration(array $data): array
+    {
+        $validator = new Validator($data);
+        $validator->exist("pseudo", "email", "password");
+        $validator->checkLength("pseudo", 180);
+        $validator->checkMail("email");
+        $validator->checkPassword("password");
+        if ($validator->exist('password-confirm')) {
+            $validator->equal("password", $data['password-confirm']);
+        }
+
+        return $validator->getErrors();
     }
 }

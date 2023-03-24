@@ -17,7 +17,7 @@ class Validator
     /**
      * Validate a password.
      */
-    public function validPassword(string $key, string $field = 'Ce champ'): bool
+    public function checkPassword(string $key, string $field = 'Ce champ'): bool
     {
         if (!isset($this->data[$key])) {
             $this->errors[$key][] = "$key n'existe pas";

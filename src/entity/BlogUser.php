@@ -18,8 +18,6 @@ final class BlogUser extends AbstractEntity
 
     private ?string $email = null;
 
-    private ?DateTime $createdAt = null;
-
     private ?UserRole $role = null;
 
     /**
@@ -106,28 +104,6 @@ final class BlogUser extends AbstractEntity
     public function setPassword(?string $password): self
     {
         $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of createdAt.
-     *
-     * @return ?DateTime
-     */
-    public function getCreatedAt(): ?DateTime
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set the value of createdAt.
-     *
-     * @param ?DateTime $createdAt
-     */
-    public function setCreatedAt(?DateTime $createdAt): self
-    {
-        $this->createdAt = $createdAt;
 
         return $this;
     }
