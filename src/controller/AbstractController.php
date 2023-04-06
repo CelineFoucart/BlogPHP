@@ -4,21 +4,27 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Twig\Environment;
-use App\router\Router;
-use App\Twig\PathExtension;
-use GuzzleHttp\Psr7\Response;
-use App\Manager\ManagerInterface;
-use Twig\Loader\FilesystemLoader;
-use App\Exception\NotFoundException;
-use App\exception\ForbiddenException;
 use App\Exception\BadRequestException;
+use App\exception\ForbiddenException;
+use App\Exception\NotFoundException;
+use App\Manager\ManagerInterface;
+use App\router\Router;
+use App\Service\Session\Auth;
+use App\Service\Session\Session;
 use App\Twig\PaginationExtension;
+use App\Twig\PathExtension;
 use App\Twig\UserExtension;
+use GuzzleHttp\Psr7\Response;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 abstract class AbstractController
 {
     protected Router $router;
+
+    protected Session $session;
+
+    protected Auth $auth;
 
     private array $twigVariables;
 
@@ -27,12 +33,16 @@ abstract class AbstractController
     public function __construct(Router $router)
     {
         $this->router = $router;
+        $this->session = new Session();
+        $this->session->start();
+        $this->auth = new Auth($this->session);
+
         $this->twigVariables = require dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'twig.php';
         $loader = new FilesystemLoader(PATH.DIRECTORY_SEPARATOR.'templates');
         $this->twig = new Environment($loader);
         $this->twig->addExtension(new PathExtension($this->router));
         $this->twig->addExtension(new PaginationExtension());
-        $this->twig->addExtension(new UserExtension());
+        $this->twig->addExtension(new UserExtension($this->session, $this->auth));
     }
 
     /**
@@ -52,7 +62,7 @@ abstract class AbstractController
     {
         if (!$entityClass) {
             $parts = explode('\\', $classManager);
-            $class = $parts[count($parts) -1];
+            $class = $parts[count($parts) - 1];
             $managerNameParts = explode('Manager', $class);
             $entityClass = $managerNameParts[0];
         }
@@ -63,7 +73,7 @@ abstract class AbstractController
             $table = strtolower(trim($table, '_'));
         }
 
-        return new $classManager('\\App\\Entity\\' .  $entityClass, $table);
+        return new $classManager('\\App\\Entity\\'.$entityClass, $table);
     }
 
     /**

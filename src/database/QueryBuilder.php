@@ -200,7 +200,7 @@ class QueryBuilder
     }
 
     /**
-     * Format the sql request.
+     * Format the sql request, for a select, an update, an insert or a delete.
      *
      * @param string $action = "select"
      *
@@ -299,14 +299,19 @@ class QueryBuilder
     protected function getInsert(): void
     {
         $columns = join(', ', $this->selectedColumns);
-        $values = join(', ', $this->values);
+        $keys = array_keys($this->params);
+        
+        $keys = array_map(function ($item) {
+            return ':'.(string) $item;
+        }, $keys);
+        $alias = join(', ', $keys);
 
         if (preg_match('/AS/', $this->from)) {
             $from = trim(explode('AS', $this->from)[0]);
         } else {
             $from = $this->from;
         }
-        $this->sql = "INSERT INTO {$from}({$columns}) VALUES($values)";
+        $this->sql = "INSERT INTO {$from}({$columns}) VALUES($alias)";
     }
 
     /**
@@ -348,7 +353,7 @@ class QueryBuilder
     }
 
     /**
-     * Get the value of alias
+     * Get the value of alias.
      *
      * @return ?string
      */

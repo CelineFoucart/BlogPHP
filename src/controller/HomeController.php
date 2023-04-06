@@ -13,6 +13,7 @@ class HomeController extends AbstractController
     {
         return $this->render('home/index.html.twig');
     }
+
     public function privacy(ServerRequest $request): ResponseInterface
     {
         return $this->render('home/privacy.html.twig');

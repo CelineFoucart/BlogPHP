@@ -115,7 +115,7 @@ final class Comment extends AbstractEntity
     }
 
     /**
-     * Get the value of author
+     * Get the value of author.
      *
      * @return ?BlogUser
      */
@@ -129,11 +129,9 @@ final class Comment extends AbstractEntity
     }
 
     /**
-     * Set the value of author
+     * Set the value of author.
      *
      * @param ?BlogUser $author
-     *
-     * @return self
      */
     public function setAuthor(?BlogUser $author): self
     {

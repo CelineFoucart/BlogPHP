@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\router\Router;
-use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 class PathExtension extends AbstractExtension
 {
@@ -26,5 +26,4 @@ class PathExtension extends AbstractExtension
     {
         return $this->router->url($name, $params);
     }
-    
 }

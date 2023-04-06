@@ -8,6 +8,12 @@
     <div class="body-page about-page gap">
         <h2 class="about-title">Connectez-vous</h2>
 
+        {% if error %}
+            <div class="alert alert-danger">
+                <p class="mb-0">Identifiants de connexion invalides.</p>
+            </div>
+        {% endif %}
+
         <form action="" method="post" class="comment-form">
             <div class="mb-3">
                 <label for="pseudo">Pseudo<sup>*</sup></label>

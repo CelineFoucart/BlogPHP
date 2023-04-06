@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use DateTime;
-
 final class BlogUser extends AbstractEntity
 {
     private ?string $username = null;
@@ -18,14 +16,7 @@ final class BlogUser extends AbstractEntity
 
     private ?string $email = null;
 
-    private ?DateTime $createdAt = null;
-
-    private ?UserRole $role;
-
-    public function __construct()
-    {
-        $this->role = new UserRole();
-    }
+    private ?UserRole $role = null;
 
     /**
      * Get the value of username.
@@ -116,28 +107,6 @@ final class BlogUser extends AbstractEntity
     }
 
     /**
-     * Get the value of createdAt.
-     *
-     * @return ?DateTime
-     */
-    public function getCreatedAt(): ?DateTime
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set the value of createdAt.
-     *
-     * @param ?DateTime $createdAt
-     */
-    public function setCreatedAt(?DateTime $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
      * Get the value of email.
      *
      * @return ?string
@@ -164,6 +133,10 @@ final class BlogUser extends AbstractEntity
      */
     public function getRole(): ?UserRole
     {
+        if (!$this->role) {
+            $this->role = new UserRole();
+        }
+
         return $this->role;
     }
 

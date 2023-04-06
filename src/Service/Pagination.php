@@ -21,9 +21,7 @@ class Pagination
     private array $elements = [];
 
     /**
-     * Get the value of current
-     *
-     * @return ?int
+     * Get the value of current.
      */
     public function getCurrent(): ?int
     {
@@ -31,11 +29,7 @@ class Pagination
     }
 
     /**
-     * Set the value of current
-     *
-     * @param ?int $current
-     *
-     * @return self
+     * Set the value of current.
      */
     public function setCurrent(?int $current): self
     {
@@ -45,9 +39,7 @@ class Pagination
     }
 
     /**
-     * Get the value of pages
-     *
-     * @return array
+     * Get the value of pages.
      */
     public function getPages(): array
     {
@@ -55,11 +47,7 @@ class Pagination
     }
 
     /**
-     * Set the value of pages
-     *
-     * @param array $pages
-     *
-     * @return self
+     * Set the value of pages.
      */
     public function setPages(array $pages): self
     {
@@ -69,7 +57,7 @@ class Pagination
     }
 
     /**
-     * Get the value of previousLink
+     * Get the value of previousLink.
      *
      * @return ?string
      */
@@ -79,11 +67,9 @@ class Pagination
     }
 
     /**
-     * Set the value of previousLink
+     * Set the value of previousLink.
      *
      * @param ?string $previousLink
-     *
-     * @return self
      */
     public function setPreviousLink(?string $previousLink): self
     {
@@ -93,7 +79,7 @@ class Pagination
     }
 
     /**
-     * Get the value of nextLink
+     * Get the value of nextLink.
      *
      * @return ?string
      */
@@ -103,11 +89,9 @@ class Pagination
     }
 
     /**
-     * Set the value of nextLink
+     * Set the value of nextLink.
      *
      * @param ?string $nextLink
-     *
-     * @return self
      */
     public function setNextLink(?string $nextLink): self
     {
@@ -117,7 +101,7 @@ class Pagination
     }
 
     /**
-     * Get the value of numberItems
+     * Get the value of numberItems.
      *
      * @return ?int
      */
@@ -127,11 +111,9 @@ class Pagination
     }
 
     /**
-     * Set the value of numberItems
+     * Set the value of numberItems.
      *
      * @param ?int $numberItems
-     *
-     * @return self
      */
     public function setNumberItems(?int $numberItems): self
     {
@@ -141,7 +123,7 @@ class Pagination
     }
 
     /**
-     * Get the value of perPage
+     * Get the value of perPage.
      *
      * @return ?string
      */
@@ -151,11 +133,9 @@ class Pagination
     }
 
     /**
-     * Set the value of perPage
+     * Set the value of perPage.
      *
      * @param ?string $perPage
-     *
-     * @return self
      */
     public function setPerPage(?string $perPage): self
     {
@@ -165,9 +145,7 @@ class Pagination
     }
 
     /**
-     * Get the value of elements
-     *
-     * @return array
+     * Get the value of elements.
      */
     public function getElements(): array
     {
@@ -175,11 +153,7 @@ class Pagination
     }
 
     /**
-     * Set the value of elements
-     *
-     * @param array $elements
-     *
-     * @return self
+     * Set the value of elements.
      */
     public function setElements(array $elements): self
     {
