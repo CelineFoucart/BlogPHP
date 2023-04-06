@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use DateTime;
-
 final class BlogUser extends AbstractEntity
 {
     private ?string $username = null;

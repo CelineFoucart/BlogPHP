@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use Twig\TwigFunction;
 use App\Service\Session\Auth;
-use Twig\Extension\AbstractExtension;
 use App\Service\Session\SessionInterface;
-
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 class UserExtension extends AbstractExtension
 {
     public function __construct(private SessionInterface $session, private Auth $auth)
     {
-        
     }
+
     public function getFunctions()
     {
         return [
@@ -24,7 +23,7 @@ class UserExtension extends AbstractExtension
         ];
     }
 
-    public function isLogged():bool
+    public function isLogged(): bool
     {
         return $this->auth->logged();
     }

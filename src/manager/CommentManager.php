@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\manager;
 
-use App\Service\Paginator;
-use App\Service\Pagination;
 use App\Manager\AbstractManager;
+use App\Service\Pagination;
+use App\Service\Paginator;
 
 class CommentManager extends AbstractManager
 {

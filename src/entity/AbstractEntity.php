@@ -26,7 +26,7 @@ abstract class AbstractEntity
 
     public function __set($name, $value)
     {
-        $method = "set" . str_replace(" ", "", ucwords(str_replace("_", " ", $name)));
+        $method = 'set'.str_replace(' ', '', ucwords(str_replace('_', ' ', $name)));
         if (method_exists($this, $method)) {
             $this->$method($value);
         } else {
@@ -35,13 +35,13 @@ abstract class AbstractEntity
             if (empty($parts)) {
                 return;
             }
-            
+
             $class = $parts[0];
-            
+
             if (property_exists($this, $class)) {
-                $classGetter = "get" . ucwords($class);
-                $propertyMethod = "set" . str_replace(" ", "", ucwords(str_replace("_", " ", $parts[1])));
-                
+                $classGetter = 'get'.ucwords($class);
+                $propertyMethod = 'set'.str_replace(' ', '', ucwords(str_replace('_', ' ', $parts[1])));
+
                 $this->$classGetter()->$propertyMethod($value);
             }
         }

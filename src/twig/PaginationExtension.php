@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Service\Pagination;
-use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 class PaginationExtension extends AbstractExtension
 {
@@ -22,13 +22,13 @@ class PaginationExtension extends AbstractExtension
         if (null === $pagination) {
             return '';
         }
-        
+
         $previous = $pagination->getPreviousLink();
         $next = $pagination->getNextLink();
-        if($next === null && $previous === null) {
-            return "";
+        if (null === $next && null === $previous) {
+            return '';
         }
-        $pagination = (empty($pagination->getPages())) ? "" : implode("", $pagination->getPages());
+        $pagination = (empty($pagination->getPages())) ? '' : implode('', $pagination->getPages());
 
         return <<<HTML
         <div class="navigation">

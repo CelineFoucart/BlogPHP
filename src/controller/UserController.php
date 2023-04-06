@@ -6,7 +6,8 @@ namespace App\Controller;
 
 use App\Entity\BlogUser;
 use App\manager\BlogUserManager;
-use App\manager\RoleManager;
+use App\manager\UserRoleManager;
+use App\Service\Form\FormBuilder;
 use App\Service\Validator;
 use GuzzleHttp\Psr7\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
@@ -64,14 +65,18 @@ class UserController extends AbstractController
         }
 
         $errors = [];
+        $data = [];
 
         if ($request->getMethod() === 'POST') {
+            /** @var BlogUserManager */
+            $userManager = $this->getManager(BlogUserManager::class);
+
             $data = $request->getParsedBody();
-            $errors = $this->validateForRegistration($data);
+            $errors = $this->validateForRegistration($data, $userManager);
 
             if (empty($errors)) {
                 $password = password_hash($data['password'], PASSWORD_DEFAULT);
-                $roleManager = $this->getManager(RoleManager::class);
+                $roleManager = $this->getManager(UserRoleManager::class);
                 $role = $roleManager->findBy('alias', 'ROLE_USER');
 
                 $user = (new BlogUser())
@@ -80,8 +85,7 @@ class UserController extends AbstractController
                     ->setPassword($password)
                 ;
 
-                /** @var BlogUserManager */
-                $userManager = $this->getManager(BlogUserManager::class);
+                
                 $userId = $userManager->createUser($user, $role->getId());
                 $this->auth->session($userId, 0);
 
@@ -89,7 +93,7 @@ class UserController extends AbstractController
             }
         }
 
-        return $this->render('user/register.html.twig', ['errors' => $errors]);
+        return $this->render('user/register.html.twig', ['form' => $this->generateRegistrationForm($errors, $data)]);
     }
 
     public function profile(): ResponseInterface
@@ -109,16 +113,31 @@ class UserController extends AbstractController
         return $this->render('user/profile.html.twig', ['user' => $user]);
     }
 
-    private function validateForRegistration(array $data): array
+    private function generateRegistrationForm(array $errors, array $data): string
     {
-        $validator = new Validator($data);
-        $validator->exist("pseudo", "email", "password");
-        $validator->checkLength("pseudo", 180);
-        $validator->checkMail("email");
-        $validator->checkPassword("password");
-        if ($validator->exist('password-confirm')) {
-            $validator->equal("password", $data['password-confirm']);
-        }
+        return (new FormBuilder('POST'))
+            ->setErrors($errors)
+            ->setData($data)
+            ->setFormClasses("comment-form")
+            ->addField("pseudo", 'text', ['label' => 'Pseudo', 'placeholder' => 'Votre pseudo'])
+            ->addField("email", 'email', ['label' => 'Votre email', 'placeholder' => 'Votre email'])
+            ->addField("password", 'password', ['label' => 'Mot de passe'])
+            ->addField("password-confirm", 'password', ['label' => 'Confirmer le mot de passe'])
+            ->setButton("S'inscrire", 'button')
+            ->renderForm()
+        ;
+    }
+
+    private function validateForRegistration(array $data, BlogUserManager $manager): array
+    {
+        $validator = (new Validator($data))
+            ->checkLength("pseudo", 3, 180)
+            ->checkMail("email")
+            ->checkPassword("password")
+            ->isUnique("pseudo", 'username', $manager)
+            ->isUnique("email", 'email', $manager)
+            ->equal("password-confirm", 'password', "mot de passe")
+        ;
 
         return $validator->getErrors();
     }

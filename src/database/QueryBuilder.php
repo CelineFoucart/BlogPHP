@@ -300,10 +300,11 @@ class QueryBuilder
     {
         $columns = join(', ', $this->selectedColumns);
         $keys = array_keys($this->params);
-        $keys = array_map(function($item){
-            return ':' . (string)$item;
+        
+        $keys = array_map(function ($item) {
+            return ':'.(string) $item;
         }, $keys);
-        $alias = join(', ', array_keys($keys));
+        $alias = join(', ', $keys);
 
         if (preg_match('/AS/', $this->from)) {
             $from = trim(explode('AS', $this->from)[0]);
@@ -352,7 +353,7 @@ class QueryBuilder
     }
 
     /**
-     * Get the value of alias
+     * Get the value of alias.
      *
      * @return ?string
      */

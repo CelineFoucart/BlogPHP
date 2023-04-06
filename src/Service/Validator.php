@@ -4,10 +4,22 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Manager\AbstractManager;
+
 class Validator
 {
     private array $data = [];
     private array $errors = [];
+    private array $messages = [
+        'exist' => "Un champ obligatoire est manquant dans le formulaire",
+        'empty' => "Ce champ ne peut être vide",
+        'password' => "Ce champ n'est pas un mot de passe valide : il doit comporter des chiffre, des lettres et fait au moins 8 caractères",
+        'length' => "La longueur de ce champ doit être compris entre %s et %s caractères",
+        'slug' => "Un slug ne doit pas comporter de chiffres ou de caractères spéciaux",
+        'equal' => "La valeur de ce champ doit être identique à celle du champ %s",
+        'mail' => "Ce champ doit comporter un email valide suivant le format nom@domaine.fr",
+        'unique' => "La valeur de ce champ est déjà utilisée en base de données.",
+    ];
 
     public function __construct(array $data)
     {
@@ -17,118 +29,123 @@ class Validator
     /**
      * Validate a password.
      */
-    public function checkPassword(string $key, string $field = 'Ce champ'): bool
+    public function checkPassword(string $key): self
     {
         if (!isset($this->data[$key])) {
-            $this->errors[$key][] = "$key n'existe pas";
-
-            return false;
+            $this->errors[$key][] = $this->messages['exist'];
         }
 
         if (!preg_match('/^(?=.*[0-9])(?=.*[a-z]).{8,20}$/', $this->data[$key])) {
-            $this->errors[$key][] = "$field n'est pas un mot de passe valide";
-
-            return false;
+            $this->errors[$key][] = $this->messages['password'];
         }
 
-        return true;
+        return $this;
     }
 
     /**
      * Check the length of a string.
      */
-    public function checkLength(string $key, int $size, string $field = 'Ce champ'): bool
+    public function checkLength(string $key, int $min = 3, int $max = 255): self
     {
         if (!isset($this->data[$key])) {
-            $this->errors[$key][] = "$key n'existe pas";
-
-            return false;
+            $this->errors[$key][] = $this->messages['exist'];
         }
 
-        if (strlen($this->data[$key]) > $size) {
-            return true;
-        } else {
-            $this->errors[$key][] = "$field doit faire plus que $size caractères";
+        $length = strlen($this->data[$key]);
+
+        if ($length < $min || $length > $max) {
+            $this->errors[$key][] = sprintf($this->messages['length'], $min, $max);
         }
 
-        return false;
+        return $this;
     }
 
     /**
      * Check if a string is a valid slug.
-     *
-     * @param mixed string
      */
-    public function slug(string $key, string $field = 'Ce champ'): bool
+    public function slug(string $key): self
     {
         if (!isset($this->data[$key])) {
-            $this->errors[$key][] = "$key n'existe pas";
-
-            return false;
+            $this->errors[$key][] = $this->messages['exist'];
         }
+
         $pattern = '/^[a-z]+(-?[a-z]+)+$/';
-        if (preg_match($pattern, $this->data[$key])) {
-            return true;
-        } else {
-            $this->errors[$key][] = 'Un slug ne doit pas comporter de chiffres ou de caractères spéciaux';
-
-            return false;
-        }
-    }
-
-    public function exist(string $key, string $field = 'Ce champ'): bool
-    {
-        if (!isset($this->data[$key])) {
-            $this->errors[$key][] = "$field est vide";
-
-            return false;
-        } else {
-            if (empty($this->data[$key])) {
-                $this->errors[$key][] = "$field ne peut être vide";
-
-                return false;
-            }
+        if (!preg_match($pattern, $this->data[$key])) {
+            $this->errors[$key][] = $this->messages['slug'];
         }
 
-        return true;
+        return $this;
     }
 
     /**
-     * Compare an element to another value.
+     * Check if a field is empty.
      */
-    public function equal(string $key, $valueToCompare, string $field = 'Ce champ'): bool
+    public function notEmpty(string $key): self
     {
-        if (isset($this->data[$key])) {
-            $valueCompared = (is_int($valueToCompare)) ? (int) $this->data[$key] : $this->data[$key];
-            if ($valueCompared === $valueToCompare) {
-                $this->errors[$key][] = "$field n'est pas valide";
-
-                return false;
-            } else {
-                return true;
-            }
-        } else {
-            return false;
+        if (!isset($this->data[$key])) {
+            $this->errors[$key][] = $this->messages['exist'];
+        } elseif (empty($this->data[$key])) {
+            $this->errors[$key][] = $this->messages['empty'];
         }
+
+        return $this;
+    }
+
+    /**
+     * Check if a field is equal to another field.
+     */
+    public function equal(string $key, string $anotherKey, string $otherFieldName): self
+    {
+        $error = false;
+
+        if (!isset($this->data[$key])) {
+            $this->errors[$key][] = $this->messages['exist'];
+            $error = true;
+        } 
+
+        if (!isset($this->data[$anotherKey])) {
+            $this->errors[$anotherKey][] = $this->messages['exist'];
+            $error = true;
+        } 
+
+        if ($error) {
+            return $this;
+        } elseif ($this->data[$key] !== $this->data[$anotherKey]) {
+            $this->errors[$key][] = sprintf($this->messages['equal'], $otherFieldName);
+        }
+
+        return $this;
     }
 
     /**
      * Check if a string is a valid mail.
      */
-    public function checkMail(string $key, string $field = 'Ce champ'): bool
+    public function checkMail(string $key): self
     {
-        if (!$this->exist($key)) {
-            $this->errors[$key][] = "$field n'est pas un mail";
-
-            return false;
+        if (!isset($this->data[$key])) {
+            $this->errors[$key][] = $this->messages['exist'];
+        } elseif (!preg_match("#^[a-z0-9-_.]+@[a-z0-9-_.]{2,}\.[a-z]{2,4}$#", $this->data[$key])) {
+            $this->errors[$key][] = $this->messages['mail'];
         }
-        if (!preg_match("#^[a-z0-9-_.]+@[a-z0-9-_.]{2,}\.[a-z]{2,4}$#", $this->data[$key])) {
-            $this->errors[$key][] = "$field n'est pas un mail";
 
-            return false;
-        } else {
-            return true;
+        return $this;
+    }
+
+    /**
+     * Check if a value exist in the database.
+     */
+    public function isUnique(string $key, string $propertyName, AbstractManager $manager): self
+    {
+        if (!isset($this->data[$key])) {
+            $this->errors[$key][] = $this->messages['exist'];
         }
+
+        $total = $manager->count("$propertyName = :field", ['field' => $this->data[$key]]);
+        if (0 !== $total) {
+            $this->errors[$key][] = $this->messages['unique'];
+        }
+
+        return $this;
     }
 
     /**

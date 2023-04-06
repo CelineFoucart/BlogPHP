@@ -24,17 +24,17 @@ class BlogUserManager extends AbstractManager
 
     public function createUser(BlogUser $user, int $roleId): int
     {
-        $insertSQL = $this->getQuery()
-            ->select('username', 'email', 'password', 'role_id')
+        $query = $this->getQuery();
+        $insertSQL =  $query->select('username', 'email', 'password', 'role_id')
             ->setParams([
-                'username' => $user->getUsername(), 
-                'email' => $user->getEmail(), 
+                'username' => $user->getUsername(),
+                'email' => $user->getEmail(),
                 'password' => $user->getPassword(),
-                'roleId' => (string)$roleId
+                'roleId' => (string) $roleId,
             ])
             ->toSQL('insert')
         ;
 
-        return $this->getBuilder()->alter($insertSQL, $this->getQuery()->getParams());
+        return $this->getBuilder()->alter($insertSQL, $query->getParams());
     }
 }

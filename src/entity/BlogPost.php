@@ -45,7 +45,7 @@ final class BlogPost extends AbstractEntity
     }
 
     /**
-     * Get the value of slug
+     * Get the value of slug.
      *
      * @return ?string
      */
@@ -55,11 +55,9 @@ final class BlogPost extends AbstractEntity
     }
 
     /**
-     * Set the value of slug
+     * Set the value of slug.
      *
      * @param ?string $slug
-     *
-     * @return self
      */
     public function setSlug(?string $slug): self
     {
@@ -171,10 +169,10 @@ final class BlogPost extends AbstractEntity
      */
     public function getAuthor(): ?BlogUser
     {
-        if (!$this->author) {        
+        if (!$this->author) {
             $this->author = new BlogUser();
         }
-        
+
         return $this->author;
     }
 

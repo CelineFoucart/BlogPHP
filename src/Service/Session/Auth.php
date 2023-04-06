@@ -2,8 +2,6 @@
 
 namespace App\Service\Session;
 
-use App\Service\Session\SessionInterface;
-
 class Auth
 {
     protected SessionInterface $session;
@@ -22,7 +20,7 @@ class Auth
 
         return $this;
     }
-    
+
     /**
      * Check if a user is logged.
      */
@@ -30,18 +28,19 @@ class Auth
     {
         return $this->session->exists('id');
     }
-    
+
     /**
      * Check if a user is admin.
      */
     public function isAdmin(): bool
     {
-        if(!$this->session->exists('isAdmin')) {
+        if (!$this->session->exists('isAdmin')) {
             return false;
         }
-        return $this->session->get('isAdmin') === 1;
+
+        return 1 === $this->session->get('isAdmin');
     }
-    
+
     /**
      * Logout the user.
      */
@@ -51,7 +50,7 @@ class Auth
 
         return $this;
     }
-    
+
     /**
      * Return user id.
      */

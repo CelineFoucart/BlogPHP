@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Twig\Environment;
-use App\router\Router;
-use App\Twig\PathExtension;
-use GuzzleHttp\Psr7\Response;
-use App\Manager\ManagerInterface;
-use Twig\Loader\FilesystemLoader;
-use App\Exception\NotFoundException;
-use App\exception\ForbiddenException;
 use App\Exception\BadRequestException;
+use App\exception\ForbiddenException;
+use App\Exception\NotFoundException;
+use App\Manager\ManagerInterface;
+use App\router\Router;
 use App\Service\Session\Auth;
 use App\Service\Session\Session;
 use App\Twig\PaginationExtension;
+use App\Twig\PathExtension;
 use App\Twig\UserExtension;
+use GuzzleHttp\Psr7\Response;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 abstract class AbstractController
 {
@@ -62,7 +62,7 @@ abstract class AbstractController
     {
         if (!$entityClass) {
             $parts = explode('\\', $classManager);
-            $class = $parts[count($parts) -1];
+            $class = $parts[count($parts) - 1];
             $managerNameParts = explode('Manager', $class);
             $entityClass = $managerNameParts[0];
         }
@@ -73,7 +73,7 @@ abstract class AbstractController
             $table = strtolower(trim($table, '_'));
         }
 
-        return new $classManager('\\App\\Entity\\' .  $entityClass, $table);
+        return new $classManager('\\App\\Entity\\'.$entityClass, $table);
     }
 
     /**

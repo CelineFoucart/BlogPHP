@@ -12,8 +12,6 @@ final class UserRole extends AbstractEntity
 
     /**
      * Get the value of name.
-     *
-     * @return ?string
      */
     public function getName(): ?string
     {
@@ -22,8 +20,6 @@ final class UserRole extends AbstractEntity
 
     /**
      * Set the value of name.
-     *
-     * @param ?string $name
      */
     public function setName(?string $name): self
     {
@@ -34,8 +30,6 @@ final class UserRole extends AbstractEntity
 
     /**
      * Get the value of alias.
-     *
-     * @return ?string
      */
     public function getAlias(): ?string
     {
@@ -44,8 +38,6 @@ final class UserRole extends AbstractEntity
 
     /**
      * Set the value of alias.
-     *
-     * @param ?string $alias
      */
     public function setAlias(?string $alias): self
     {

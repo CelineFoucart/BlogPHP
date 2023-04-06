@@ -6,7 +6,6 @@ namespace App\manager;
 
 use App\Manager\AbstractManager;
 
-class RoleManager extends AbstractManager
+class UserRoleManager extends AbstractManager
 {
-    
 }

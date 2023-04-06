@@ -20,21 +20,21 @@ class AbstractManager implements ManagerInterface
         $this->class = $class;
         $this->table = $table;
     }
-    
+
     public function findBy(string $column, mixed $value)
     {
         $sql = $this->getQuery()->where($this->table[0].'.'.$column.' = ?')->toSQL();
 
         return $this->getBuilder()->fetch($sql, [$value]);
     }
-    
+
     public function findAll(): array
     {
         $sql = $this->getQuery()->toSQL();
 
         return $this->getBuilder()->fetchAll($sql);
     }
-    
+
     public function count(?string $where = null, array $params = []): int
     {
         $count = $this->table[0].'.id';

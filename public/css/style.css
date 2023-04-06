@@ -182,6 +182,10 @@ nav a.nav-link {
 	gap: 20px;
 }
 
+.alert p {
+	margin-bottom: 0;
+}
+
 /* ===================== 
  * COMMENTS
 /* ===================== */
