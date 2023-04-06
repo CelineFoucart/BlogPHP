@@ -1,0 +1,167 @@
+html, body {
+    height: 100vh;
+}
+
+.sidebar {
+    width: 4.5rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 3000;
+    padding: 1rem 0;
+    background-color: #343a40;
+    box-shadow: 0 14px 28px rgba(0,0,0,.25),0 10px 10px rgba(0,0,0,.22);
+}
+
+.wrapper {
+    margin-left: 4.5rem;
+    padding-bottom: 10px;
+}
+
+.sidebar-main-brand {
+    text-align: center;
+    margin-bottom: 0;
+    color: #fff;
+    text-decoration: none;
+}
+
+.sidebar-title {
+    display: none;
+}
+
+.user-menu {
+    padding: 0;
+}
+
+.user-menu .dropdown-divider {
+    margin: 0;
+}
+
+.user-menu .dropdown-item {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5em;
+}
+
+@media (min-width: 768px) {
+    .sidebar {
+        width: 280px;
+        padding: 1rem 0;
+    }
+
+    .wrapper {
+        margin-left: 280px;
+    }
+
+    .sidebar-title {
+        display: inline;
+    }
+}
+
+.card-header {
+    background-color: transparent;
+}
+
+.sidebar .nav-item .nav-link, .nav-item {
+    color: #fff;
+}
+
+.sidebar .nav-item {
+    transition: all .2s ease-in-out;
+}
+
+.sidebar .nav-item:hover {
+    background-color: rgba(255,255,255,.1);
+}
+
+.sidebar .nav-item.active {
+    position: relative;
+    background-color: rgba(255,255,255,.1);
+}
+
+.sidebar .nav-item.active::before {
+    content: ' ';
+    display: inline-block;
+    width: 2px;
+    background-color: #17a2b8;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+.icon {
+    margin-right: 5px;
+}
+
+h1 {
+    font-weight: 400;
+}
+
+.card {
+    box-shadow: 0 0 1px rgb(0 0 0 / 8%), 0 1px 3px rgb(0 0 0 / 13%);
+    border-top: 3px solid #17a2b8;
+}
+
+.card-info {
+    background: #17a2b8;
+    color: #fff;
+}
+
+.card-info a {
+    color: inherit;
+}
+
+.card-title {
+    margin: 0.25rem 0;
+    font-size: 1.1rem;
+    font-weight: normal;
+}
+
+.card-footer {
+    border: none;
+}
+
+.sortable-table tbody tr {
+    cursor: grab;
+}
+
+.blue-background-class {
+    background: rgb(200, 235, 251);
+    background: linear-gradient(0deg, rgba(200, 235, 251, 1) 21%, rgba(200, 235, 251, 0.4) 52%, rgba(200, 235, 251, 1) 85%);
+}
+
+.sortable-chosen {
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, .125);
+}
+
+/* toastify style */
+.toastify-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 3000;
+}
+
+.toastify {
+    width: 350px;
+    padding: 10px;
+    margin-bottom: 10px;
+    gap: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toastify-success {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+}
+
+.toastify-error {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+}

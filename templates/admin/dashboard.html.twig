@@ -1,0 +1,74 @@
+{% extends "admin/admin_layout.html.twig" %}
+
+{% block title %}
+    Panneau d'administration
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-5 mb-1">
+            <div class="card card-info">
+                <div class="card-body">
+                    <h2 class="fw-normal m-0 p-0">
+                        <strong>{{ stats.blog_post }}</strong>
+                    </h2>
+                    <p class="mt-2 mb-0 h5">Article{{ stats.blog_post > 1 ? 's' : '' }}</p>
+                </div>
+                <div class="card-footer text-end">
+                    <a href="#" class="text-decoration-none fw-bold">Voir plus <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="card card-info mt-2">
+                <div class="card-body">
+                    <h2 class="fw-normal m-0 p-0">
+                        <strong>{{ stats.comment }}</strong>
+                    </h2>
+                    <p class="mt-2 mb-0 h5">Commentaire{{ stats.comment > 1 ? 's' : '' }}</p>
+                </div>
+                <div class="card-footer text-end">
+                    <a href="#" class="text-decoration-none fw-bold">Voir plus <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7 mb-1">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">5 derniers commentaires non validés</h2>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped mb-0">
+                        <thead>
+                            <th>Auteur</th>
+                            <th>Publication</th>
+                            <th>Article</th>
+                            <th></th>
+                        </thead>
+                        <tbody>
+                            {% for comment in comments %}
+                                <tr>
+                                    <td>{{ comment.author.username }}</td>
+                                    <td>{{ comment.createdAt|date('d/m/Y à H:i') }}</td>
+                                    <td>
+                                        <a href="{{ path('app_article_show', {slug: comment.post.slug}) }}">
+                                            {{ comment.post.title }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-success">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td class="text-center" colspan="4">Aucun commentaire en attente de validation</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div> 
+            </div>
+        </div>
+    </div>
+{% endblock %}

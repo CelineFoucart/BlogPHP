@@ -12,4 +12,5 @@ return [
     ['mixed', '/register', 'App\\Controller\\UserController#register', [], 'app_register'],
     ['mixed', '/logout', 'App\\Controller\\UserController#logout', [], 'app_logout'],
     ['get', '/profile', 'App\\Controller\\UserController#profile', [], 'app_profile'],
+    ['get', '/admin', 'App\\Controller\\Admin\\AdminDashboardController#dashboard', [], 'app_admin'],
 ];

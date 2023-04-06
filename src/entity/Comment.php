@@ -18,6 +18,8 @@ final class Comment extends AbstractEntity
 
     private ?BlogPost $post = null;
 
+    private bool $isValidated = false;
+
     /**
      * Get the value of content.
      *
@@ -136,6 +138,24 @@ final class Comment extends AbstractEntity
     public function setAuthor(?BlogUser $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of isValidated.
+     */
+    public function getIsValidated(): bool
+    {
+        return $this->isValidated;
+    }
+
+    /**
+     * Set the value of isValidated.
+     */
+    public function setIsValidated(bool $isValidated): self
+    {
+        $this->isValidated = $isValidated;
 
         return $this;
     }
