@@ -90,6 +90,10 @@ class FormBuilder
         if (isset($options['errorSectionClass'])) {
             $field->setErrorSectionClass($options['errorSectionClass']);
         }
+        
+        if (isset($options['rows'])) {
+            $field->setTextareaRows($options['rows']);
+        }
 
         if (isset($this->data[$name])) {
             $field->setValue($this->data[$name]);

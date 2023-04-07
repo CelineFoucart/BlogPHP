@@ -13,4 +13,9 @@ return [
     ['mixed', '/logout', 'App\\Controller\\UserController#logout', [], 'app_logout'],
     ['get', '/profile', 'App\\Controller\\UserController#profile', [], 'app_profile'],
     ['get', '/admin', 'App\\Controller\\Admin\\AdminDashboardController#dashboard', [], 'app_admin'],
+    ['get', '/admin/posts', 'App\\Controller\\Admin\\AdminPostController#index', [], 'app_admin_post_index'],
+    ['get', '/admin/posts/:id', 'App\\Controller\\Admin\\AdminPostController#show', ['id' => "([0-9-]+)"], 'app_admin_post_show'],
+    ['mixed', '/admin/posts/:id/edit', 'App\\Controller\\Admin\\AdminPostController#edit', ['id' => "([0-9-]+)"], 'app_admin_post_edit'],
+    ['mixed', '/admin/posts/create', 'App\\Controller\\Admin\\AdminPostController#create', [], 'app_admin_post_create'],
+    ['post', '/admin/posts/:id/delete', 'App\\Controller\\Admin\\AdminPostController#delete', ['id' => "([0-9-]+)"], 'app_admin_post_delete'],
 ];

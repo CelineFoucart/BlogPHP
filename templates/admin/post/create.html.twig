@@ -1,0 +1,40 @@
+{% extends "admin/admin_layout.html.twig" %}
+
+{% block title %}
+    Créer un article | {{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/sceditor/themes/default.min.css">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/sceditor/sceditor.min.js"></script>
+    <script src="/sceditor/icons/monocons.js"></script>
+    <script src="/sceditor/formats/bbcode.js"></script>
+    <script src="/sceditor/fr.js"></script>
+    <script src="/js/editor.js"></script>
+{% endblock %}
+
+{% block page_title %}Créer un article{% endblock %}
+
+{% block breadcrumb_items %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb justify-content-end">
+            <li class="breadcrumb-item"><a href="{{ path('app_admin') }}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_admin_post_index') }}">Articles</a></li>
+            <li class="breadcrumb-item active">Créer</li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Nouvel article</h2>
+        </div>
+        <div class="card-body">
+            {{ form|raw }}
+        </div>
+    </div>
+{% endblock %}

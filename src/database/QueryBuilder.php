@@ -210,8 +210,6 @@ class QueryBuilder
     {
         if ('insert' === $action) {
             $this->getInsert();
-
-            return $this->sql;
         } elseif ('update' === $action) {
             $this->getUpdate();
         } elseif ('delete' === $action) {
@@ -319,6 +317,22 @@ class QueryBuilder
      */
     protected function getUpdate(): void
     {
+        if (preg_match('/AS/', $this->from)) {
+            $from = trim(explode('AS', $this->from)[0]);
+        } else {
+            $from = $this->from;
+        }
+
+        $sql = "UPDATE {$from} SET";
+
+        foreach ($this->selectedColumns as $column) {
+            $sql .= " $column = :$column,";
+        }
+
+        $sql = trim($sql, ",");
+        $sql .= " WHERE id = :id"; 
+
+        $this->sql = $sql;
     }
 
     /**
@@ -331,7 +345,7 @@ class QueryBuilder
         } else {
             $from = $this->from;
         }
-        $this->sql = "DELETE FROM {$from}";
+        $this->sql = "DELETE FROM {$from} WHERE id = :id LIMIT 1";
     }
 
     /**

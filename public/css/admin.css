@@ -165,3 +165,36 @@ h1 {
     background-color: #f8d7da;
     border-color: #f5c2c7;
 }
+
+/* Pagination */
+.button-outline, .button:hover {
+	color: #0d6efd;
+	background: transparent;
+	text-decoration: none;
+	border: 1px solid #0d6efd;
+}
+
+.button-outline:hover, .outline-active {
+	color: #fff !important;
+	border-color: #0d6efd;
+	background: #0d6efd;
+}
+
+.navigation {
+	height: 38px;
+}
+
+.btn-group .init {
+	width: 120px;
+}
+
+.alert p {
+    margin-bottom: 0;
+}
+
+blockquote {
+    background: #fff7d9;
+    border-left: 0.3em solid #f4e59f;
+    margin: 0.25em 0;
+    padding: 0.5em 0.5em 0.5em 0.75em;
+}

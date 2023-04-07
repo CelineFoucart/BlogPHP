@@ -187,6 +187,16 @@ class FieldType
 
         return $this;
     }
+    
+    /**
+     * Set the value of textareaRows.
+     */
+    public function setTextareaRows(int $textareaRows): self
+    {
+        $this->textareaRows = $textareaRows;
+
+        return $this;
+    }
 
     /**
      * Render the field with a label and the serror section.

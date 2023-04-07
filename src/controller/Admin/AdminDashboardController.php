@@ -12,8 +12,20 @@ use Psr\Http\Message\ResponseInterface;
 
 class AdminDashboardController  extends AbstractController
 {
+    /**
+     * @todo Ajouter les permissions
+     *
+     * @return ResponseInterface
+     */
     public function dashboard(): ResponseInterface
     {
+        if (!$this->auth->logged()) {
+            return $this->redirect('app_login');
+        }
+        if (!$this->auth->isAdmin()) {
+            $this->createForbidderException("Vous ne pouvez pas consulter cette page.");
+        }
+
         $stats = (new StatisticsHandler())
             ->addEntity(new StatisticsEntity('blog_post'))
             ->addEntity(new StatisticsEntity('comment'))

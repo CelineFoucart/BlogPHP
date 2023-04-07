@@ -11,6 +11,7 @@
 		<link rel="stylesheet" href="/fontawesome-free/css/all.min.css">
         <link rel="stylesheet" href="/css/admin.css">
 		<link rel="shortcut icon" href="/img/logo.png" type="image/png">
+		{% block stylesheets %}{% endblock %}
 	</head>
 	<body class="bg-light">
 		{% include "admin/components/_sidebar.html.twig" %}
@@ -38,5 +39,6 @@
 		</div>
 
 		<script src="/bootstrap/bootstrap.bundle.min.js"></script>
+		{% block javascripts %}{% endblock %}
 	</body>
 </html>

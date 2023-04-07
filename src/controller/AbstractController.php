@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Exception\BadRequestException;
-use App\exception\ForbiddenException;
-use App\Exception\NotFoundException;
-use App\Manager\ManagerInterface;
+use Twig\Environment;
 use App\router\Router;
-use App\Service\Session\Auth;
-use App\Service\Session\Session;
-use App\Twig\PaginationExtension;
 use App\Twig\PathExtension;
 use App\Twig\UserExtension;
+use App\Service\Session\Auth;
+use App\Twig\BbcodeExtension;
 use GuzzleHttp\Psr7\Response;
-use Twig\Environment;
+use App\Service\Session\Session;
+use App\Manager\ManagerInterface;
+use App\Twig\PaginationExtension;
 use Twig\Loader\FilesystemLoader;
+use App\Exception\NotFoundException;
+use App\exception\ForbiddenException;
+use App\Exception\BadRequestException;
 
 abstract class AbstractController
 {
@@ -43,6 +44,7 @@ abstract class AbstractController
         $this->twig->addExtension(new PathExtension($this->router));
         $this->twig->addExtension(new PaginationExtension());
         $this->twig->addExtension(new UserExtension($this->session, $this->auth));
+        $this->twig->addExtension(new BbcodeExtension());
     }
 
     /**
@@ -79,9 +81,9 @@ abstract class AbstractController
     /**
      * Create a redirection.
      */
-    protected function redirect(string $route, int $code = 301): Response
+    protected function redirect(string $route, array $params = [], int $code = 301): Response
     {
-        $url = $this->router->url($route);
+        $url = $this->router->url($route, $params);
 
         return new Response($code, ['location' => $url]);
     }

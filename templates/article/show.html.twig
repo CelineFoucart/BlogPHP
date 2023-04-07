@@ -13,12 +13,19 @@
             </a>
         </p>
         <header>
-            <h2 class="h4">{{ post.title }}</h2>
+            <h2 class="h4">
+                {{ post.title }}
+                {% if is_admin() %}
+                    <a href="{{ path('app_admin_post_edit', {id: post.id}) }}" title="éditer" class="text-decoration-none">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
+                {% endif %}
+            </h2>
         </header>
         <div class="content">
             <p>{{ post.description|nl2br }}</p>
 
-            {{ post.content|nl2br }}
+            {{ post.content|parse_bbcode }}
         </div>
         <div class="post-footer">
             <p><strong>Publication :</strong> le {{ post.createdAt|date('d/m/Y à H:i') }}, par {{ post.author.username }}</p>
