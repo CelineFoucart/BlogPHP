@@ -98,7 +98,7 @@ class BbcodeExtension extends AbstractExtension
         $text = preg_replace('#\[color=(.+)\](.+)\[/color\]#isU', '<span style="color:$1">$2</span>', $text);
         $text = preg_replace('#\[url\=(.+)\](.+)\[\/url\]#iUs', '<a href="$1">$2</a>', $text);
         $text = preg_replace('#\[img\](.+)\[\/img\]#iUs', '<img src="$1" class="img-fluid">', $text);
-        $text = preg_replace('#\[img\=(\d+)x(\d+)\](.+)\[\/img\]#iUs', '<img src="$3" style="width:$1px; height:$2px">', $text);
+        $text = preg_replace('#\[img\=(\d+)x(\d+)\](.+)\[\/img\]#iUs', '<img src="$3" style="width:$1px; height:$2px; overflow:hidden;">', $text);
 
         foreach ($this->fontSizes as $key => $size) {
             $text = preg_replace('#\['.$key.'\](.+)\[/size\]#isU', '<span style="font-size:'.$size.'">$1</span>', $text);

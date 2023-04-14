@@ -18,4 +18,9 @@ return [
     ['mixed', '/admin/posts/:id/edit', 'App\\Controller\\Admin\\AdminPostController#edit', ['id' => "([0-9-]+)"], 'app_admin_post_edit'],
     ['mixed', '/admin/posts/create', 'App\\Controller\\Admin\\AdminPostController#create', [], 'app_admin_post_create'],
     ['post', '/admin/posts/:id/delete', 'App\\Controller\\Admin\\AdminPostController#delete', ['id' => "([0-9-]+)"], 'app_admin_post_delete'],
+    ['get', '/admin/comments', 'App\\Controller\\Admin\\AdminCommentController#index', [], 'app_admin_comment_index'],
+    ['get', '/admin/comments/:id', 'App\\Controller\\Admin\\AdminCommentController#show', ['id' => "([0-9-]+)"], 'app_admin_comment_show'],
+    ['mixed', '/admin/comments/:id/edit', 'App\\Controller\\Admin\\AdminCommentController#edit', ['id' => "([0-9-]+)"], 'app_admin_comment_edit'],
+    ['post', '/admin/comments/:id/delete', 'App\\Controller\\Admin\\AdminCommentController#delete', ['id' => "([0-9-]+)"], 'app_admin_comment_delete'],
+    ['post', '/admin/comments/:id/status', 'App\\Controller\\Admin\\AdminCommentController#updateStatus', ['id' => "([0-9-]+)"], 'app_admin_comment_status'],
 ];

@@ -24,8 +24,8 @@
         <h2 class="card-title">Liste des articles</h2>
         
     </div>
-    <div class="card-body">
-        <table id="table" class="table table-striped mb-0">
+    <div class="card-body p-0">
+        <table id="table" class="table table-responsive table-striped mb-0">
             <thead>
                 <tr>
                     <th>Titre</th>
@@ -38,20 +38,20 @@
             <tbody>
                 {% for post in pagination.elements %}
                     <tr>
-                        <td>
+                        <td data-label="Titre">
                             <a href="{{ path('app_article_show', {slug: post.slug}) }}">{{ post.title }}</a>
                         </td>
-                        <td>{{ post.author.username }}</td>
-                        <td>{{ post.createdAt|date('d/m/Y H:i') }}</td>
-                        <td>{{ post.updatedAt|date('d/m/Y H:i') }}</td>
+                        <td data-label="Auteur">{{ post.author.username }}</td>
+                        <td data-label="Date de création">{{ post.createdAt|date('d/m/Y H:i') }}</td>
+                        <td data-label="Dernière mise à jour">{{ post.updatedAt|date('d/m/Y H:i') }}</td>
                         <td class="text-end">
-                            <a href="{{ path('app_admin_post_show', {id: post.id}) }}" class="btn btn-primary btn-sm">
-                                <i class="fas fa-eye"></i> Voir
+                            <a aria-label="Voir" href="{{ path('app_admin_post_show', {id: post.id}) }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> <span class="d-none d-lg-inline">Voir</span>
                             </a>
-                            <a href="{{ path('app_admin_post_edit', {id: post.id}) }}" class="btn btn-success btn-sm">
-                                <i class="fas fa-pencil-alt"></i> Editer
+                            <a aria-label="Editer" href="{{ path('app_admin_post_edit', {id: post.id}) }}" class="btn btn-success btn-sm">
+                                <i class="fas fa-pencil-alt"></i> <span class="d-none d-lg-inline">Editer</span>
                             </a>
-                            {% include "admin/post/_delete_form.html.twig" %}
+                            {% include "admin/components/_delete_form.html.twig" with {'element': post } %}
                         </td>
                     </tr>
                 {% else %}

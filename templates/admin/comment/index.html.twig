@@ -1,0 +1,95 @@
+{% extends "admin/admin_layout.html.twig" %}
+
+{% block title %}
+    Liste des commentaires | {{ parent() }}
+{% endblock %}
+
+{% block page_title %}Administration des commentaires{% endblock %}
+
+{% block breadcrumb_items %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb justify-content-end">
+            <li class="breadcrumb-item"><a href="{{ path('app_admin') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active">Commentaires</li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block body %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h2 class="h3">Filtres</h2>
+        <p class="mb-0">
+            <a href="{{ path('app_admin_comment_index') }}">Tous</a> | 
+            <a href="{{ path('app_admin_comment_index') }}?option=validated">Validés</a> | 
+            <a href="{{ path('app_admin_comment_index') }}?option=notValidated">Non validés</a>  
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Commentaires</h2>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-responsive table-striped mb-0">
+            <thead>
+                <th>Auteur</th>
+                <th>Publication</th>
+                <th>Commentaire</th>
+                <th>Statut</th>
+                <th>Article</th>
+                <th class="text-end">Actions</th>
+            </thead>
+            <tbody>
+                {% for comment in pagination.elements %}
+                    <tr>
+                        <td data-label="Auteur">{{ comment.author.username }}</td>
+                        <td data-label="Publication">{{ comment.createdAt|date('d/m/Y à H:i') }}</td>
+                        <td data-label="Commentaire">
+                            <div class="truncate-container">
+                                <div class="truncate-title">{{ truncate(comment.content, 70) }}</div>
+                                <div class="truncate-full">
+                                    {{ comment.content|nl2br }}
+                                </div>
+                            </div>
+                        </td>
+                        <td data-label="Statut">
+                            {% include "admin/comment/_status_form.html.twig" %}
+                        </td>
+                        <td data-label="Article">
+                            <a href="{{ path('app_article_show', {slug: comment.post.slug}) }}">
+                                {{ comment.post.title }}
+                            </a>
+                        </td>
+                        <td class="text-end">
+                            <a aria-label="Voir" href="{{ path('app_admin_comment_show', {id: comment.id}) }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> <span class="d-none d-lg-inline">Voir</span>
+                            </a>
+                            <a aria-label="Editer" href="{{ path('app_admin_comment_edit', {id: comment.id}) }}" class="btn btn-success btn-sm">
+                                <i class="fas fa-pencil-alt"></i> <span class="d-none d-lg-inline">Editer</span>
+                            </a>
+                            {% include "admin/components/_delete_form.html.twig" with {'element': comment, 'route': 'app_admin_comment_delete' } %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td class="text-center" colspan="6">Aucun commentaire</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div> 
+    <div class="card-footer">
+        {% set count = pagination.count %}
+        <div class="d-flex align-items-center justify-content-end">
+            <p class="mb-0 me-1">
+                <strong>{{ count }}</strong> commentaire{{ count > 1 ? 's' : '' }} sur 
+                <strong>{{ pagination.numberItems }}</strong>
+            </p>
+
+            {{ pagination(pagination) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

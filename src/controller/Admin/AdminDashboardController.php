@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use App\manager\CommentManager;
 use App\Controller\AbstractController;
 use App\Database\Statistics\StatisticsEntity;
 use App\Database\Statistics\StatisticsHandler;
+use App\manager\CommentManager;
 use Psr\Http\Message\ResponseInterface;
 
-class AdminDashboardController  extends AbstractController
+class AdminDashboardController extends AbstractController
 {
     /**
-     * @todo Ajouter les permissions
-     *
-     * @return ResponseInterface
+     * Display the dashboard page.
      */
     public function dashboard(): ResponseInterface
     {
@@ -23,7 +21,7 @@ class AdminDashboardController  extends AbstractController
             return $this->redirect('app_login');
         }
         if (!$this->auth->isAdmin()) {
-            $this->createForbidderException("Vous ne pouvez pas consulter cette page.");
+            $this->createForbidderException('Vous ne pouvez pas consulter cette page.');
         }
 
         $stats = (new StatisticsHandler())
@@ -31,7 +29,7 @@ class AdminDashboardController  extends AbstractController
             ->addEntity(new StatisticsEntity('comment'))
             ->getStatistics()
         ;
-        
+
         /** @var CommentManager */
         $commentManager = $this->getManager(CommentManager::class);
 

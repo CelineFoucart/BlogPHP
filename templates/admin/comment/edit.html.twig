@@ -1,0 +1,34 @@
+{% extends "admin/admin_layout.html.twig" %}
+
+{% block title %}
+    Editer un commentaire | {{ parent() }}
+{% endblock %}
+
+{% block page_title %}Editer un commentaire de {{ comment.author.username }}{% endblock %}
+
+{% block breadcrumb_items %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb justify-content-end">
+            <li class="breadcrumb-item"><a href="{{ path('app_admin') }}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_admin_comment_index') }}">Commentaires</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_admin_comment_show', {id: comment.id}) }}">
+                Commentaire de {{ comment.author.username }}</a>
+            </li>
+            <li class="breadcrumb-item active">Editer</li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header">
+            <div class="float-end">
+                {# delete #}
+            </div>
+            <h2 class="card-title">Editer un commentaire</h2>
+        </div>
+        <div class="card-body">
+            {{ form|raw }}
+        </div>
+    </div>
+{% endblock %}

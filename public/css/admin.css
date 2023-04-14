@@ -2,6 +2,10 @@ html, body {
     height: 100vh;
 }
 
+.modal {
+    z-index: 9999;
+}
+
 .sidebar {
     width: 4.5rem;
     position: fixed;
@@ -197,4 +201,45 @@ blockquote {
     border-left: 0.3em solid #f4e59f;
     margin: 0.25em 0;
     padding: 0.5em 0.5em 0.5em 0.75em;
+}
+
+/* Truncate block */
+.truncate-container {
+    position: relative;
+}
+
+.truncate-full {
+    border-radius: 8px;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.1);
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+    padding: 0.25rem;
+    display: none;
+    z-index: 1000;
+}
+
+.truncate-title:hover + .truncate-full {
+    display: block;
+    position: absolute;
+    top: 90%;
+}
+
+/* table responsive */
+@media (max-width: 991px) {
+    .table-responsive thead, .table-responsive th {
+        display: none;
+    }
+    .table-responsive tr {
+        display: block;
+    }
+
+    .table-responsive td {
+        display: block;
+    }
+
+    .table-responsive td::before {
+        content: attr(data-label);
+        display: block;
+        font-weight: bold;
+    }
 }

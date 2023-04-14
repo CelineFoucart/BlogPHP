@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use App\router\Router;
-use App\Entity\BlogPost;
-use App\Service\Validator;
-use App\manager\BlogPostManager;
-use App\Service\Form\FormBuilder;
-use GuzzleHttp\Psr7\ServerRequest;
 use App\Controller\AbstractController;
-use App\Entity\BlogUser;
+use App\Entity\BlogPost;
+use App\manager\BlogPostManager;
+use App\router\Router;
+use App\Service\Form\FormBuilder;
+use App\Service\Validator;
 use DateTime;
+use GuzzleHttp\Psr7\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
 
-class AdminPostController  extends AbstractController
+class AdminPostController extends AbstractController
 {
     private BlogPostManager $postManager;
 
@@ -23,12 +22,15 @@ class AdminPostController  extends AbstractController
     {
         parent::__construct($router);
         $this->postManager = $this->getManager(BlogPostManager::class);
-        
+
         if (!$this->auth->isAdmin()) {
-            $this->createForbidderException("Vous ne pouvez pas consulter cette page.");
+            $this->createForbidderException('Vous ne pouvez pas consulter cette page.');
         }
     }
 
+    /**
+     * Display the post listing page with pagination.
+     */
     public function index(ServerRequest $request): ResponseInterface
     {
         $link = (string) $request->getUri();
@@ -42,6 +44,9 @@ class AdminPostController  extends AbstractController
         ]);
     }
 
+    /**
+     * Display the detail page.
+     */
     public function show(ServerRequest $request): ResponseInterface
     {
         return $this->render('admin/post/show.html.twig', [
@@ -50,18 +55,21 @@ class AdminPostController  extends AbstractController
         ]);
     }
 
+    /**
+     * Displays the edition page.
+     */
     public function edit(ServerRequest $request): ResponseInterface
     {
         $blogPost = $this->getPost($request);
         $data = [
             'title' => $blogPost->getTitle(),
             'slug' => $blogPost->getSlug(),
-            'content' => $blogPost->getContent(), 
+            'content' => $blogPost->getContent(),
             'description' => $blogPost->getDescription(),
         ];
         $errors = [];
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $data = $request->getParsedBody();
             $errors = $this->validateForm($data);
 
@@ -82,19 +90,22 @@ class AdminPostController  extends AbstractController
         ]);
     }
 
+    /**
+     * Display the creation page.
+     */
     public function create(ServerRequest $request): ResponseInterface
     {
-        $data = ['title' => "",'slug' => "",'content' => "", 'description' => ""];
+        $data = ['title' => '', 'slug' => '', 'content' => '', 'description' => ''];
         $errors = [];
 
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $data = $request->getParsedBody();
             $errors = $this->validateForm($data, true);
 
             if (empty($errors)) {
                 $userId = $this->auth->getUserId();
                 if (null === $userId) {
-                    $this->createForbidderException("Action impossible");
+                    $this->createForbidderException('Action impossible');
                 }
 
                 $blogPost = (new BlogPost())
@@ -105,7 +116,7 @@ class AdminPostController  extends AbstractController
                     ->setCreatedAt(new DateTime())
                     ->setUpdatedAt(new DateTime())
                 ;
-                $postId = $this->postManager->insert($blogPost, (int)$userId);
+                $postId = $this->postManager->insert($blogPost, (int) $userId);
 
                 return $this->redirect('app_admin_post_show', ['id' => $postId]);
             }
@@ -117,6 +128,9 @@ class AdminPostController  extends AbstractController
         ]);
     }
 
+    /**
+     * Delete a post.
+     */
     public function delete(ServerRequest $request): ResponseInterface
     {
         $blogPost = $this->getPost($request);
@@ -125,10 +139,13 @@ class AdminPostController  extends AbstractController
         return $this->redirect('app_admin_post_index');
     }
 
+    /**
+     * Return the post by the id given in the url.
+     */
     private function getPost(ServerRequest $request): BlogPost
     {
         $id = $request->getAttribute('id');
-        $blogPost = $this->postManager->findById((int)$id);
+        $blogPost = $this->postManager->findById((int) $id);
 
         if (null === $blogPost) {
             $this->createNotFoundException("Cet article n'existe pas.");
@@ -137,32 +154,38 @@ class AdminPostController  extends AbstractController
         return $blogPost;
     }
 
-    private function getPostForm(array $errors, array $data)
+    /**
+     * Return the post form.
+     */
+    private function getPostForm(array $errors, array $data): string
     {
         return (new FormBuilder('POST'))
             ->setErrors($errors)
             ->setData($data)
-            ->addField("title", 'text', ['label' => 'Titre', 'placeholder' => "Titre de l'article"])
-            ->addField("slug", 'text', ['label' => "Lien de l'article, sans accent, espaces, caractères spéciaux ni chiffres", 'placeholder' => "Lien de l'article"])
-            ->addField("description", 'textarea', ['label' => "Description", 'rows' => 2])
-            ->addField("content", 'textarea', ['label' => "Contenu de l'article", 'rows' => 10])
-            ->setButton("Enregistrer")
+            ->addField('title', 'text', ['label' => 'Titre', 'placeholder' => "Titre de l'article"])
+            ->addField('slug', 'text', ['label' => "Lien de l'article, sans accent, espaces, caractères spéciaux ni chiffres", 'placeholder' => "Lien de l'article"])
+            ->addField('description', 'textarea', ['label' => 'Description', 'rows' => 2])
+            ->addField('content', 'textarea', ['label' => "Contenu de l'article", 'rows' => 10])
+            ->setButton('Enregistrer')
             ->renderForm()
         ;
     }
 
+    /**
+     * Validate a post form submitted.
+     */
     private function validateForm(array $data, bool $isforCreation = false): array
     {
         $validator = (new Validator($data))
-            ->checkLength("title", 3, 150)
-            ->checkLength("slug", 3, 200)
-            ->checkLength("content", 3, 20000)
-            ->checkLength("description", 3, 255)
-            ->slug("slug")
+            ->checkLength('title', 3, 150)
+            ->checkLength('slug', 3, 200)
+            ->checkLength('content', 3, 20000)
+            ->checkLength('description', 3, 255)
+            ->slug('slug')
         ;
 
         if ($isforCreation) {
-            $validator->isUnique("slug", 'slug', $this->postManager);
+            $validator->isUnique('slug', 'slug', $this->postManager);
         }
 
         return $validator->getErrors();

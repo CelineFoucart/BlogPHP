@@ -1,0 +1,73 @@
+{% extends "admin/admin_layout.html.twig" %}
+
+{% block title %}
+    Voir un commentaire | {{ parent() }}
+{% endblock %}
+
+{% block page_title %}Voir un commentaire{% endblock %}
+
+{% block breadcrumb_items %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb justify-content-end">
+            <li class="breadcrumb-item"><a href="{{ path('app_admin') }}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_admin_comment_index') }}">Commentaires</a></li>
+            <li class="breadcrumb-item active">Commentaire de {{ comment.author.username }}</li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header">
+            <div class="float-end">
+                <a aria-label="Editer" href="{{ path('app_admin_comment_edit', {id: comment.id}) }}" class="btn btn-success btn-sm">
+                    <i class="fas fa-pencil-alt"></i> <span class="d-none d-lg-inline">Editer</span>
+                </a>
+                <a aria-label="Voir l'article" href="{{ path('app_article_show', {slug: comment.post.slug}) }}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-eye"></i> <span class="d-none d-lg-inline">Article</span>
+                </a>
+            </div>
+            <h2 class="card-title">Voir un commentaire</h2>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped m-0">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ comment.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Auteur</th>
+                        <td>{{ comment.author.username }}</td>
+                    </tr>
+                    <tr>
+                        <th>Article</th>
+                        <td>
+                            <a href="{{ path('app_article_show', {slug: comment.post.slug}) }}">
+                                {{ comment.post.title }}
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Statut</th>
+                        <td>
+                            {% include "admin/comment/_status_form.html.twig" %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Commentaire</th>
+                        <td>{{ comment.content|nl2br }}</td>
+                    </tr>
+                    <tr>
+                        <th>Publication</th>
+                        <td>{{ comment.createdAt|date('d/m/Y à H:i') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Mise à jour</th>
+                        <td>{{ comment.createdAt ? comment.createdAt|date('d/m/Y à H:i') : '-' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> 
+    </div>
+{% endblock %}

@@ -18,6 +18,7 @@ use Twig\Loader\FilesystemLoader;
 use App\Exception\NotFoundException;
 use App\exception\ForbiddenException;
 use App\Exception\BadRequestException;
+use App\Twig\StringExtension;
 
 abstract class AbstractController
 {
@@ -45,6 +46,7 @@ abstract class AbstractController
         $this->twig->addExtension(new PaginationExtension());
         $this->twig->addExtension(new UserExtension($this->session, $this->auth));
         $this->twig->addExtension(new BbcodeExtension());
+        $this->twig->addExtension(new StringExtension());
     }
 
     /**
