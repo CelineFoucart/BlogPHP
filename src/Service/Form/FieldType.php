@@ -21,7 +21,7 @@ namespace App\Service\Form;
 class FieldType
 {
     /**
-     * The field type, accepted types: text, textarea, email, password, number.
+     * The field type, accepted types: text, textarea, email, password, number, checkbox.
      */
     private string $type;
 
@@ -53,7 +53,7 @@ class FieldType
     /**
      * The value of the field.
      */
-    private string $value = '';
+    private mixed $value = '';
 
     /**
      * Define if the field has errors.
@@ -90,6 +90,9 @@ class FieldType
         $this->name = $name;
         $this->id = $name;
         $this->setType($type);
+        if ($type === 'checkbox') {
+            $this->inputClass = 'form-check-input';
+        }
         $this->required = $required;
     }
 
@@ -98,7 +101,7 @@ class FieldType
      */
     public function setType(string $type): self
     {
-        $acceptedTypes = ['text', 'textarea', 'email', 'password', 'number'];
+        $acceptedTypes = ['text', 'textarea', 'email', 'password', 'number', 'checkbox'];
 
         if (!in_array($type, $acceptedTypes)) {
             $type = 'text';
@@ -112,7 +115,7 @@ class FieldType
     /**
      * Set the value of value.
      */
-    public function setValue(string $value): self
+    public function setValue(mixed $value): self
     {
         $this->value = $value;
 
@@ -187,21 +190,38 @@ class FieldType
 
         return $this;
     }
+    
+    /**
+     * Set the value of textareaRows.
+     */
+    public function setTextareaRows(int $textareaRows): self
+    {
+        $this->textareaRows = $textareaRows;
+
+        return $this;
+    }
 
     /**
      * Render the field with a label and the serror section.
      */
     public function render(): string
     {
-        $label = $this->getFormattedLabel();
+        $errorDiv = $this->getErrorAsHTML();        
 
         if ('textarea' === $this->type) {
             $field = $this->getFieldAsTextarea();
+            $label = $this->getFormattedLabel();
+        } elseif ('checkbox' === $this->type) {
+            $label = $this->getFormattedLabel('form-check-label');
+            $field = $this->getFieldAsInput();
         } else {
             $field = $this->getFieldAsInput();
+            $label = $this->getFormattedLabel();
         }
 
-        $errorDiv = $this->getErrorAsHTML();
+        if ('checkbox' === $this->type) {
+            return '<div class="mb-3 form-check form-switch">'.$field.$label.$errorDiv.'</div>';
+        }
 
         return '<div class="mb-3">'.$label.$field.$errorDiv.'</div>';
     }
@@ -209,14 +229,20 @@ class FieldType
     /**
      * Render the label of the field.
      */
-    private function getFormattedLabel(): string
+    private function getFormattedLabel(?string $labelClass = null): string
     {
         $label = ($this->label) ? $this->label : ucfirst($this->name);
         if ($this->required) {
             $label .= '<sup>*</sup>';
         }
 
-        return '<label for="'.$this->id.'">'.$label.'</label>';
+        if ($labelClass) {
+            $class = 'class="'.$labelClass.'"';
+        } else {
+            $class = '';
+        }
+
+        return '<label '.$class .' for="'.$this->id.'">'.$label.'</label>';
     }
 
     /**
@@ -240,8 +266,14 @@ class FieldType
         $required = ($this->required) ? 'required' : '';
         $inputClass = $this->getInputClasses();
 
+        if (is_bool($this->value)) {
+            $data = ($this->value) ? '" checked ' : '';
+        } else {
+            $data = '" value="'.$this->value.'" ';
+        }
+
         return '<input type="'.$this->type.'" class="'.$inputClass.'" id="'.$this->id.'" name="'.$this->name.'" 
-            placeholder="'.$this->placeholder.'" value="'.$this->value.'" '.$required.'>';
+            placeholder="'.$this->placeholder.$data.$required.'>';
     }
 
     /**

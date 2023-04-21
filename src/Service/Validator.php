@@ -11,11 +11,11 @@ class Validator
     private array $data = [];
     private array $errors = [];
     private array $messages = [
-        'exist' => "Un champ obligatoire est manquant dans le formulaire",
-        'empty' => "Ce champ ne peut être vide",
-        'password' => "Ce champ n'est pas un mot de passe valide : il doit comporter des chiffre, des lettres et fait au moins 8 caractères",
-        'length' => "La longueur de ce champ doit être compris entre %s et %s caractères",
-        'slug' => "Un slug ne doit pas comporter de chiffres ou de caractères spéciaux",
+        'exist' => "Un champ obligatoire est manquant dans le formulaire.",
+        'empty' => "Ce champ ne peut être vide.",
+        'password' => "Ce champ n'est pas un mot de passe valide : il doit comporter au moins un chiffres, au moins une lettre et au moins 8 caractères.",
+        'length' => "La longueur du champ doit être comprise entre %s et %s caractères.",
+        'slug' => "Un slug ne doit pas comporter de chiffres ou de caractères spéciaux.",
         'equal' => "La valeur de ce champ doit être identique à celle du champ %s",
         'mail' => "Ce champ doit comporter un email valide suivant le format nom@domaine.fr",
         'unique' => "La valeur de ce champ est déjà utilisée en base de données.",
@@ -33,6 +33,8 @@ class Validator
     {
         if (!isset($this->data[$key])) {
             $this->errors[$key][] = $this->messages['exist'];
+
+            return $this;
         }
 
         if (!preg_match('/^(?=.*[0-9])(?=.*[a-z]).{8,20}$/', $this->data[$key])) {
@@ -49,6 +51,8 @@ class Validator
     {
         if (!isset($this->data[$key])) {
             $this->errors[$key][] = $this->messages['exist'];
+
+            return $this;
         }
 
         $length = strlen($this->data[$key]);
@@ -67,6 +71,8 @@ class Validator
     {
         if (!isset($this->data[$key])) {
             $this->errors[$key][] = $this->messages['exist'];
+
+            return $this;
         }
 
         $pattern = '/^[a-z]+(-?[a-z]+)+$/';
@@ -138,6 +144,8 @@ class Validator
     {
         if (!isset($this->data[$key])) {
             $this->errors[$key][] = $this->messages['exist'];
+
+            return $this;
         }
 
         $total = $manager->count("$propertyName = :field", ['field' => $this->data[$key]]);

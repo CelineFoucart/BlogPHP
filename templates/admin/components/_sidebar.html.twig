@@ -1,0 +1,23 @@
+<aside class="sidebar d-flex flex-column flex-shrink-0 text-white">
+    <a href="{{ path('app_admin') }}" class="sidebar-main-brand text-white">
+        <span class="fs-4"><i class="fas fa-cogs me-1"></i> <span class="sidebar-title">Administration</span></span>
+    </a>
+    <hr>
+    <ul class="nav flex-column mb-auto">
+        <li class="nav-item {{ activeDashboard is defined ? 'active' : '' }}">
+            <a href="{{ path('app_admin') }}" class="nav-link">
+                <i class="icon fas fa-tachometer-alt fa-fw"></i> <span class="sidebar-title">Tableau de bord</span>
+            </a>
+        </li>
+        <li class="nav-item {{ activeArticle is defined ? 'active' : '' }}">
+            <a href="{{ path('app_admin_post_index') }}" class="nav-link">
+                <i class="icon fas fa-file fa-fw"></i> <span class="sidebar-title">Articles</span>
+            </a>
+        </li>
+        <li class="nav-item {{ activeComment is defined ? 'active' : '' }}">
+            <a href="{{ path('app_admin_comment_index') }}" class="nav-link">
+                <i class="icon fas fa-comment fa-fw"></i> <span class="sidebar-title">Commentaires</span>
+            </a>
+        </li>
+    </ul>
+</aside>

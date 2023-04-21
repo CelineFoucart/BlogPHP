@@ -8,5 +8,6 @@ return [
     'twig_variables' => [
         'website_name' => 'Céline Foucart',
         'website_description' => "Développeuse web fullstack",
+        'request_uri' => $_SERVER['REQUEST_URI'],
     ],
 ];

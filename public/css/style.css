@@ -22,16 +22,19 @@ body {
 	padding: 5px;	
 }
 
+.button-outline, .button {
+	padding: 5px;
+	width: 150px;
+	border-radius: 3px;
+	text-align: center;
+	display: inline-block;
+	text-decoration: none;
+}
+
 .button {
 	color: #fff;
 	background: #087087;
 	border: 1px solid #087087;
-	border-radius: 3px;
-	padding: 5px;
-	width: 150px;
-	text-align: center;
-	display: inline-block;
-	text-decoration: none;
 }
 
 .button-small {
@@ -58,12 +61,6 @@ body {
 
 .btn-group .init {
 	width: 120px;
-}
-
-.comment-form .button {
-	margin-left: auto;
-	margin-right: 0;
-	display: block;
 }
 
 /* ===================== 
@@ -195,11 +192,6 @@ nav a.nav-link {
 	margin: 20px auto;
 }
 
-.comment-title {
-	text-transform: uppercase;
-	padding: 20px 0 10px;
-}
-
 .comments .author {
 	font-size: 19px;
 	margin-bottom: 0;
@@ -318,5 +310,11 @@ footer.main-footer p {
 
 	.about-title {
 		font-size: 50px;
+	}
+}
+
+@media (min-width: 1805px) {
+	.container-fluid {
+		width: 1800px;
 	}
 }

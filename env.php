@@ -24,6 +24,6 @@ define('DB_PASSWORD', '');
 define('CONTACT_EMAIL', 'contact@celine-foucart.com');
 
 /**
- * Pagination confuration
+ * Pagination configuration
  */
-define('PER_PAGE', 10);
+define('PER_PAGE', 12);

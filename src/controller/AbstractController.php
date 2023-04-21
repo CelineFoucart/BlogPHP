@@ -4,19 +4,22 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Exception\BadRequestException;
-use App\exception\ForbiddenException;
-use App\Exception\NotFoundException;
-use App\Manager\ManagerInterface;
+use Twig\Environment;
 use App\router\Router;
-use App\Service\Session\Auth;
-use App\Service\Session\Session;
-use App\Twig\PaginationExtension;
 use App\Twig\PathExtension;
 use App\Twig\UserExtension;
+use App\Service\Session\Auth;
+use App\Twig\BbcodeExtension;
 use GuzzleHttp\Psr7\Response;
-use Twig\Environment;
+use App\Service\Session\Session;
+use App\Manager\ManagerInterface;
+use App\Twig\PaginationExtension;
 use Twig\Loader\FilesystemLoader;
+use App\Exception\NotFoundException;
+use App\exception\ForbiddenException;
+use App\Exception\BadRequestException;
+use App\manager\BlogUserManager;
+use App\Twig\StringExtension;
 
 abstract class AbstractController
 {
@@ -43,6 +46,8 @@ abstract class AbstractController
         $this->twig->addExtension(new PathExtension($this->router));
         $this->twig->addExtension(new PaginationExtension());
         $this->twig->addExtension(new UserExtension($this->session, $this->auth));
+        $this->twig->addExtension(new BbcodeExtension());
+        $this->twig->addExtension(new StringExtension());
     }
 
     /**
@@ -50,7 +55,10 @@ abstract class AbstractController
      */
     protected function render(string $template, array $params = [], int $statusCode = 200): Response
     {
-        $params = array_merge(['router' => $this->router], $this->twigVariables['twig_variables'], $params);
+        $params = array_merge(
+            ['router' => $this->router, 'session_user' => ['id' => $this->auth->getUserId(), 'username' => $this->auth->getUsername()]], 
+            $this->twigVariables['twig_variables'], $params
+        );
 
         return new Response($statusCode, [], $this->twig->render($template, $params));
     }
@@ -79,9 +87,9 @@ abstract class AbstractController
     /**
      * Create a redirection.
      */
-    protected function redirect(string $route, int $code = 301): Response
+    protected function redirect(string $route, array $params = [], int $code = 301): Response
     {
-        $url = $this->router->url($route);
+        $url = $this->router->url($route, $params);
 
         return new Response($code, ['location' => $url]);
     }

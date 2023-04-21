@@ -12,13 +12,31 @@
                 <i class="fas fa-arrow-left me-1"></i> Retour à la liste des articles
             </a>
         </p>
+        {% if errorMessage %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                L'enregistrement du commentaire a échoué. {{ errorMessage }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% elseif successMessage %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ successMessage }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
         <header>
-            <h2 class="h4">{{ post.title }}</h2>
+            <h2 class="h4">
+                {{ post.title }}
+                {% if is_admin() %}
+                    <a href="{{ path('app_admin_post_edit', {id: post.id}) }}" title="éditer" class="text-decoration-none">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
+                {% endif %}
+            </h2>
         </header>
         <div class="content">
             <p>{{ post.description|nl2br }}</p>
 
-            {{ post.content|nl2br }}
+            {{ post.content|parse_bbcode }}
         </div>
         <div class="post-footer">
             <p><strong>Publication :</strong> le {{ post.createdAt|date('d/m/Y à H:i') }}, par {{ post.author.username }}</p>
@@ -27,33 +45,32 @@
     </article>
 
     <article class="comments">
-        {% set total_comment = commentPagination.numberItems ? commentPagination.numberItems : 0 %}
-        <h2 class="comment-title">{{ total_comment }} commentaire{{ total_comment > 1 ? 's' : '' }}</h2>
+        <div class="card shadow mt-5">
+            <div class="card-header">
+                {% set total_comment = commentPagination.numberItems ? commentPagination.numberItems : 0 %}
+                <h2 class="card-title mb-0 h4">{{ total_comment }} commentaire{{ total_comment > 1 ? 's' : '' }}</h2>
+            </div>
+            <div class="card-body">
+                {% for comment in commentPagination.elements %}
+                    {% include "comment/_comment_card.html.twig" %}
+                {% else %}
+                    <p class="text-muted text-center">Aucun commentaire n'a été publié sur cet article.</p>
+                {% endfor %}
+                {{ pagination(commentPagination) }}
+            </div>
 
-        {% for comment in commentPagination.elements %}
-            {% include "comment/_comment_card.html.twig" %}
-        {% else %}
-            <p class="text-muted text-center">Aucun commentaire n'a été publié sur cet article.</p>
-        {% endfor %}
-
-        {{ pagination(commentPagination) }}
-        
-        
-        <h2 class="comment-title h4">Laissez un commentaire</h2>
-
-        {% if is_logged() %}
-            <form action="" method="post" class="comment-form">
-                {# Poster avec le pseudo <strong>Pseudo</strong> #}
-                <div class="mb-3">
-                    <label for="contentComment">Commentaire<sup>*</sup></label>
-                    <textarea class="form-control" id="contentComment" name="contentComment"
-                        placeholder="votre commentaire..." rows="5" required></textarea>
-                </div>
-                <button type="submit" class="button">Soumettre</button>
-            </form>
-        {% else %}
-            <p class="text-danger text-center">Pour poster un commentaire, connectez-vous.</p>
-        {% endif %}
+            <div class="card-footer">
+                {% if is_logged() %}
+                    {% include "comment/_comment_form.html.twig" %}
+                {% else %}
+                    <p class="text-center">Pour poster un commentaire, connectez-vous.</p>
+                {% endif %}
+            </div>
+        </div>
     </article>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/form-validation.js"></script>
 {% endblock %}

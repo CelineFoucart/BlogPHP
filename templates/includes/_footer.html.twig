@@ -6,6 +6,6 @@
     </span> | © Céline Foucart</p>
 
     {% if is_admin() %}
-        <p>[<a href="#" class="text-decoration-none">Panneau de contrôle d’administration</a>]</p>
+        <p>[<a href="{{ path('app_admin') }}" class="text-decoration-none">Panneau de contrôle d’administration</a>]</p>
     {% endif %}
 </footer>

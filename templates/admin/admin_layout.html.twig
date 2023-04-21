@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>
+			{% block title %}Administration{% endblock %}
+		</title>
+		<link rel="stylesheet" href="/bootstrap/bootstrap.min.css">
+		<link rel="stylesheet" href="/fontawesome-free/css/all.min.css">
+        <link rel="stylesheet" href="/css/admin.css">
+		<link rel="shortcut icon" href="/img/logo.png" type="image/png">
+		{% block stylesheets %}{% endblock %}
+	</head>
+	<body class="bg-light">
+		{% include "admin/components/_sidebar.html.twig" %}
+
+		<div class="wrapper" id="wrapper">
+			{% include "admin/components/_navbar.html.twig" %}
+
+			<div class="container-fluid mt-2">
+				<div class="row my-3">
+					<div class="col-md-6 col-lg-8">
+						<header>
+							<h1 class="fs-2">{% block page_title %}Administration{% endblock %}</h1>
+						</header>
+					</div>
+					
+					<div class="col-md-6 col-lg-4">
+						{% block breadcrumb_items %}{% endblock %}
+					</div>
+				</div>
+			</div>
+
+			<main class="container-fluid">
+				{% block body %}{% endblock %}
+			</main>
+		</div>
+
+		<script src="/bootstrap/bootstrap.bundle.min.js"></script>
+		{% block javascripts %}{% endblock %}
+	</body>
+</html>

@@ -68,7 +68,7 @@ class FormBuilder
      */
     public function addField(string $name, string $type = 'text', array $options = []): self
     {
-        $isRequired = (isset($option['required'])) ? $option['required'] : true;
+        $isRequired = (isset($options['required'])) ? $options['required'] : true;
         $field = new FieldType($name, $type, $isRequired);
 
         if (isset($options['placeholder'])) {
@@ -89,6 +89,10 @@ class FormBuilder
         
         if (isset($options['errorSectionClass'])) {
             $field->setErrorSectionClass($options['errorSectionClass']);
+        }
+        
+        if (isset($options['rows'])) {
+            $field->setTextareaRows($options['rows']);
         }
 
         if (isset($this->data[$name])) {

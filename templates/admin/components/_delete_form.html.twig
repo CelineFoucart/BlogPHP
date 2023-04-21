@@ -1,0 +1,39 @@
+{% set id = uniqid() %}
+<button aria-label="Supprimer" type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ id }}">
+    <i class="fas fa-trash"></i> <span class="d-none d-lg-inline">Supprimer</span>
+</button>
+
+{% if route is not defined %}
+    {% set route = 'app_admin_post_delete' %}
+{% endif %}
+
+{% if element.title is defined %}
+    {% set title = '"' ~ element.title ~ '"' %}
+{% else %}
+    {% set title = "cet élément" %}
+{% endif %}
+
+
+
+<div class="modal fade" id="deleteModal{{ id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{ path(route, {id: element.id }) }}" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="deleteModalLabel{{ id }}">Suppression d'un élément</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-danger text-start fw-bold">
+                        Voulez-vous vraiment supprimer {{ title }} ? 
+                        Attention, cette action est irréversible.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-danger btn-sm">Confirmer la suppression</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
