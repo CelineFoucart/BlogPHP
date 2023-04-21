@@ -32,7 +32,7 @@ class FormBuilder
     private array $data = [];
 
     /**
-     * @var FieldType[] an array of fields
+     * @var FieldType[] an array of fieldType objects
      */
     private array $fields = [];
 
@@ -119,20 +119,31 @@ class FormBuilder
         if (empty($this->fields)) {
             throw new Exception('The form must have at least one field.');
         }
+        $formParts = $this->getFormParts();
+        $fields = join('', $formParts['fields']);
 
-        $form = '<form action="'.$this->action.'" method="'.$this->method.'" class="'.$this->formClasses.'">';
-        $errorTopBlock = $this->formatErrorGeneralBlock();
+        return $formParts['start'] . $formParts['errorBlock'] . $fields . $formParts['button'] . $formParts['end'];
+    }
 
-        $fields = '';
-        foreach ($this->fields as $field) {
-            $fields .= $field->render();
+    /**
+     * Generate form parts.
+     *
+     * @return array
+     */
+    public function getFormParts(): array
+    {
+        $fields = [];
+        foreach ($this->fields as $key => $field) {
+            $fields[$key] = $field->render();
         }
 
-        $button = '<button type="submit" class="'. $this->button['class'].'">'. $this->button['text'].'</button>';
-
-        $form .= $errorTopBlock.$fields.$button.'</form>';
-
-        return $form;
+        return [
+            'start' => '<form action="'.$this->action.'" method="'.$this->method.'" class="'.$this->formClasses.'">',
+            'errorBlock' => $this->formatErrorGeneralBlock(),
+            'fields' => $fields,
+            'button' => '<button type="submit" class="'. $this->button['class'].'">'. $this->button['text'].'</button>',
+            'end' => '</form>',
+        ];
     }
 
     /**

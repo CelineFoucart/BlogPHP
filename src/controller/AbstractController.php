@@ -31,7 +31,7 @@ abstract class AbstractController
 
     private array $twigVariables;
 
-    private Environment $twig;
+    protected Environment $twig;
 
     public function __construct(Router $router)
     {
