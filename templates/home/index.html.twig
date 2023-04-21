@@ -23,7 +23,7 @@
 					<img src="/img/php-symfony-mysql-sample.png" class="card-img-top" alt=".logos de PHP et Symfony">
 					<div class="card-body">
 						<h3 class="card-title h5">PHP et Symfony</h3>
-						<p class="card-text">Je développe côté serveur en utilisant PHP et le framework Symfony.</p>
+						<p class="card-text">Je développe côté serveur en utilisant PHP et Symfony.</p>
 					</div>
 				</div>
 			</div>
@@ -57,41 +57,34 @@
 			</a>
 		</p>
 		<p class="text-center">Envie d'en savoir plus ? Télécharger mon <a href="/assets/CV_Céline_Foucart.pdf">CV</a> ou remplissez le formulaire suivant pour m'envoyer un message.</p>
-		<form action="" method="post" class="comment-form">
+		{% if successMessage %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ successMessage }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+		{% elseif errorMessage %}
+			<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ errorMessage }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+		<form action="" method="post" class="needs-validation" novalidate>
 			<div class="row">
 				<div class="col-md-6">
-					<div class="mb-3">
-						<label for="firstname">Prénom<sup>*</sup></label>
-						<input type="text" class="form-control" id="firstname" aria-describedby="firstname" name="firstname"
-							placeholder="Votre prénom" required>
-					</div>
+					{{ form.fields.firstname|raw }}
 				</div>
 				<div class="col-md-6">
-					<div class="mb-3">
-						<label for="lastname">Nom<sup>*</sup></label>
-						<input type="text" class="form-control" id="lastname" aria-describedby="lastname" name="lastname"
-							placeholder="Votre nom" required>
-					</div>
+					{{ form.fields.lastname|raw }}
 				</div>
 			</div>
-			<div class="mb-3">
-				<label for="mail">Mail<sup>*</sup></label>
-				<input type="email" class="form-control" id="mail" aria-describedby="mail" name="mail"
-					placeholder="votre e-mail" required>
-			</div>
-			<div class="mb-3">
-				<label for="contentComment">Message<sup>*</sup></label>
-				<textarea class="form-control" id="contentComment" name="contentComment"
-					placeholder="votre commentaire..." rows="5" required></textarea>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input" type="checkbox" value="" id="book-agree">
-				<label class="form-check-label" for="book-agree">
-					J’autorise ce site à conserver mes données transmises via ce formulaire. 
-					Voir notre <a href="{{ path('app_privacy') }}">Politique de confidentialité</a>.
-				</label>
-			</div>
-			<button type="submit" class="button">Soumettre</button>
+			{{ form.fields.email|raw }}
+			{{ form.fields.message|raw }}
+			{{ form.fields.agreeTerms|raw }}
+			{{ form.button|raw }}
 		</form>
 	</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/form-validation.js"></script>
 {% endblock %}

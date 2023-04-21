@@ -1,0 +1,23 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+    <title>Demande de contact</title>
+</head>
+
+<body>
+    <main>
+        <header>
+            <h1>Vous avez reçu une demande de contact</h1>
+            <p>Prénom : {{ email.firstname }}</p>
+            <p>Nom : {{ email.lastname }}</p>
+            <p>Email : {{ email.email }}</p>
+        </header>
+
+        <article>
+            <h2>Message</h2>
+            <p>{{ email.message }}</p>
+        </article>
+    </main>
+</body>
+</html>

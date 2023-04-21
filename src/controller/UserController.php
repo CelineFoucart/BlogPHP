@@ -89,6 +89,8 @@ class UserController extends AbstractController
                 $userId = $userManager->createUser($user, $role->getId());
                 $this->auth->session($userId, 0, $user->getUsername());
 
+                // send email after registration
+
                 return $this->redirect('app_profile');
             }
         }
@@ -98,14 +100,7 @@ class UserController extends AbstractController
 
     public function profile(): ResponseInterface
     {
-        $userId = $this->auth->getUserId();
-        if (null === $userId) {
-            return $this->redirect('app_login');
-        }
-
-        $userManager = $this->getManager(BlogUserManager::class);
-        $user = $userManager->findBy('id', $userId);
-
+        $user = $this->getUser();
         if (null === $user) {
             return $this->redirect('app_login');
         }
@@ -140,5 +135,18 @@ class UserController extends AbstractController
         ;
 
         return $validator->getErrors();
+    }
+
+    private function getUser(): ?BlogUser
+    {
+        $userId = $this->auth->getUserId();
+        if (null === $userId) {
+            return null;
+        }
+
+        $userManager = $this->getManager(BlogUserManager::class);
+        $user = $userManager->findBy('id', $userId);
+
+        return $user;
     }
 }
