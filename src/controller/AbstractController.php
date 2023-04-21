@@ -18,6 +18,7 @@ use Twig\Loader\FilesystemLoader;
 use App\Exception\NotFoundException;
 use App\exception\ForbiddenException;
 use App\Exception\BadRequestException;
+use App\manager\BlogUserManager;
 use App\Twig\StringExtension;
 
 abstract class AbstractController
@@ -54,7 +55,10 @@ abstract class AbstractController
      */
     protected function render(string $template, array $params = [], int $statusCode = 200): Response
     {
-        $params = array_merge(['router' => $this->router], $this->twigVariables['twig_variables'], $params);
+        $params = array_merge(
+            ['router' => $this->router, 'session_user' => ['id' => $this->auth->getUserId(), 'username' => $this->auth->getUsername()]], 
+            $this->twigVariables['twig_variables'], $params
+        );
 
         return new Response($statusCode, [], $this->twig->render($template, $params));
     }

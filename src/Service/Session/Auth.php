@@ -14,9 +14,9 @@ class Auth
     /**
      * Hydrate the session.
      */
-    public function session(int $id, int $isAdmin): self
+    public function session(int $id, int $isAdmin, string $username): self
     {
-        $this->session->set('id', $id)->set('isAdmin', $isAdmin);
+        $this->session->set('id', $id)->set('isAdmin', $isAdmin)->set('username', $username);
 
         return $this;
     }
@@ -58,6 +58,18 @@ class Auth
     {
         if ($this->logged()) {
             return $this->session->get('id');
+        }
+
+        return null;
+    }
+
+    /**
+     * Return the username.
+     */
+    public function getUsername(): ?string
+    {
+        if ($this->logged()) {
+            return $this->session->get('username');
         }
 
         return null;

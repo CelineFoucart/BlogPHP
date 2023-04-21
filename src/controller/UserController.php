@@ -37,7 +37,7 @@ class UserController extends AbstractController
                 if (password_verify($data['password'], $user->getPassword())) {
                     $userRole = $user->getRole();
                     $isAdmin = ($userRole !== null && $userRole->getAlias() === 'ROLE_ADMIN') ? 1 : 0;
-                    $this->auth->session($user->getId(), $isAdmin);
+                    $this->auth->session($user->getId(), $isAdmin, $user->getUsername());
 
                     return $this->redirect('app_profile');
                 } else {
@@ -87,7 +87,7 @@ class UserController extends AbstractController
 
                 
                 $userId = $userManager->createUser($user, $role->getId());
-                $this->auth->session($userId, 0);
+                $this->auth->session($userId, 0, $user->getUsername());
 
                 return $this->redirect('app_profile');
             }

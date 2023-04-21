@@ -61,6 +61,25 @@ class CommentManager extends AbstractManager
         ;
     }
 
+    public function create(Comment $comment, int $userId): int
+    {
+        $query = $this->getQuery();
+        $insertSQL = $query->select('content', 'updated_at', 'is_validated', 'created_at', 'author_id', 'post_id')
+            ->setParams([
+                'content' => htmlspecialchars($comment->getContent()),
+                'updated_at' => $comment->getUpdatedAt()->format('Y-m-d H:i:s'),
+                'is_validated' => $comment->getIsValidated(),
+                'created_at' => $comment->getCreatedAt()->format('Y-m-d H:i:s'),
+                'author_id' => $userId,
+                'post_id' => $comment->getPost()->getId(),
+            ])
+            ->toSQL('insert')
+        ;
+
+        return $this->getBuilder()->alter($insertSQL, $query->getParams());
+
+    }
+
     public function update(Comment $comment): int
     {
         $query = $this->getQuery();
