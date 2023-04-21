@@ -63,7 +63,9 @@
                 {% if is_logged() %}
                     {% include "comment/_comment_form.html.twig" %}
                 {% else %}
-                    <p class="text-center">Pour poster un commentaire, connectez-vous.</p>
+                    <p class="text-center">
+                        Pour poster un commentaire, <a href="{{ path('app_login') }}">connectez-vous</a> ou <a href="{{ path('app_register') }}">inscrivez-vous</a>.
+                    </p>
                 {% endif %}
             </div>
         </div>
