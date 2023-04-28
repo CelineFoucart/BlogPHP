@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Service\Mailer;
 use App\Service\Validator;
 use App\Service\Form\FormBuilder;
-use App\Service\Mailer;
 use GuzzleHttp\Psr7\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
+use App\Service\CSRF\CsrfInvalidException;
 
 class HomeController extends AbstractController
 {
@@ -18,45 +19,58 @@ class HomeController extends AbstractController
         $errors = [];
         $successMessage = null;
         $errorMessage = null;
+        $invalidCSRFMessage = null;
+        
+        
 
-        if ($request->getMethod() === 'POST') {
-            $data = $request->getParsedBody();
-            $errors = $this->validateContactForm($data);
-
-            if (!isset($data['agreeTerms'])) {
-                $errors['agreeTerms'] = ['Vous devez accepter la conservation de vos données pour que votre demande soit traitée.'];
-            }
-
-            if (empty($errors)) {
-                $mailer = (new Mailer())
-                    ->setTo(CONTACT_EMAIL)
-                    ->setFrom($data['email'], $data['firstname'] . ' ' . $data['lastname'])
-                    ->setBody($this->twig->render('emails/contact.html.twig', ['email' => $data]))
-                    ->setSubject("Demande de contact")
-                ;
-                $status = $mailer->send();
-
-                if ($status) {
-                    $data = [];
-                    $successMessage = "Votre message a été envoyé à l'administrateur.";
-                } else {
-                    $errorMessage = "Il y a eu une erreur et l'envoi de l'email a échoué";
+        try {
+            if ($request->getMethod() === 'POST') {
+                $this->csrf->process($request);
+                $data = $request->getParsedBody();
+                $errors = $this->validateContactForm($data);
+    
+                if (!isset($data['agreeTerms'])) {
+                    $errors['agreeTerms'] = ['Vous devez accepter la conservation de vos données pour que votre demande soit traitée.'];
                 }
-            } else {
-                $errorMessage = "Les champs du formulaire sont mal remplis.";
+    
+                if (empty($errors)) {
+                    $mailer = (new Mailer())
+                        ->setTo(CONTACT_EMAIL)
+                        ->setFrom($data['email'], $data['firstname'] . ' ' . $data['lastname'])
+                        ->setBody($this->twig->render('emails/contact.html.twig', ['email' => $data]))
+                        ->setSubject("Demande de contact")
+                    ;
+                    $status = $mailer->send();
+    
+                    if ($status) {
+                        $data = [];
+                        $successMessage = "Votre message a été envoyé à l'administrateur.";
+                    } else {
+                        $errorMessage = "Il y a eu une erreur et l'envoi de l'email a échoué";
+                    }
+                } else {
+                    $errorMessage = "Les champs du formulaire sont mal remplis.";
+                }
             }
+        } catch (CsrfInvalidException $th) {
+            $invalidCSRFMessage = $th->getMessage();
         }
 
         return $this->render('home/index.html.twig', [
             'form' => $this->getContactForm($data, $errors),
             'successMessage' => $successMessage,
             'errorMessage' => $errorMessage,
+            'invalidCSRFMessage' => $invalidCSRFMessage,
         ]);
     }
 
     public function privacy(ServerRequest $request): ResponseInterface
     {
-        return $this->render('home/privacy.html.twig');
+        $serverParams = $request->getServerParams();
+
+        return $this->render('home/privacy.html.twig', [
+            'domaine' => $serverParams['REQUEST_SCHEME'] . '://' . $serverParams['HTTP_HOST'],
+        ]);
     }
 
     /**
@@ -64,6 +78,8 @@ class HomeController extends AbstractController
      */
     private function getContactForm(array $data, array $errors = []): array
     {
+        $token = $this->csrf->generateToken();
+
         return (new FormBuilder('POST'))
             ->setErrors($errors)
             ->setData($data)
@@ -74,7 +90,7 @@ class HomeController extends AbstractController
             ->addField('agreeTerms', 'checkbox', [
                 'label' => 'J’autorise ce site à conserver mes données transmises via ce formulaire. Voir notre <a href="/privacy">Politique de confidentialité</a>.'
             ])->setButton('Soumettre', "button")
-            ->getFormParts()
+            ->getFormParts($token)
         ;
     }
 

@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\BlogUser;
+use App\Service\Validator;
 use App\manager\BlogUserManager;
 use App\manager\UserRoleManager;
 use App\Service\Form\FormBuilder;
-use App\Service\Validator;
 use GuzzleHttp\Psr7\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
+use App\Service\CSRF\CsrfInvalidException;
 
 class UserController extends AbstractController
 {
@@ -21,34 +22,40 @@ class UserController extends AbstractController
         }
 
         $error = false;
+        $invalidCSRFMessage = null;
 
-        if ($request->getMethod() === 'POST') {
-            $data = $request->getParsedBody();
-
-            $user = null;
-
-            if (isset($data['pseudo']) && isset($data['password'])) {
-                /** @var BlogUserManager */
-                $userManager = $this->getManager(BlogUserManager::class);
-                $user = $userManager->findUserAfterLogin(htmlspecialchars($data['pseudo']));
-            }
-
-            if ($user !== null) {
-                if (password_verify($data['password'], $user->getPassword())) {
-                    $userRole = $user->getRole();
-                    $isAdmin = ($userRole !== null && $userRole->getAlias() === 'ROLE_ADMIN') ? 1 : 0;
-                    $this->auth->session($user->getId(), $isAdmin, $user->getUsername());
-
-                    return $this->redirect('app_profile');
+        try {
+            if ($request->getMethod() === 'POST') {
+                $this->csrf->process($request);
+                $data = $request->getParsedBody();
+    
+                $user = null;
+    
+                if (isset($data['pseudo']) && isset($data['password'])) {
+                    /** @var BlogUserManager */
+                    $userManager = $this->getManager(BlogUserManager::class);
+                    $user = $userManager->findUserAfterLogin(htmlspecialchars($data['pseudo']));
+                }
+    
+                if ($user !== null) {
+                    if (password_verify($data['password'], $user->getPassword())) {
+                        $userRole = $user->getRole();
+                        $isAdmin = ($userRole !== null && $userRole->getAlias() === 'ROLE_ADMIN') ? 1 : 0;
+                        $this->auth->session($user->getId(), $isAdmin, $user->getUsername());
+    
+                        return $this->redirect('app_profile');
+                    } else {
+                        $error = true;
+                    }
                 } else {
                     $error = true;
                 }
-            } else {
-                $error = true;
             }
+        } catch (CsrfInvalidException $th) {
+            $invalidCSRFMessage = $th->getMessage();
         }
 
-        return $this->render('user/login.html.twig', ['error' => $error]);
+        return $this->render('user/login.html.twig', ['error' => $error, 'invalidCSRFMessage' => $invalidCSRFMessage]);
     }
 
     public function logout(): ResponseInterface
@@ -66,36 +73,43 @@ class UserController extends AbstractController
 
         $errors = [];
         $data = [];
+        $invalidCSRFMessage = null;
 
-        if ($request->getMethod() === 'POST') {
-            /** @var BlogUserManager */
-            $userManager = $this->getManager(BlogUserManager::class);
-
-            $data = $request->getParsedBody();
-            $errors = $this->validateForRegistration($data, $userManager);
-
-            if (empty($errors)) {
-                $password = password_hash($data['password'], PASSWORD_DEFAULT);
-                $roleManager = $this->getManager(UserRoleManager::class);
-                $role = $roleManager->findBy('alias', 'ROLE_USER');
-
-                $user = (new BlogUser())
-                    ->setUsername(htmlspecialchars($data['pseudo']))
-                    ->setEmail(htmlspecialchars($data['email']))
-                    ->setPassword($password)
-                ;
-
-                
-                $userId = $userManager->createUser($user, $role->getId());
-                $this->auth->session($userId, 0, $user->getUsername());
-
-                // send email after registration
-
-                return $this->redirect('app_profile');
+        try {
+            if ($request->getMethod() === 'POST') {
+                $this->csrf->process($request);
+                /** @var BlogUserManager */
+                $userManager = $this->getManager(BlogUserManager::class);
+    
+                $data = $request->getParsedBody();
+                $errors = $this->validateForRegistration($data, $userManager);
+    
+                if (empty($errors)) {
+                    $password = password_hash($data['password'], PASSWORD_DEFAULT);
+                    $roleManager = $this->getManager(UserRoleManager::class);
+                    $role = $roleManager->findBy('alias', 'ROLE_USER');
+    
+                    $user = (new BlogUser())
+                        ->setUsername(htmlspecialchars($data['pseudo']))
+                        ->setEmail(htmlspecialchars($data['email']))
+                        ->setPassword($password)
+                    ;
+    
+                    
+                    $userId = $userManager->createUser($user, $role->getId());
+                    $this->auth->session($userId, 0, $user->getUsername());
+    
+                    return $this->redirect('app_profile');
+                }
             }
+        } catch (CsrfInvalidException $th) {
+            $invalidCSRFMessage = $th->getMessage();
         }
 
-        return $this->render('user/register.html.twig', ['form' => $this->generateRegistrationForm($errors, $data)]);
+        return $this->render('user/register.html.twig', [
+            'form' => $this->generateRegistrationForm($errors, $data), 
+            'invalidCSRFMessage' => $invalidCSRFMessage
+        ]);
     }
 
     public function profile(): ResponseInterface
@@ -110,6 +124,8 @@ class UserController extends AbstractController
 
     private function generateRegistrationForm(array $errors, array $data): string
     {
+        $token = $this->csrf->generateToken();
+
         return (new FormBuilder('POST'))
             ->setErrors($errors)
             ->setData($data)
@@ -119,7 +135,7 @@ class UserController extends AbstractController
             ->addField("password", 'password', ['label' => 'Mot de passe'])
             ->addField("password-confirm", 'password', ['label' => 'Confirmer le mot de passe'])
             ->setButton("S'inscrire", 'button')
-            ->renderForm()
+            ->renderForm($token)
         ;
     }
 

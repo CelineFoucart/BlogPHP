@@ -19,6 +19,7 @@ class Validator
         'equal' => "La valeur de ce champ doit être identique à celle du champ %s",
         'mail' => "Ce champ doit comporter un email valide suivant le format nom@domaine.fr",
         'unique' => "La valeur de ce champ est déjà utilisée en base de données.",
+        'select' => "L'option choisie pour ce champ n'est pas valide."
     ];
 
     public function __construct(array $data)
@@ -151,6 +152,24 @@ class Validator
         $total = $manager->count("$propertyName = :field", ['field' => $this->data[$key]]);
         if (0 !== $total) {
             $this->errors[$key][] = $this->messages['unique'];
+        }
+
+        return $this;
+    }
+
+    /**
+     * Check if the selected value is a valid choice.
+     */
+    public function selectIsValid(string $key, array $validOptions): self
+    {
+        if (!isset($this->data[$key])) {
+            $this->errors[$key][] = $this->messages['exist'];
+
+            return $this;
+        }
+
+        if (!in_array($this->data[$key], $validOptions)) {
+            $this->errors[$key][] = $this->messages['select'];
         }
 
         return $this;

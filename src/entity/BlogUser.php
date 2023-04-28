@@ -149,4 +149,9 @@ final class BlogUser extends AbstractEntity
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->username;
+    }
 }

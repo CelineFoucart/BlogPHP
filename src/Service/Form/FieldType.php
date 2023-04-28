@@ -18,7 +18,7 @@ namespace App\Service\Form;
  *  $fieldWithValue = (new Field("title", "text"))->setValue("Lorem Ipsum")->render();
  *  ```
  */
-class FieldType
+final class FieldType extends AbstractType
 {
     /**
      * The field type, accepted types: text, textarea, email, password, number, checkbox.
@@ -26,59 +26,9 @@ class FieldType
     private string $type;
 
     /**
-     * The value of the HTML attribute name.
-     */
-    private string $name;
-
-    /**
-     * The value of the HTML attribute id.
-     */
-    private string $id;
-
-    /**
-     * The value of the field label.
-     */
-    private ?string $label = null;
-
-    /**
-     * Define if the field is required.
-     */
-    private bool $required;
-
-    /**
      * The value of the HTML attribute placeholder.
      */
     private string $placeholder = '';
-
-    /**
-     * The value of the field.
-     */
-    private mixed $value = '';
-
-    /**
-     * Define if the field has errors.
-     */
-    private bool $hasError = false;
-
-    /**
-     * The error message to display.
-     */
-    private string $errorMessage = "Ce champ n'est pas valide";
-
-    /**
-     * The input of textarea classes.
-     */
-    private string $inputClass = 'form-control';
-
-    /**
-     * The error class for the input or textarea.
-     */
-    private string $errorClass = 'is-invalid';
-
-    /**
-     * The error section class.
-     */
-    private string $errorSectionClass = 'invalid-feedback';
 
     /**
      * The value of the HTML attribute rows for textarea.
@@ -87,13 +37,11 @@ class FieldType
 
     public function __construct(string $name, string $type = 'text', bool $required = true)
     {
-        $this->name = $name;
-        $this->id = $name;
+        parent::__construct($name, $required);
         $this->setType($type);
-        if ($type === 'checkbox') {
+        if ('checkbox' === $type) {
             $this->inputClass = 'form-check-input';
         }
-        $this->required = $required;
     }
 
     /**
@@ -113,47 +61,6 @@ class FieldType
     }
 
     /**
-     * Set the value of value.
-     */
-    public function setValue(mixed $value): self
-    {
-        $this->value = $value;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of id.
-     */
-    public function setId(string $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Define the field as invalid.
-     */
-    public function defineAdInvalid(string $message = "Ce champ n'est pas valide"): self
-    {
-        $this->hasError = true;
-        $this->errorMessage = $message;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of label.
-     */
-    public function setLabel(?string $label): self
-    {
-        $this->label = $label;
-
-        return $this;
-    }
-
-    /**
      * Set the value of placeholder.
      */
     public function setPlaceholder(string $placeholder): self
@@ -162,35 +69,7 @@ class FieldType
 
         return $this;
     }
-    
-    /**
-     * Set the value of input class.
-     */
-    public function setInputClass(string $inputClass): self
-    {
-        $this->inputClass = $inputClass;
 
-        return $this;
-    }/**
-     * Set the value of errorClass.
-     */
-    public function setErrorClass(string $errorClass): self
-    {
-        $this->errorClass = $errorClass;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of errorSectionClass.
-     */
-    public function setErrorSectionClass(string $errorSectionClass): self
-    {
-        $this->errorSectionClass = $errorSectionClass;
-
-        return $this;
-    }
-    
     /**
      * Set the value of textareaRows.
      */
@@ -206,7 +85,7 @@ class FieldType
      */
     public function render(): string
     {
-        $errorDiv = $this->getErrorAsHTML();        
+        $errorDiv = $this->getErrorAsHTML();
 
         if ('textarea' === $this->type) {
             $field = $this->getFieldAsTextarea();
@@ -224,25 +103,6 @@ class FieldType
         }
 
         return '<div class="mb-3">'.$label.$field.$errorDiv.'</div>';
-    }
-
-    /**
-     * Render the label of the field.
-     */
-    private function getFormattedLabel(?string $labelClass = null): string
-    {
-        $label = ($this->label) ? $this->label : ucfirst($this->name);
-        if ($this->required) {
-            $label .= '<sup>*</sup>';
-        }
-
-        if ($labelClass) {
-            $class = 'class="'.$labelClass.'"';
-        } else {
-            $class = '';
-        }
-
-        return '<label '.$class .' for="'.$this->id.'">'.$label.'</label>';
     }
 
     /**
@@ -274,32 +134,5 @@ class FieldType
 
         return '<input type="'.$this->type.'" class="'.$inputClass.'" id="'.$this->id.'" name="'.$this->name.'" 
             placeholder="'.$this->placeholder.$data.$required.'>';
-    }
-
-    /**
-     * Render the input or textarea classes.
-     */
-    private function getInputClasses(): string
-    {
-        $inputClass = $this->inputClass;
-        if ($this->hasError) {
-            $inputClass .= ' '.$this->errorClass;
-        }
-
-        return $inputClass;
-    }
-
-    /**
-     * Render the error in a HTML element.
-     */
-    private function getErrorAsHTML(): string
-    {
-        $error = '';
-
-        if ($this->hasError) {
-            $error .= '<div class="'.$this->errorSectionClass.'">'.$this->errorMessage.'</div>';
-        }
-
-        return $error;
     }
 }

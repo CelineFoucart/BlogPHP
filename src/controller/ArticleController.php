@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use DateTime;
+use App\Entity\Comment;
 use App\Entity\BlogPost;
 use App\Entity\BlogUser;
-use App\Entity\Comment;
 use App\Service\Validator;
 use App\Service\Pagination;
 use App\manager\CommentManager;
 use App\Manager\BlogPostManager;
-use DateTime;
 use GuzzleHttp\Psr7\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
+use App\Service\CSRF\CsrfInvalidException;
 
 class ArticleController extends AbstractController
 {
@@ -44,6 +45,7 @@ class ArticleController extends AbstractController
         $errorMessage = null;
         $commentSubmitted = "";
         $successMessage = null;
+        $invalidCSRFMessage = null;
 
         if (null === $blogPost) {
             $this->createNotFoundException("Cet article n'existe pas.");
@@ -51,18 +53,25 @@ class ArticleController extends AbstractController
 
         $commentPagination = $this->getPostComments($request, $blogPost->getId());
 
-        if ($request->getMethod() === 'POST') {
-            $userId = $this->auth->getUserId();
-            $data = $request->getParsedBody();
-
-            $status = $this->createComment($data, $blogPost, $userId);
-
-            if ($status['commentId'] > 0) {
-                $successMessage = $status['message'];
-            }  else {
-                $errorMessage = $status['message'];
-                $commentSubmitted = (isset($data['content'])) ? htmlspecialchars($data['content']) : "";
+        try {
+            if ($request->getMethod() === 'POST') {
+                $userId = $this->getUserId();
+                $this->csrf->process($request);
+                $data = $request->getParsedBody();
+    
+                $status = $this->createComment($data, $blogPost, $userId);
+    
+                if ($status['commentId'] > 0) {
+                    $successMessage = $status['message'];
+                }  else {
+                    $errorMessage = $status['message'];
+                    $commentSubmitted = (isset($data['content'])) ? htmlspecialchars($data['content']) : "";
+                }
             }
+        } catch (CsrfInvalidException $th) {
+            $invalidCSRFMessage = $th->getMessage();
+        } catch (\Exception $th) {
+            $errorMessage = $th->getMessage();
         }
 
         return $this->render('article/show.html.twig', [
@@ -71,6 +80,7 @@ class ArticleController extends AbstractController
             'errorMessage' => $errorMessage,
             'commentSubmitted' => $commentSubmitted,
             'successMessage' => $successMessage,
+            'invalidCSRFMessage' => $invalidCSRFMessage,
         ]);
     }
 
@@ -83,15 +93,8 @@ class ArticleController extends AbstractController
      * 
      * @return array     an array with the commentId (0 if fail) and a message
      */
-    private function createComment(array $data, BlogPost $post, ?int $userId): array
+    private function createComment(array $data, BlogPost $post, int $userId): array
     {
-        if (!$userId) {
-            return [
-                'commentId' => 0,
-                'message' => "Vous devez vous connecter pour poster un commentaire."
-            ];
-        }
-
         $errors = (new Validator($data))->checkLength('content', 3, 10000)->getErrors();
 
         if (empty($errors)) {
@@ -137,5 +140,18 @@ class ArticleController extends AbstractController
     private function getCommentManager(): CommentManager
     {
         return $this->getManager(CommentManager::class);
+    }
+
+    /**
+     * Get the id of the current user.
+     */
+    private function getUserId(): int
+    {
+        $userId = $this->auth->getUserId();
+        if (!$userId) {
+            throw new \Exception("Vous devez vous connecter pour poster un commentaire.");
+        }
+
+        return $userId;
     }
 }

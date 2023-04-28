@@ -7,6 +7,12 @@
 {% block body %}
     <div class="body-page about-page gap">
         <h2 class="about-title">Inscrivez-vous</h2>
+        {% if invalidCSRFMessage %}
+			<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ invalidCSRFMessage }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+		{% endif %}
         {{ form|raw }}
     </div>
 {% endblock %}
