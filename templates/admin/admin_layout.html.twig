@@ -23,7 +23,9 @@
 				<div class="row my-3">
 					<div class="col-md-6 col-lg-8">
 						<header>
-							<h1 class="fs-2">{% block page_title %}Administration{% endblock %}</h1>
+							<h1 class="fs-2 {{ errorMessage is defined ? 'text-danger': '' }}">
+								{% block page_title %}Administration{% endblock %}
+							</h1>
 						</header>
 					</div>
 					

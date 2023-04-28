@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use DateTime;
 use App\router\Router;
 use App\Entity\Comment;
 use App\Service\Validator;
+use GuzzleHttp\Psr7\Response;
 use App\manager\CommentManager;
 use App\Service\Form\FormBuilder;
 use GuzzleHttp\Psr7\ServerRequest;
 use App\Controller\AbstractController;
-use DateTime;
-use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
+use App\Service\CSRF\CsrfInvalidException;
 
 class AdminCommentController extends AbstractController
 {
@@ -70,22 +71,28 @@ class AdminCommentController extends AbstractController
         $comment = $this->getComment($request);
         $data = [ 'content' => $comment->getContent(), 'isValidated' => $comment->getIsValidated() ];
         $errors = [];
+        $invalidCSRFMessage = null;
 
-        if ($request->getMethod() === 'POST') {
-            $data = $request->getParsedBody();
-            $data['isValidated'] = (isset($data['isValidated'])) ? true : false;
-            $errors = (new Validator($data))->checkLength('content', 3, 10000)->getErrors();
-
-            if (empty($errors)) {
-                $comment
-                    ->setContent(htmlspecialchars($data['content']))
-                    ->setUpdatedAt(new DateTime())
-                    ->setIsValidated($data['isValidated'])
-                ;
-                $this->commentManager->update($comment);
-
-                return $this->redirect('app_admin_comment_show', ['id' => $comment->getId()]);
+        try {
+            if ($request->getMethod() === 'POST') {
+                $this->csrf->process($request);
+                $data = $request->getParsedBody();
+                $data['isValidated'] = (isset($data['isValidated'])) ? true : false;
+                $errors = (new Validator($data))->checkLength('content', 3, 10000)->getErrors();
+    
+                if (empty($errors)) {
+                    $comment
+                        ->setContent(htmlspecialchars($data['content']))
+                        ->setUpdatedAt(new DateTime())
+                        ->setIsValidated($data['isValidated'])
+                    ;
+                    $this->commentManager->update($comment);
+    
+                    return $this->redirect('app_admin_comment_show', ['id' => $comment->getId()]);
+                }
             }
+        } catch (CsrfInvalidException $th) {
+            $invalidCSRFMessage = $th->getMessage();
         }
 
         $form = (new FormBuilder('POST'))
@@ -94,13 +101,14 @@ class AdminCommentController extends AbstractController
             ->addField('content', 'textarea', ['label' => "Contenu du commentaire", 'rows' => 5])
             ->addField('isValidated', 'checkbox', ['label' => 'Valider le commentaire', 'required' => false])
             ->setButton('Enregistrer')
-            ->renderForm()
+            ->renderForm($this->csrf->generateToken())
         ;
 
         return $this->render('admin/comment/edit.html.twig', [
             'activeComment' => true,
             'form' => $form,
             'comment' => $comment,
+            'invalidCSRFMessage' => $invalidCSRFMessage,
         ]);
     }
 
@@ -109,18 +117,26 @@ class AdminCommentController extends AbstractController
      */
     public function updateStatus(ServerRequest $request): ResponseInterface
     {
-        $comment = $this->getComment($request);
+        try {
+            $this->csrf->process($request);
+            $comment = $this->getComment($request);
 
-        $data = $request->getParsedBody();
-        $isValidated = (isset($data['isValidated'])) ? true : false;
-        $comment->setIsValidated($isValidated)->setUpdatedAt(new DateTime());
-        $this->commentManager->update($comment);
+            $data = $request->getParsedBody();
+            $isValidated = (isset($data['isValidated'])) ? true : false;
+            $comment->setIsValidated($isValidated)->setUpdatedAt(new DateTime());
+            $this->commentManager->update($comment);
 
-        if (isset($data['redirect'])) {
-            return new Response(301, ['location' => $data['redirect']]);
+            if (isset($data['redirect'])) {
+                return new Response(301, ['location' => $data['redirect']]);
+            }
+
+            return $this->redirect('app_admin_comment_show', ['id' => $comment->getId()]);
+        } catch (\Throwable $th) {
+            return $this->render('admin/components/error.html.twig', [
+                'errorMessage' => $th->getMessage(),
+                'title' => "Erreur lors de la validation",
+            ]);
         }
-
-        return $this->redirect('app_admin_comment_show', ['id' => $comment->getId()]);
     }
 
     /**
@@ -128,10 +144,17 @@ class AdminCommentController extends AbstractController
      */
     public function delete(ServerRequest $request): ResponseInterface
     {
-        $comment = $this->getComment($request);
+        try {
+            $comment = $this->getComment($request);
         $this->commentManager->delete($comment);
         
-        return $this->redirect('app_admin_comment_index');
+            return $this->redirect('app_admin_comment_index');
+        } catch (\Exception $th) {
+            return $this->render('admin/components/error.html.twig', [
+                'errorMessage' => $th->getMessage(),
+                'title' => "Erreur de suppression",
+            ]);
+        }
     }
 
     /**

@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use App\Controller\AbstractController;
+use DateTime;
+use App\router\Router;
 use App\Entity\BlogPost;
 use App\Entity\BlogUser;
+use App\Service\Validator;
 use App\manager\BlogPostManager;
 use App\manager\BlogUserManager;
-use App\router\Router;
 use App\Service\Form\FormBuilder;
-use App\Service\Validator;
-use DateTime;
 use GuzzleHttp\Psr7\ServerRequest;
+use App\Controller\AbstractController;
 use Psr\Http\Message\ResponseInterface;
+use App\Service\CSRF\CsrfInvalidException;
 
 class AdminPostController extends AbstractController
 {
@@ -64,6 +65,7 @@ class AdminPostController extends AbstractController
     {
         $blogPost = $this->getPost($request);
         $users = $this->getUsers();
+        $invalidCSRFMessage = null;
 
         $data = [
             'title' => $blogPost->getTitle(),
@@ -74,30 +76,36 @@ class AdminPostController extends AbstractController
         ];
         $errors = [];
 
-        if ('POST' === $request->getMethod()) {
-            $data = $request->getParsedBody();
-            $errors = $this->validateForm($data, false, array_keys($users));
-
-            if (empty($errors)) {
-                $blogPost
-                    ->setTitle($data['title'])
-                    ->setSlug($data['slug'])
-                    ->setContent($data['content'])
-                    ->setDescription($data['description'])
-                    ->setAuthor((new BlogUser())->setId((int)$data['author']))
-                    ->setUpdatedAt(new DateTime())
-                ;
-
-                $this->postManager->update($blogPost);
-
-                return $this->redirect('app_admin_post_show', ['id' => $blogPost->getId()]);
+        try {
+            if ('POST' === $request->getMethod()) {
+                $this->csrf->process($request);
+                $data = $request->getParsedBody();
+                $errors = $this->validateForm($data, false, array_keys($users));
+    
+                if (empty($errors)) {
+                    $blogPost
+                        ->setTitle($data['title'])
+                        ->setSlug($data['slug'])
+                        ->setContent($data['content'])
+                        ->setDescription($data['description'])
+                        ->setAuthor((new BlogUser())->setId((int)$data['author']))
+                        ->setUpdatedAt(new DateTime())
+                    ;
+    
+                    $this->postManager->update($blogPost);
+    
+                    return $this->redirect('app_admin_post_show', ['id' => $blogPost->getId()]);
+                }
             }
+        } catch (CsrfInvalidException $th) {
+            $invalidCSRFMessage = $th->getMessage();
         }
 
         return $this->render('admin/post/edit.html.twig', [
             'post' => $blogPost,
             'form' => $this->getPostForm($errors, $data, $users),
             'activeArticle' => true,
+            'invalidCSRFMessage' => $invalidCSRFMessage,
         ]);
     }
 
@@ -109,35 +117,42 @@ class AdminPostController extends AbstractController
         $data = ['title' => '', 'slug' => '', 'content' => '', 'description' => '', 'author' => $this->auth->getUserId()];
         $errors = [];
         $users = $this->getUsers();
+        $invalidCSRFMessage = null;
 
-        if ('POST' === $request->getMethod()) {
-            $data = $request->getParsedBody();
-            $errors = $this->validateForm($data, true, array_keys($users));
-
-            if (empty($errors)) {
-                $userId = $this->auth->getUserId();
-                if (null === $userId) {
-                    $this->createForbidderException('Action impossible');
+        try {
+            if ('POST' === $request->getMethod()) {
+                $this->csrf->process($request);
+                $data = $request->getParsedBody();
+                $errors = $this->validateForm($data, true, array_keys($users));
+    
+                if (empty($errors)) {
+                    $userId = $this->auth->getUserId();
+                    if (null === $userId) {
+                        $this->createForbidderException('Action impossible');
+                    }
+    
+                    $blogPost = (new BlogPost())
+                        ->setTitle($data['title'])
+                        ->setSlug($data['slug'])
+                        ->setContent($data['content'])
+                        ->setDescription($data['description'])
+                        ->setCreatedAt(new DateTime())
+                        ->setUpdatedAt(new DateTime())
+                        ->setAuthor((new BlogUser())->setId((int)$data['author']))
+                    ;
+                    $postId = $this->postManager->insert($blogPost);
+    
+                    return $this->redirect('app_admin_post_show', ['id' => $postId]);
                 }
-
-                $blogPost = (new BlogPost())
-                    ->setTitle($data['title'])
-                    ->setSlug($data['slug'])
-                    ->setContent($data['content'])
-                    ->setDescription($data['description'])
-                    ->setCreatedAt(new DateTime())
-                    ->setUpdatedAt(new DateTime())
-                    ->setAuthor((new BlogUser())->setId((int)$data['author']))
-                ;
-                $postId = $this->postManager->insert($blogPost);
-
-                return $this->redirect('app_admin_post_show', ['id' => $postId]);
             }
+        } catch (CsrfInvalidException $th) {
+            $invalidCSRFMessage = $th->getMessage();
         }
 
         return $this->render('admin/post/create.html.twig', [
             'form' => $this->getPostForm($errors, $data, $users),
             'activeArticle' => true,
+            'invalidCSRFMessage' => $invalidCSRFMessage,
         ]);
     }
 
@@ -146,10 +161,18 @@ class AdminPostController extends AbstractController
      */
     public function delete(ServerRequest $request): ResponseInterface
     {
-        $blogPost = $this->getPost($request);
-        $this->postManager->delete($blogPost);
+        try {
+            $this->csrf->process($request);
+            $blogPost = $this->getPost($request);
+            $this->postManager->delete($blogPost);
 
         return $this->redirect('app_admin_post_index');
+        } catch (\Exception $th) {
+            return $this->render('admin/components/error.html.twig', [
+                'errorMessage' => $th->getMessage(),
+                'title' => "Erreur de suppression",
+            ]);
+        }
     }
 
     /**
@@ -172,6 +195,8 @@ class AdminPostController extends AbstractController
      */
     private function getPostForm(array $errors, array $data, array $options): string
     {
+        $token = $this->csrf->generateToken();
+
         return (new FormBuilder('POST'))
             ->setErrors($errors)
             ->setData($data)
@@ -181,7 +206,7 @@ class AdminPostController extends AbstractController
             ->addField('content', 'textarea', ['label' => "Contenu de l'article", 'rows' => 10])
             ->addField('author', 'select', ['label' => "Auteur", 'options' => $options])
             ->setButton('Enregistrer')
-            ->renderForm()
+            ->renderForm($token)
         ;
     }
 

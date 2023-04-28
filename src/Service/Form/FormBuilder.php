@@ -101,12 +101,12 @@ class FormBuilder
      *
      * @throws Exception if there is no field
      */
-    public function renderForm(): string
+    public function renderForm(?string $csrfToken = null): string
     {
         if (empty($this->fields)) {
             throw new Exception('The form must have at least one field.');
         }
-        $formParts = $this->getFormParts();
+        $formParts = $this->getFormParts($csrfToken);
         $fields = join('', $formParts['fields']);
 
         return $formParts['start'] . $formParts['errorBlock'] . $fields . $formParts['button'] . $formParts['end'];
@@ -117,11 +117,15 @@ class FormBuilder
      *
      * @return array
      */
-    public function getFormParts(): array
+    public function getFormParts(?string $csrfToken = null): array
     {
         $fields = [];
         foreach ($this->fields as $key => $field) {
             $fields[$key] = $field->render();
+        }
+
+        if ($csrfToken) {
+            $fields['csrf'] = '<input type="hidden" name="_csrf" value="'.$csrfToken.'">';
         }
 
         return [

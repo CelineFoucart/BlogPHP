@@ -10,16 +10,17 @@ use App\Twig\PathExtension;
 use App\Twig\UserExtension;
 use App\Service\Session\Auth;
 use App\Twig\BbcodeExtension;
+use App\Twig\StringExtension;
 use GuzzleHttp\Psr7\Response;
 use App\Service\Session\Session;
 use App\Manager\ManagerInterface;
+use App\Service\CSRF\CsrfManager;
 use App\Twig\PaginationExtension;
 use Twig\Loader\FilesystemLoader;
 use App\Exception\NotFoundException;
 use App\exception\ForbiddenException;
 use App\Exception\BadRequestException;
-use App\manager\BlogUserManager;
-use App\Twig\StringExtension;
+use App\Twig\CsrfExtension;
 
 abstract class AbstractController
 {
@@ -32,6 +33,8 @@ abstract class AbstractController
     private array $twigVariables;
 
     protected Environment $twig;
+    
+    protected CsrfManager $csrf;
 
     public function __construct(Router $router)
     {
@@ -39,7 +42,17 @@ abstract class AbstractController
         $this->session = new Session();
         $this->session->start();
         $this->auth = new Auth($this->session);
+        $this->csrf = new CsrfManager($this->session);
+        $this->setTwig();
+    }
 
+    /**
+     * Create a twig object and add the extensions.
+     *
+     * @return self
+     */
+    private function setTwig(): self
+    {
         $this->twigVariables = require dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'twig.php';
         $loader = new FilesystemLoader(PATH.DIRECTORY_SEPARATOR.'templates');
         $this->twig = new Environment($loader);
@@ -48,6 +61,9 @@ abstract class AbstractController
         $this->twig->addExtension(new UserExtension($this->session, $this->auth));
         $this->twig->addExtension(new BbcodeExtension());
         $this->twig->addExtension(new StringExtension());
+        $this->twig->addExtension(new CsrfExtension($this->csrf));
+
+        return $this;
     }
 
     /**

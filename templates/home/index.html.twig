@@ -6,6 +6,24 @@
 
 {% block body %}
 	<div class="body-page about-page">
+		{% if successMessage %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ successMessage }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+		{% elseif errorMessage %}
+			<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ errorMessage }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+		{% if invalidCSRFMessage %}
+			<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ invalidCSRFMessage }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+		{% endif %}
+
 		<h2 class="title-about-me h1"><img src="img/logo.png" width="60" alt="logo CF"> Qui suis-je ?</h2>
 
 		<div class="row justify-content-center mb-4">
@@ -57,17 +75,6 @@
 			</a>
 		</p>
 		<p class="text-center">Envie d'en savoir plus ? Télécharger mon <a href="/assets/CV_Céline_Foucart.pdf">CV</a> ou remplissez le formulaire suivant pour m'envoyer un message.</p>
-		{% if successMessage %}
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ successMessage }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-		{% elseif errorMessage %}
-			<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ errorMessage }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endif %}
 		<form action="" method="post" class="needs-validation" novalidate>
 			<div class="row">
 				<div class="col-md-6">
@@ -80,6 +87,7 @@
 			{{ form.fields.email|raw }}
 			{{ form.fields.message|raw }}
 			{{ form.fields.agreeTerms|raw }}
+			{{ form.fields.csrf|raw }}
 			{{ form.button|raw }}
 		</form>
 	</div>

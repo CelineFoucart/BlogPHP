@@ -19,6 +19,7 @@
             </div>
     </div>
     <div class="text-end mb-2">
+        <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
         <input type="reset" value="Annuler" class="button-outline">
         <button type="submit" class="button">Soumettre</button>
     </div>

@@ -30,6 +30,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                     <button type="submit" class="btn btn-primary">Sauvegarder</button>
                 </div>

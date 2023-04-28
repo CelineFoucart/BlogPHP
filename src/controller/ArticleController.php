@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use DateTime;
+use App\Entity\Comment;
 use App\Entity\BlogPost;
 use App\Entity\BlogUser;
-use App\Entity\Comment;
 use App\Service\Validator;
 use App\Service\Pagination;
 use App\manager\CommentManager;
 use App\Manager\BlogPostManager;
-use DateTime;
 use GuzzleHttp\Psr7\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
+use App\Service\CSRF\CsrfInvalidException;
 
 class ArticleController extends AbstractController
 {
@@ -44,6 +45,7 @@ class ArticleController extends AbstractController
         $errorMessage = null;
         $commentSubmitted = "";
         $successMessage = null;
+        $invalidCSRFMessage = null;
 
         if (null === $blogPost) {
             $this->createNotFoundException("Cet article n'existe pas.");
@@ -51,18 +53,23 @@ class ArticleController extends AbstractController
 
         $commentPagination = $this->getPostComments($request, $blogPost->getId());
 
-        if ($request->getMethod() === 'POST') {
-            $userId = $this->auth->getUserId();
-            $data = $request->getParsedBody();
-
-            $status = $this->createComment($data, $blogPost, $userId);
-
-            if ($status['commentId'] > 0) {
-                $successMessage = $status['message'];
-            }  else {
-                $errorMessage = $status['message'];
-                $commentSubmitted = (isset($data['content'])) ? htmlspecialchars($data['content']) : "";
+        try {
+            if ($request->getMethod() === 'POST') {
+                $this->csrf->process($request);
+                $userId = $this->auth->getUserId();
+                $data = $request->getParsedBody();
+    
+                $status = $this->createComment($data, $blogPost, $userId);
+    
+                if ($status['commentId'] > 0) {
+                    $successMessage = $status['message'];
+                }  else {
+                    $errorMessage = $status['message'];
+                    $commentSubmitted = (isset($data['content'])) ? htmlspecialchars($data['content']) : "";
+                }
             }
+        } catch (CsrfInvalidException $th) {
+            $invalidCSRFMessage = $th->getMessage();
         }
 
         return $this->render('article/show.html.twig', [
@@ -71,6 +78,7 @@ class ArticleController extends AbstractController
             'errorMessage' => $errorMessage,
             'commentSubmitted' => $commentSubmitted,
             'successMessage' => $successMessage,
+            'invalidCSRFMessage' => $invalidCSRFMessage,
         ]);
     }
 

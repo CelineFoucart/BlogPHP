@@ -1,0 +1,29 @@
+{% extends "admin/admin_layout.html.twig" %}
+
+{% block title %}
+    Erreur de suppression | {{ parent() }}
+{% endblock %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block breadcrumb_items %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb justify-content-end">
+            <li class="breadcrumb-item"><a href="{{ path('app_admin') }}">Dashboard</a></li>
+            <li class="breadcrumb-item active">Erreur</li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="card  border border-danger">
+        <div class="card-header">
+            <h2 class="card-title text-danger fw-bold">Il y a eu une erreur et l'opération a échoué</h2>
+        </div>
+        <div class="card-body">
+            <div class="text-danger">
+                {{ errorMessage is defined ? errorMessage : "Il y a eu une erreur inattendue et la suppression a échoué." }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -13,6 +13,12 @@
                 <p class="mb-0">Identifiants de connexion invalides.</p>
             </div>
         {% endif %}
+        {% if invalidCSRFMessage %}
+			<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ invalidCSRFMessage }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+		{% endif %}
 
         <form action="" method="post" class="comment-form">
             <div class="mb-3">
@@ -25,6 +31,7 @@
                 <input type="password" class="form-control" id="password" aria-describedby="password"
                     name="password" placeholder="mot de passe" required>
             </div>
+            <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
             <button type="submit" class="button">Se connecter</button>
         </form>
 
