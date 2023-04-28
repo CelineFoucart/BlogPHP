@@ -55,8 +55,8 @@ class ArticleController extends AbstractController
 
         try {
             if ($request->getMethod() === 'POST') {
+                $userId = $this->getUserId();
                 $this->csrf->process($request);
-                $userId = $this->auth->getUserId();
                 $data = $request->getParsedBody();
     
                 $status = $this->createComment($data, $blogPost, $userId);
@@ -70,6 +70,8 @@ class ArticleController extends AbstractController
             }
         } catch (CsrfInvalidException $th) {
             $invalidCSRFMessage = $th->getMessage();
+        } catch (\Exception $th) {
+            $errorMessage = $th->getMessage();
         }
 
         return $this->render('article/show.html.twig', [
@@ -91,15 +93,8 @@ class ArticleController extends AbstractController
      * 
      * @return array     an array with the commentId (0 if fail) and a message
      */
-    private function createComment(array $data, BlogPost $post, ?int $userId): array
+    private function createComment(array $data, BlogPost $post, int $userId): array
     {
-        if (!$userId) {
-            return [
-                'commentId' => 0,
-                'message' => "Vous devez vous connecter pour poster un commentaire."
-            ];
-        }
-
         $errors = (new Validator($data))->checkLength('content', 3, 10000)->getErrors();
 
         if (empty($errors)) {
@@ -145,5 +140,18 @@ class ArticleController extends AbstractController
     private function getCommentManager(): CommentManager
     {
         return $this->getManager(CommentManager::class);
+    }
+
+    /**
+     * Get the id of the current user.
+     */
+    private function getUserId(): int
+    {
+        $userId = $this->auth->getUserId();
+        if (!$userId) {
+            throw new \Exception("Vous devez vous connecter pour poster un commentaire.");
+        }
+
+        return $userId;
     }
 }

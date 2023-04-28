@@ -16,7 +16,7 @@ class ErrorController extends AbstractController
     public function displayError(Exception $exception): Response
     {
         $error = $exception->getCode();
-        $error = (!is_int($error)) ? 500 : $error;
+        $error = (!is_int($error) || $error < 100) ? 500 : $error;
 
         return $this->renderError($exception->getMessage(), $error);
     }

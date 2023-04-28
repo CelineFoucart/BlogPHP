@@ -20,6 +20,8 @@ class HomeController extends AbstractController
         $successMessage = null;
         $errorMessage = null;
         $invalidCSRFMessage = null;
+        
+        
 
         try {
             if ($request->getMethod() === 'POST') {
@@ -64,7 +66,11 @@ class HomeController extends AbstractController
 
     public function privacy(ServerRequest $request): ResponseInterface
     {
-        return $this->render('home/privacy.html.twig');
+        $serverParams = $request->getServerParams();
+
+        return $this->render('home/privacy.html.twig', [
+            'domaine' => $serverParams['REQUEST_SCHEME'] . '://' . $serverParams['HTTP_HOST'],
+        ]);
     }
 
     /**

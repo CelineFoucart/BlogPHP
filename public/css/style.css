@@ -323,3 +323,10 @@ footer.main-footer p {
 		width: 1800px;
 	}
 }
+
+blockquote {
+    background: #fff7d9;
+    border-left: 0.3em solid #f4e59f;
+    margin: 0.25em 0;
+    padding: 0.5em 0.5em 0.5em 0.75em;
+}

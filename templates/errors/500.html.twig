@@ -5,5 +5,17 @@
 {% endblock %}
 
 {% block body %}
-    <h1 class="text-danger">Erreur 500</h1>
+    <article class="body-page about-page">
+        <h2 class="display-2 text-danger text-center">Erreur 500</h2>
+
+        <p class="h4 mb-4 text-center fw-bold mt-4">
+            <span class="text-danger">Oups !</span> Il y a eu une erreur inattendue.
+        </p>
+        <p class="text-center lead mb-4">
+            Il y a eu une erreur interne du serveur. Nous travaillons à résoudre le problème.
+        </p>
+        <footer class="text-center">
+            <a href="{{ path('app_home') }}" class="btn btn-primary">Retour à l'accueil</a>
+        </footer>
+    </article>
 {% endblock %}
