@@ -22,6 +22,13 @@ class BlogUserManager extends AbstractManager
         return $this->getBuilder()->fetch($sql, [$username]);
     }
 
+    public function findUserList(): array
+    {
+        $sql = $this->getQuery()->select('b.id AS id', 'b.username AS username')->orderBy('b.username')->toSQL();
+
+        return $this->getBuilder()->fetchAll($sql);
+    }
+
     public function createUser(BlogUser $user, int $roleId): int
     {
         $query = $this->getQuery();

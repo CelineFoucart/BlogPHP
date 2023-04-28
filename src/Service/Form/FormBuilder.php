@@ -32,7 +32,7 @@ class FormBuilder
     private array $data = [];
 
     /**
-     * @var FieldType[] an array of fieldType objects
+     * @var FieldType[]|ChoiceType[] an array of fieldType objects
      */
     private array $fields = [];
 
@@ -64,36 +64,23 @@ class FormBuilder
     /**
      * Add a field to the form.
      * 
-     * @param array $options the field options (required, placeholder, label, class, errorClass, errorSectionClass)
+     * @param array $options the field options (required, placeholder, label, class, errorClass, errorSectionClass, options for select fields)
      */
     public function addField(string $name, string $type = 'text', array $options = []): self
     {
         $isRequired = (isset($options['required'])) ? $options['required'] : true;
-        $field = new FieldType($name, $type, $isRequired);
 
-        if (isset($options['placeholder'])) {
-            $field->setPlaceholder($options['placeholder']);
-        }
-
-        if (isset($options['label'])) {
-            $field->setLabel($options['label']);
-        }
-
-        if (isset($options['class'])) {
-            $field->setInputClass($options['class']);
-        }
-
-        if (isset($options['errorClass'])) {
-            $field->setErrorClass($options['errorClass']);
+        if ($type === 'select') {
+            $field = new ChoiceType($name, $isRequired);
+            
+            if (isset($options['options'])) {
+                $field->setOptions($options['options']);
+            }
+        } else {
+            $field = new FieldType($name, $type, $isRequired);
         }
         
-        if (isset($options['errorSectionClass'])) {
-            $field->setErrorSectionClass($options['errorSectionClass']);
-        }
-        
-        if (isset($options['rows'])) {
-            $field->setTextareaRows($options['rows']);
-        }
+        $field = $this->definedFieldOptions($field, $options);
 
         if (isset($this->data[$name])) {
             $field->setValue($this->data[$name]);
@@ -235,5 +222,41 @@ class FormBuilder
         $otherMessages = (!empty($errors)) ? '<p>'.join('<br>', $errorsWithNotFields).'</p>' : '';
 
         return '<div class="alert alert-danger">'.$message.$otherMessages.'</div>';
+    }
+
+    /**
+     * Set the options of a field.
+     *
+     * @param FieldType|ChoiceType  $field
+     * @param array                 $options
+     * @return FieldType|ChoiceType
+     */
+    private function definedFieldOptions($field, array $options = [])
+    {
+        if (isset($options['placeholder'])) {
+            $field->setPlaceholder($options['placeholder']);
+        }
+
+        if (isset($options['label'])) {
+            $field->setLabel($options['label']);
+        }
+
+        if (isset($options['class'])) {
+            $field->setInputClass($options['class']);
+        }
+
+        if (isset($options['errorClass'])) {
+            $field->setErrorClass($options['errorClass']);
+        }
+        
+        if (isset($options['errorSectionClass'])) {
+            $field->setErrorSectionClass($options['errorSectionClass']);
+        }
+        
+        if (isset($options['rows'])) {
+            $field->setTextareaRows($options['rows']);
+        }
+
+        return $field;
     }
 }

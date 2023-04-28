@@ -48,7 +48,7 @@ final class BlogPostManager extends AbstractManager
     public function update(BlogPost $post): int
     {
         $query = $this->getQuery();
-        $updateSQL = $query->select('title', 'slug', 'content', 'updated_at', 'description')
+        $updateSQL = $query->select('title', 'slug', 'content', 'updated_at', 'description', 'author_id')
             ->setParams([
                 'title' => $post->getTitle(),
                 'slug' => $post->getSlug(),
@@ -56,6 +56,7 @@ final class BlogPostManager extends AbstractManager
                 'content' => htmlspecialchars($post->getContent()),
                 'updated_at' => $post->getUpdatedAt()->format('Y-m-d H:i:s'),
                 'id' => $post->getId(),
+                'author_id' => (string) $post->getAuthor()->getId(),
             ])
             ->toSQL('update')
         ;
@@ -74,7 +75,7 @@ final class BlogPostManager extends AbstractManager
     /**
      * Inserts in the database a new blog post.
      */
-    public function insert(BlogPost $post, int $userId): int
+    public function insert(BlogPost $post): int
     {
         $query = $this->getQuery();
         $insertSQL = $query->select('title', 'slug', 'description', 'content', 'updated_at', 'created_at', 'author_id')
@@ -85,7 +86,7 @@ final class BlogPostManager extends AbstractManager
                 'content' => htmlspecialchars($post->getContent()),
                 'updated_at' => $post->getUpdatedAt()->format('Y-m-d H:i:s'),
                 'created_at' => $post->getCreatedAt()->format('Y-m-d H:i:s'),
-                'author_id' => (string) $userId,
+                'author_id' => (string) $post->getAuthor()->getId(),
             ])
             ->toSQL('insert')
         ;

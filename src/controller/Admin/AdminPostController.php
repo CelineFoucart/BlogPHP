@@ -6,7 +6,9 @@ namespace App\Controller\Admin;
 
 use App\Controller\AbstractController;
 use App\Entity\BlogPost;
+use App\Entity\BlogUser;
 use App\manager\BlogPostManager;
+use App\manager\BlogUserManager;
 use App\router\Router;
 use App\Service\Form\FormBuilder;
 use App\Service\Validator;
@@ -61,21 +63,30 @@ class AdminPostController extends AbstractController
     public function edit(ServerRequest $request): ResponseInterface
     {
         $blogPost = $this->getPost($request);
+        $users = $this->getUsers();
+
         $data = [
             'title' => $blogPost->getTitle(),
             'slug' => $blogPost->getSlug(),
             'content' => $blogPost->getContent(),
             'description' => $blogPost->getDescription(),
+            'author' => $blogPost->getAuthor()->getId(),
         ];
         $errors = [];
 
         if ('POST' === $request->getMethod()) {
             $data = $request->getParsedBody();
-            $errors = $this->validateForm($data);
+            $errors = $this->validateForm($data, false, array_keys($users));
 
             if (empty($errors)) {
-                $blogPost->setTitle($data['title'])->setSlug($data['slug'])->setContent($data['content'])->setDescription($data['description']);
-                $blogPost->setUpdatedAt(new DateTime());
+                $blogPost
+                    ->setTitle($data['title'])
+                    ->setSlug($data['slug'])
+                    ->setContent($data['content'])
+                    ->setDescription($data['description'])
+                    ->setAuthor((new BlogUser())->setId((int)$data['author']))
+                    ->setUpdatedAt(new DateTime())
+                ;
 
                 $this->postManager->update($blogPost);
 
@@ -85,7 +96,7 @@ class AdminPostController extends AbstractController
 
         return $this->render('admin/post/edit.html.twig', [
             'post' => $blogPost,
-            'form' => $this->getPostForm($errors, $data),
+            'form' => $this->getPostForm($errors, $data, $users),
             'activeArticle' => true,
         ]);
     }
@@ -95,12 +106,13 @@ class AdminPostController extends AbstractController
      */
     public function create(ServerRequest $request): ResponseInterface
     {
-        $data = ['title' => '', 'slug' => '', 'content' => '', 'description' => ''];
+        $data = ['title' => '', 'slug' => '', 'content' => '', 'description' => '', 'author' => $this->auth->getUserId()];
         $errors = [];
+        $users = $this->getUsers();
 
         if ('POST' === $request->getMethod()) {
             $data = $request->getParsedBody();
-            $errors = $this->validateForm($data, true);
+            $errors = $this->validateForm($data, true, array_keys($users));
 
             if (empty($errors)) {
                 $userId = $this->auth->getUserId();
@@ -115,15 +127,16 @@ class AdminPostController extends AbstractController
                     ->setDescription($data['description'])
                     ->setCreatedAt(new DateTime())
                     ->setUpdatedAt(new DateTime())
+                    ->setAuthor((new BlogUser())->setId((int)$data['author']))
                 ;
-                $postId = $this->postManager->insert($blogPost, (int) $userId);
+                $postId = $this->postManager->insert($blogPost);
 
                 return $this->redirect('app_admin_post_show', ['id' => $postId]);
             }
         }
 
         return $this->render('admin/post/create.html.twig', [
-            'form' => $this->getPostForm($errors, $data),
+            'form' => $this->getPostForm($errors, $data, $users),
             'activeArticle' => true,
         ]);
     }
@@ -157,7 +170,7 @@ class AdminPostController extends AbstractController
     /**
      * Return the post form.
      */
-    private function getPostForm(array $errors, array $data): string
+    private function getPostForm(array $errors, array $data, array $options): string
     {
         return (new FormBuilder('POST'))
             ->setErrors($errors)
@@ -166,6 +179,7 @@ class AdminPostController extends AbstractController
             ->addField('slug', 'text', ['label' => "Lien de l'article, sans accent, espaces, caractères spéciaux ni chiffres", 'placeholder' => "Lien de l'article"])
             ->addField('description', 'textarea', ['label' => 'Description', 'rows' => 2])
             ->addField('content', 'textarea', ['label' => "Contenu de l'article", 'rows' => 10])
+            ->addField('author', 'select', ['label' => "Auteur", 'options' => $options])
             ->setButton('Enregistrer')
             ->renderForm()
         ;
@@ -174,7 +188,7 @@ class AdminPostController extends AbstractController
     /**
      * Validate a post form submitted.
      */
-    private function validateForm(array $data, bool $isforCreation = false): array
+    private function validateForm(array $data, bool $isforCreation = false, array $usersIds = []): array
     {
         $validator = (new Validator($data))
             ->checkLength('title', 3, 150)
@@ -189,5 +203,18 @@ class AdminPostController extends AbstractController
         }
 
         return $validator->getErrors();
+    }
+
+    private function getUsers(): array
+    {
+        /** @var BlogUserManager */
+        $manager = $this->getManager(BlogUserManager::class);
+        $users = $manager->findUserList();
+        $options = [];
+        foreach ($users as $user) {
+            $options[] = $user;
+        }
+
+        return $options;
     }
 }
