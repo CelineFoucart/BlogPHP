@@ -12,7 +12,7 @@ class BlogUserManager extends AbstractManager
     public function findUserAfterLogin(string $username): ?BlogUser
     {
         $sql = $this->getQuery()
-            ->select('b.id', 'b.username', 'b.email', 'b.password')
+            ->select('b.id', 'b.username', 'b.email', 'b.password', 'b.attempts', 'b.last_attempt')
             ->select('r.id AS role_id', 'r.name AS role_name', 'r.alias AS role_alias')
             ->leftJoin('user_role r', 'r.id = b.role_id')
             ->where('b.username = ?')
@@ -43,5 +43,20 @@ class BlogUserManager extends AbstractManager
         ;
 
         return $this->getBuilder()->alter($insertSQL, $query->getParams());
+    }
+
+    public function updateAttemps(BlogUser $user): int
+    {
+        $query = $this->getQuery();
+        $updateSQL = $query->select('attempts', 'last_attempt')
+            ->setParams([
+                'attempts' => $user->getAttempts(),
+                'last_attempt' => $user->getLastAttempt() ? $user->getLastAttempt()->format('Y-m-d H:i:s') : NULL,
+                'id' => $user->getId(),
+            ])
+            ->toSQL('update')
+        ;
+
+        return $this->getBuilder()->alter($updateSQL, $query->getParams());
     }
 }

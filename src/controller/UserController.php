@@ -12,6 +12,7 @@ use App\Service\Form\FormBuilder;
 use GuzzleHttp\Psr7\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
 use App\Service\CSRF\CsrfInvalidException;
+use DateTime;
 
 class UserController extends AbstractController
 {
@@ -23,39 +24,32 @@ class UserController extends AbstractController
 
         $error = false;
         $invalidCSRFMessage = null;
+        $attemptsError = false;
 
         try {
             if ($request->getMethod() === 'POST') {
                 $this->csrf->process($request);
                 $data = $request->getParsedBody();
-    
-                $user = null;
-    
-                if (isset($data['pseudo']) && isset($data['password'])) {
-                    /** @var BlogUserManager */
-                    $userManager = $this->getManager(BlogUserManager::class);
-                    $user = $userManager->findUserAfterLogin(htmlspecialchars($data['pseudo']));
-                }
-    
-                if ($user !== null) {
-                    if (password_verify($data['password'], $user->getPassword())) {
-                        $userRole = $user->getRole();
-                        $isAdmin = ($userRole !== null && $userRole->getAlias() === 'ROLE_ADMIN') ? 1 : 0;
-                        $this->auth->session($user->getId(), $isAdmin, $user->getUsername());
-    
-                        return $this->redirect('app_profile');
-                    } else {
-                        $error = true;
-                    }
-                } else {
+                $user = $this->getUserFromPseudo($data);
+                $success = $this->checkCredentials($user, $data);
+
+                if ($success === 0) {
+                    return $this->redirect('app_profile');
+                } elseif ($success == 1) {
                     $error = true;
+                } else {
+                    $attemptsError = true;
                 }
             }
         } catch (CsrfInvalidException $th) {
             $invalidCSRFMessage = $th->getMessage();
         }
 
-        return $this->render('user/login.html.twig', ['error' => $error, 'invalidCSRFMessage' => $invalidCSRFMessage]);
+        return $this->render('user/login.html.twig', [
+            'error' => $error, 
+            'invalidCSRFMessage' => $invalidCSRFMessage, 
+            'attemptsError' => $attemptsError
+        ]);
     }
 
     public function logout(): ResponseInterface
@@ -164,5 +158,70 @@ class UserController extends AbstractController
         $user = $userManager->findBy('id', $userId);
 
         return $user;
+    }
+
+    /**
+     * Get a user with the pseudo.
+     *
+     * @param array $data
+     * @return BlogUser|null
+     */
+    private function getUserFromPseudo(array $data): ?BlogUser
+    {
+        $user = null; 
+
+        if (isset($data['pseudo']) && isset($data['password'])) {
+            /** @var BlogUserManager */
+            $userManager = $this->getManager(BlogUserManager::class);
+            $user = $userManager->findUserAfterLogin(htmlspecialchars($data['pseudo']));
+        }
+
+        return $user;
+    }
+
+    /**
+     * Checks the user credentials and persists attempts.
+     *
+     * @param BlogUser|null $user
+     * @param array $data
+     * @return integer 0 if success, 1 if credentials are invalid, 2 if the user has 3 or more attempts
+     */
+    private function checkCredentials(?BlogUser $user, array $data): int
+    {
+        if (!$user) {
+            return 1;
+        }
+
+        $hasPasswordMatched = password_verify($data['password'], $user->getPassword());
+
+        /** @var BlogUserManager */
+        $userManager = $this->getManager(BlogUserManager::class);
+
+        $lastAttempt = $user->getLastAttempt();
+        if ($lastAttempt instanceof DateTime) {
+            $now = new DateTime();
+            $interval = $lastAttempt->diff($now);
+            $minutes = ($interval->days * 24 * 60) + ($interval->h * 60) + $interval->i;
+        } else {
+            $minutes = 100;
+        }
+
+        if ($user->getAttempts() >= 3 && $minutes < 15) {
+            return 2;
+        }
+
+        if (!$hasPasswordMatched) {
+            $user->setAttempts($user->getAttempts() + 1)->setLastAttempt(new DateTime());
+            $userManager->updateAttemps($user);
+            
+            return 1;
+        }
+
+        $userManager->updateAttemps($user);
+        $userRole = $user->getRole();
+        $isAdmin = ($userRole !== null && $userRole->getAlias() === 'ROLE_ADMIN') ? 1 : 0;
+        $this->auth->session($user->getId(), $isAdmin, $user->getUsername());
+        
+        return 0;
     }
 }

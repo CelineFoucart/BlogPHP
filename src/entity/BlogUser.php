@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use DateTime;
+
 final class BlogUser extends AbstractEntity
 {
     private ?string $username = null;
@@ -17,6 +19,10 @@ final class BlogUser extends AbstractEntity
     private ?string $email = null;
 
     private ?UserRole $role = null;
+
+    private int $attempts = 0;
+
+    private ?DateTime $lastAttempt = null;
 
     /**
      * Get the value of username.
@@ -146,6 +152,58 @@ final class BlogUser extends AbstractEntity
     public function setRole(?UserRole $role): self
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of lastAttempt
+     *
+     * @return ?DateTime
+     */
+    public function getLastAttempt(): ?DateTime
+    {
+        return $this->lastAttempt;
+    }
+
+    /**
+     * Set the value of lastAttempt
+     *
+     * @param DateTime|string|null $lastAttempt
+     *
+     * @return self
+     */
+    public function setLastAttempt($lastAttempt): self
+    {
+        if ($lastAttempt instanceof DateTime) {
+            $this->lastAttempt = $lastAttempt;
+        } elseif (is_string($lastAttempt)) {
+            $this->lastAttempt = new DateTime($lastAttempt);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get the value of attempts
+     *
+     * @return int
+     */
+    public function getAttempts(): int
+    {
+        return $this->attempts;
+    }
+
+    /**
+     * Set the value of attempts
+     *
+     * @param int $attempts
+     *
+     * @return self
+     */
+    public function setAttempts(int $attempts): self
+    {
+        $this->attempts = $attempts;
 
         return $this;
     }

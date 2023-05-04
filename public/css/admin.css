@@ -6,6 +6,10 @@ html, body {
     z-index: 9999;
 }
 
+.sceditor-container {
+	z-index: 9999;
+}
+
 .sidebar {
     width: 4.5rem;
     position: fixed;
