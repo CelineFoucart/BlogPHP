@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\BlogUser;
-use App\manager\BlogUserManager;
-use App\manager\UserRoleManager;
+use App\Manager\BlogUserManager;
+use App\Manager\UserRoleManager;
 use App\Service\CSRF\CsrfInvalidException;
 use App\Service\Form\FormBuilder;
 use App\Service\Validator;

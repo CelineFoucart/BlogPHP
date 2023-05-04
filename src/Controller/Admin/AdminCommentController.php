@@ -6,8 +6,8 @@ namespace App\Controller\Admin;
 
 use App\Controller\AbstractController;
 use App\Entity\Comment;
-use App\manager\CommentManager;
-use App\router\Router;
+use App\Manager\CommentManager;
+use App\Router\Router;
 use App\Service\CSRF\CsrfInvalidException;
 use App\Service\Form\FormBuilder;
 use App\Service\Validator;

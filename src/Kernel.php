@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App;
 
 use App\Controller\ErrorController;
-use App\router\Router;
+use App\Router\Router;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 

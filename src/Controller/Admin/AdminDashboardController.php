@@ -7,7 +7,7 @@ namespace App\Controller\Admin;
 use App\Controller\AbstractController;
 use App\Database\Statistics\StatisticsEntity;
 use App\Database\Statistics\StatisticsHandler;
-use App\manager\CommentManager;
+use App\Manager\CommentManager;
 use Psr\Http\Message\ResponseInterface;
 
 /** 

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Exception\BadRequestException;
-use App\exception\ForbiddenException;
+use App\Exception\ForbiddenException;
 use App\Exception\NotFoundException;
 use App\Manager\AbstractManager;
-use App\router\Router;
+use App\Router\Router;
 use App\Service\CSRF\CsrfManager;
 use App\Service\Session\Auth;
 use App\Service\Session\Session;

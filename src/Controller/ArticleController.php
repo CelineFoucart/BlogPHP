@@ -7,7 +7,7 @@ namespace App\Controller;
 use App\Entity\BlogPost;
 use App\Entity\Comment;
 use App\Manager\BlogPostManager;
-use App\manager\CommentManager;
+use App\Manager\CommentManager;
 use App\Service\CSRF\CsrfInvalidException;
 use App\Service\Pagination;
 use App\Service\Validator;

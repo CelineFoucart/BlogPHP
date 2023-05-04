@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use App\router\Router;
+use App\Router\Router;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
