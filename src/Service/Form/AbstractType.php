@@ -69,7 +69,7 @@ abstract class AbstractType
     }
 
     /**
-     * Set the value of id.
+     * Sets the value of id.
      */
     public function setId(string $id): self
     {
@@ -79,7 +79,7 @@ abstract class AbstractType
     }
 
     /**
-     * Define the field as invalid.
+     * Defines the field as invalid.
      */
     public function defineAdInvalid(string $message = "Ce champ n'est pas valide"): self
     {
@@ -90,7 +90,7 @@ abstract class AbstractType
     }
 
     /**
-     * Set the value of label.
+     * Sets the value of label.
      */
     public function setLabel(?string $label): self
     {
@@ -100,7 +100,7 @@ abstract class AbstractType
     }
 
     /**
-     * Set the value of input class.
+     * Sets the value of input class.
      */
     public function setInputClass(string $inputClass): self
     {
@@ -110,7 +110,7 @@ abstract class AbstractType
     }
 
     /**
-     * Set the value of errorClass.
+     * Sets the value of errorClass.
      */
     public function setErrorClass(string $errorClass): self
     {
@@ -120,7 +120,7 @@ abstract class AbstractType
     }
 
     /**
-     * Set the value of errorSectionClass.
+     * Sets the value of errorSectionClass.
      */
     public function setErrorSectionClass(string $errorSectionClass): self
     {
@@ -130,7 +130,7 @@ abstract class AbstractType
     }
 
     /**
-     * Set the value of value.
+     * Sets the value of value.
      */
     public function setValue(mixed $value): self
     {
@@ -140,7 +140,7 @@ abstract class AbstractType
     }
 
     /**
-     * Render the field with a label and the serror section.
+     * Renders the field with a label and the serror section.
      */
     abstract public function render(): string;
 
@@ -164,7 +164,7 @@ abstract class AbstractType
     }
 
     /**
-     * Render the input or textarea classes.
+     * Renders the input or textarea classes.
      */
     protected function getInputClasses(): string
     {
@@ -177,7 +177,7 @@ abstract class AbstractType
     }
 
     /**
-     * Render the error in a HTML element.
+     * Renders the error in a HTML element.
      */
     protected function getErrorAsHTML(): string
     {

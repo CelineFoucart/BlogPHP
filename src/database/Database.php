@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Database;
 
 use PDO;
@@ -15,6 +17,9 @@ final class Database
     public const NAME = DB_NAME;
     private static ?PDO $pdo = null;
 
+    /**
+     * Returns an instance of PDO.
+     */
     public static function getPDO(): PDO
     {
         if (null === self::$pdo) {
@@ -25,6 +30,9 @@ final class Database
         return self::$pdo;
     }
 
+    /**
+     * Returns the id of the insertid row.
+     */
     public function getLastInsertId(): int
     {
         return (int) self::getPDO()->lastInsertId();

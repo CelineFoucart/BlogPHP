@@ -45,7 +45,7 @@ final class FieldType extends AbstractType
     }
 
     /**
-     * Set the value of type, accepted types: text, textarea, email, password, number.
+     * Sets the value of type, accepted types: text, textarea, email, password, number.
      */
     public function setType(string $type): self
     {
@@ -61,7 +61,7 @@ final class FieldType extends AbstractType
     }
 
     /**
-     * Set the value of placeholder.
+     * Sets the value of placeholder.
      */
     public function setPlaceholder(string $placeholder): self
     {
@@ -71,7 +71,7 @@ final class FieldType extends AbstractType
     }
 
     /**
-     * Set the value of textareaRows.
+     * Sets the value of textareaRows.
      */
     public function setTextareaRows(int $textareaRows): self
     {
@@ -81,7 +81,7 @@ final class FieldType extends AbstractType
     }
 
     /**
-     * Render the field with a label and the serror section.
+     * Renders the field with a label and the serror section.
      */
     public function render(): string
     {
@@ -106,7 +106,7 @@ final class FieldType extends AbstractType
     }
 
     /**
-     * Render a textarea field.
+     * Renders a textarea field.
      */
     private function getFieldAsTextarea(): string
     {
@@ -119,7 +119,7 @@ final class FieldType extends AbstractType
     }
 
     /**
-     * Render a input field.
+     * Renders a input field.
      */
     private function getFieldAsInput(): string
     {

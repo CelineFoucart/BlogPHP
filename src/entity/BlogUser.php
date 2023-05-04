@@ -6,6 +6,9 @@ namespace App\Entity;
 
 use DateTime;
 
+/**
+ * BlogUser represents a user, persited in the database.
+ */
 final class BlogUser extends AbstractEntity
 {
     private ?string $username = null;
@@ -25,7 +28,7 @@ final class BlogUser extends AbstractEntity
     private ?DateTime $lastAttempt = null;
 
     /**
-     * Get the value of username.
+     * Gets the value of username.
      *
      * @return ?string
      */
@@ -35,7 +38,7 @@ final class BlogUser extends AbstractEntity
     }
 
     /**
-     * Set the value of username.
+     * Sets the value of username.
      *
      * @param ?string $username
      */
@@ -47,7 +50,7 @@ final class BlogUser extends AbstractEntity
     }
 
     /**
-     * Get the value of firstName.
+     * Gets the value of firstName.
      *
      * @return ?string
      */
@@ -57,7 +60,7 @@ final class BlogUser extends AbstractEntity
     }
 
     /**
-     * Set the value of firstName.
+     * Sets the value of firstName.
      *
      * @param ?string $firstName
      */
@@ -69,7 +72,7 @@ final class BlogUser extends AbstractEntity
     }
 
     /**
-     * Get the value of lastName.
+     * Gets the value of lastName.
      *
      * @return ?string
      */
@@ -79,7 +82,7 @@ final class BlogUser extends AbstractEntity
     }
 
     /**
-     * Set the value of lastName.
+     * Sets the value of lastName.
      *
      * @param ?string $lastName
      */
@@ -91,7 +94,7 @@ final class BlogUser extends AbstractEntity
     }
 
     /**
-     * Get the value of password.
+     * Gets the value of password.
      *
      * @return ?string
      */
@@ -101,7 +104,7 @@ final class BlogUser extends AbstractEntity
     }
 
     /**
-     * Set the value of password.
+     * Sets the value of password.
      *
      * @param ?string $password
      */
@@ -113,7 +116,7 @@ final class BlogUser extends AbstractEntity
     }
 
     /**
-     * Get the value of email.
+     * Gets the value of email.
      *
      * @return ?string
      */
@@ -123,7 +126,7 @@ final class BlogUser extends AbstractEntity
     }
 
     /**
-     * Set the value of email.
+     * Sets the value of email.
      *
      * @param ?string $email
      */
@@ -135,7 +138,7 @@ final class BlogUser extends AbstractEntity
     }
 
     /**
-     * Get the value of role.
+     * Gets the value of role.
      */
     public function getRole(): ?UserRole
     {
@@ -147,7 +150,7 @@ final class BlogUser extends AbstractEntity
     }
 
     /**
-     * Set the value of role.
+     * Sets the value of role.
      */
     public function setRole(?UserRole $role): self
     {
@@ -157,7 +160,7 @@ final class BlogUser extends AbstractEntity
     }
 
     /**
-     * Get the value of lastAttempt
+     * Gets the value of lastAttempt.
      *
      * @return ?DateTime
      */
@@ -167,11 +170,9 @@ final class BlogUser extends AbstractEntity
     }
 
     /**
-     * Set the value of lastAttempt
+     * Sets the value of lastAttempt.
      *
      * @param DateTime|string|null $lastAttempt
-     *
-     * @return self
      */
     public function setLastAttempt($lastAttempt): self
     {
@@ -185,9 +186,7 @@ final class BlogUser extends AbstractEntity
     }
 
     /**
-     * Get the value of attempts
-     *
-     * @return int
+     * Gets the value of attempts.
      */
     public function getAttempts(): int
     {
@@ -195,11 +194,7 @@ final class BlogUser extends AbstractEntity
     }
 
     /**
-     * Set the value of attempts
-     *
-     * @param int $attempts
-     *
-     * @return self
+     * Sets the value of attempts.
      */
     public function setAttempts(int $attempts): self
     {

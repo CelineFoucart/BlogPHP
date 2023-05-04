@@ -4,19 +4,22 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use DateTime;
-use App\router\Router;
+use App\Controller\AbstractController;
 use App\Entity\BlogPost;
 use App\Entity\BlogUser;
-use App\Service\Validator;
 use App\manager\BlogPostManager;
 use App\manager\BlogUserManager;
-use App\Service\Form\FormBuilder;
-use GuzzleHttp\Psr7\ServerRequest;
-use App\Controller\AbstractController;
-use Psr\Http\Message\ResponseInterface;
+use App\router\Router;
 use App\Service\CSRF\CsrfInvalidException;
+use App\Service\Form\FormBuilder;
+use App\Service\Validator;
+use DateTime;
+use GuzzleHttp\Psr7\ServerRequest;
+use Psr\Http\Message\ResponseInterface;
 
+/**
+ * AdminPostController handles the blog post CRUD pages.
+ */
 class AdminPostController extends AbstractController
 {
     private BlogPostManager $postManager;
@@ -32,7 +35,7 @@ class AdminPostController extends AbstractController
     }
 
     /**
-     * Display the post listing page with pagination.
+     * Displays the post listing page with pagination.
      */
     public function index(ServerRequest $request): ResponseInterface
     {
@@ -48,7 +51,7 @@ class AdminPostController extends AbstractController
     }
 
     /**
-     * Display the detail page.
+     * Displays the detail page.
      */
     public function show(ServerRequest $request): ResponseInterface
     {
@@ -81,19 +84,19 @@ class AdminPostController extends AbstractController
                 $this->csrf->process($request);
                 $data = $request->getParsedBody();
                 $errors = $this->validateForm($data, false, array_keys($users));
-    
+
                 if (empty($errors)) {
                     $blogPost
                         ->setTitle($data['title'])
                         ->setSlug($data['slug'])
                         ->setContent($data['content'])
                         ->setDescription($data['description'])
-                        ->setAuthor((new BlogUser())->setId((int)$data['author']))
+                        ->setAuthor((new BlogUser())->setId((int) $data['author']))
                         ->setUpdatedAt(new DateTime())
                     ;
-    
+
                     $this->postManager->update($blogPost);
-    
+
                     return $this->redirect('app_admin_post_show', ['id' => $blogPost->getId()]);
                 }
             }
@@ -110,7 +113,7 @@ class AdminPostController extends AbstractController
     }
 
     /**
-     * Display the creation page.
+     * Displays the creation page.
      */
     public function create(ServerRequest $request): ResponseInterface
     {
@@ -124,13 +127,13 @@ class AdminPostController extends AbstractController
                 $this->csrf->process($request);
                 $data = $request->getParsedBody();
                 $errors = $this->validateForm($data, true, array_keys($users));
-    
+
                 if (empty($errors)) {
                     $userId = $this->auth->getUserId();
                     if (null === $userId) {
                         $this->createForbidderException('Action impossible');
                     }
-    
+
                     $blogPost = (new BlogPost())
                         ->setTitle($data['title'])
                         ->setSlug($data['slug'])
@@ -138,10 +141,10 @@ class AdminPostController extends AbstractController
                         ->setDescription($data['description'])
                         ->setCreatedAt(new DateTime())
                         ->setUpdatedAt(new DateTime())
-                        ->setAuthor((new BlogUser())->setId((int)$data['author']))
+                        ->setAuthor((new BlogUser())->setId((int) $data['author']))
                     ;
                     $postId = $this->postManager->insert($blogPost);
-    
+
                     return $this->redirect('app_admin_post_show', ['id' => $postId]);
                 }
             }
@@ -157,7 +160,7 @@ class AdminPostController extends AbstractController
     }
 
     /**
-     * Delete a post.
+     * Deletes a post.
      */
     public function delete(ServerRequest $request): ResponseInterface
     {
@@ -166,17 +169,17 @@ class AdminPostController extends AbstractController
             $blogPost = $this->getPost($request);
             $this->postManager->delete($blogPost);
 
-        return $this->redirect('app_admin_post_index');
+            return $this->redirect('app_admin_post_index');
         } catch (\Exception $th) {
             return $this->render('admin/components/error.html.twig', [
                 'errorMessage' => $th->getMessage(),
-                'title' => "Erreur de suppression",
+                'title' => 'Erreur de suppression',
             ]);
         }
     }
 
     /**
-     * Return the post by the id given in the url.
+     * Returns the post by the id given in the url.
      */
     private function getPost(ServerRequest $request): BlogPost
     {
@@ -191,7 +194,7 @@ class AdminPostController extends AbstractController
     }
 
     /**
-     * Return the post form.
+     * Returns the post form.
      */
     private function getPostForm(array $errors, array $data, array $options): string
     {
@@ -204,14 +207,14 @@ class AdminPostController extends AbstractController
             ->addField('slug', 'text', ['label' => "Lien de l'article, sans accent, espaces, caractères spéciaux ni chiffres", 'placeholder' => "Lien de l'article"])
             ->addField('description', 'textarea', ['label' => 'Description', 'rows' => 2])
             ->addField('content', 'textarea', ['label' => "Contenu de l'article", 'rows' => 10])
-            ->addField('author', 'select', ['label' => "Auteur", 'options' => $options])
+            ->addField('author', 'select', ['label' => 'Auteur', 'options' => $options])
             ->setButton('Enregistrer')
             ->renderForm($token)
         ;
     }
 
     /**
-     * Validate a post form submitted.
+     * Validates a post form submitted.
      */
     private function validateForm(array $data, bool $isforCreation = false, array $usersIds = []): array
     {
@@ -230,6 +233,9 @@ class AdminPostController extends AbstractController
         return $validator->getErrors();
     }
 
+    /**
+     * Returns a list of blog users for the author select.
+     */
     private function getUsers(): array
     {
         /** @var BlogUserManager */

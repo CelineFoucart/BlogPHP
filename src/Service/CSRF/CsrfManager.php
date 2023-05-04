@@ -1,21 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service\CSRF;
 
-use App\Service\Session\SessionInterface;
+use App\Service\Session\Session;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * CsrfManager
- * 
+ * CsrfManager.
+ *
  * CsrfManager generates a CSRF token and valids it.
- * 
+ *
  * Create a token:
  * ```php
  * $csrf = new CsrfManager($session);
  * $token = $csrf->generateToken();
  * ```
- * 
+ *
  * Check the token after the submission of the form:
  * ```php
  * $csrf = new CsrfManager($session);
@@ -28,12 +30,12 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class CsrfManager
 {
-    private string           $formKey;
-    private string           $sessionKey;
-    private SessionInterface $session;
-    private int              $limit;
+    private string  $formKey;
+    private string  $sessionKey;
+    private Session $session;
+    private int     $limit;
 
-    public function __construct(SessionInterface $session, int $limit = 50, string $formKey = '_csrf', string $sessionKey = 'csrf')
+    public function __construct(Session $session, int $limit = 50, string $formKey = '_csrf', string $sessionKey = 'csrf')
     {
         $this->session = $session;
         $this->formKey = $formKey;
@@ -42,7 +44,7 @@ class CsrfManager
     }
 
     /**
-     * Check if the user has submitted a valid CSRF token.
+     * Checks if the user has submitted a valid CSRF token.
      *
      * @throws CsrfInvalidException
      */
@@ -68,7 +70,7 @@ class CsrfManager
     }
 
     /**
-     * Generate a csrf token.
+     * Generates a csrf token.
      */
     public function generateToken(): string
     {
@@ -82,7 +84,7 @@ class CsrfManager
     }
 
     /**
-     * Get the value of formKey.
+     * Gets the value of formKey.
      */
     public function getFormKey(): string
     {
@@ -90,7 +92,7 @@ class CsrfManager
     }
 
     /**
-     * Limit the number of tokens.
+     * Limits the number of tokens.
      */
     private function limitTokens(): void
     {
@@ -102,7 +104,7 @@ class CsrfManager
     }
 
     /**
-     * Use a token and unset it in the array.
+     * Uses a token and unset it in the array.
      */
     private function useToken(string $token): void
     {
@@ -113,7 +115,7 @@ class CsrfManager
     }
 
     /**
-     * Reject the csrf.
+     * Rejects the csrf.
      */
     private function reject(): void
     {

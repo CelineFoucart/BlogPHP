@@ -6,6 +6,9 @@ namespace App\Entity;
 
 use DateTime;
 
+/**
+ * Comment represents a comment, persited in the database.
+ */
 final class Comment extends AbstractEntity
 {
     private ?BlogUser $author = null;
@@ -21,7 +24,7 @@ final class Comment extends AbstractEntity
     private bool $isValidated = false;
 
     /**
-     * Get the value of content.
+     * Gets the value of content.
      *
      * @return ?string
      */
@@ -31,7 +34,7 @@ final class Comment extends AbstractEntity
     }
 
     /**
-     * Set the value of content.
+     * Sets the value of content.
      *
      * @param ?string $content
      */
@@ -43,7 +46,7 @@ final class Comment extends AbstractEntity
     }
 
     /**
-     * Get the value of createdAt.
+     * Gets the value of createdAt.
      *
      * @return ?DateTime
      */
@@ -53,7 +56,7 @@ final class Comment extends AbstractEntity
     }
 
     /**
-     * Set the value of createdAt.
+     * Sets the value of createdAt.
      *
      * @param DateTime|string|null $createdAt
      */
@@ -69,7 +72,7 @@ final class Comment extends AbstractEntity
     }
 
     /**
-     * Get the value of updatedAt.
+     * Gets the value of updatedAt.
      *
      * @return ?DateTime
      */
@@ -79,7 +82,7 @@ final class Comment extends AbstractEntity
     }
 
     /**
-     * Set the value of updatedAt.
+     * Sets the value of updatedAt.
      *
      * @param DateTime|string|null $updatedAt
      */
@@ -95,7 +98,7 @@ final class Comment extends AbstractEntity
     }
 
     /**
-     * Get the value of post.
+     * Gets the value of post.
      */
     public function getPost(): ?BlogPost
     {
@@ -107,7 +110,7 @@ final class Comment extends AbstractEntity
     }
 
     /**
-     * Set the value of post.
+     * Sets the value of post.
      */
     public function setPost(?BlogPost $post): self
     {
@@ -117,7 +120,7 @@ final class Comment extends AbstractEntity
     }
 
     /**
-     * Get the value of author.
+     * Gets the value of author.
      *
      * @return ?BlogUser
      */
@@ -131,7 +134,7 @@ final class Comment extends AbstractEntity
     }
 
     /**
-     * Set the value of author.
+     * Sets the value of author.
      *
      * @param ?BlogUser $author
      */
@@ -143,7 +146,7 @@ final class Comment extends AbstractEntity
     }
 
     /**
-     * Get the value of isValidated.
+     * Gets the value of isValidated.
      */
     public function getIsValidated(): bool
     {
@@ -151,7 +154,7 @@ final class Comment extends AbstractEntity
     }
 
     /**
-     * Set the value of isValidated.
+     * Sets the value of isValidated.
      */
     public function setIsValidated(bool $isValidated): self
     {

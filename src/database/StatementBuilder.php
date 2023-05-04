@@ -1,26 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Database;
 
 use PDO;
 
 /**
- * Class StatementBuilder makes a sql query to the database.
+ * StatementBuilder makes a sql query to the database.
  */
 class StatementBuilder
 {
     private PDO $pdo;
 
-    private $entity;
+    private ?string $entity = null;
 
-    public function __construct($entity, PDO $pdo)
+    public function __construct(?string $entity, PDO $pdo)
     {
         $this->setEntity($entity);
         $this->pdo = $pdo;
     }
 
     /**
-     * Alter data and return the last inserted id.
+     * Alters data and return the last inserted id.
      */
     public function alter(string $sql, array $data): int
     {
@@ -31,7 +33,7 @@ class StatementBuilder
     }
 
     /**
-     * Make a request and a fetch.
+     * Makes a request and a fetch.
      *
      * @return mixed
      */
@@ -45,9 +47,7 @@ class StatementBuilder
     }
 
     /**
-     * Make a request and a fetchAll.
-     *
-     * @param mixed string$sql
+     * Makes a request and a fetchAll.
      *
      * @return mixed
      */
@@ -61,15 +61,18 @@ class StatementBuilder
     }
 
     /**
-     * Set the value of entity.
+     * Sets the value of entity, a class name.
      */
-    public function setEntity($entity): self
+    public function setEntity(?string $entity): self
     {
         $this->entity = $entity;
 
         return $this;
     }
 
+    /**
+     * Sets the value of the entity to null.
+     */
     public function unsetEntity(): self
     {
         $this->entity = null;
@@ -78,7 +81,7 @@ class StatementBuilder
     }
 
     /**
-     * Define the fetch mode.
+     * Defines the fetch mode.
      *
      * @param PDOStatement|false $query
      *
@@ -102,7 +105,7 @@ class StatementBuilder
     }
 
     /**
-     * Make a request.
+     * Makes a request.
      *
      * @return PDOStatement|false
      */
@@ -114,7 +117,7 @@ class StatementBuilder
     }
 
     /**
-     * Make a prepared request.
+     * Makes a prepared request.
      *
      * @return PDOStatement|false
      */

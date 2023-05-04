@@ -10,10 +10,13 @@ use App\Database\Statistics\StatisticsHandler;
 use App\manager\CommentManager;
 use Psr\Http\Message\ResponseInterface;
 
+/** 
+ * AdminDashboardController generates the admin dashboard page.
+ */
 class AdminDashboardController extends AbstractController
 {
     /**
-     * Display the dashboard page.
+     * Displays the dashboard page with the statistics.
      */
     public function dashboard(): ResponseInterface
     {

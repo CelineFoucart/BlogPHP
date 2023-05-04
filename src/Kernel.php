@@ -9,6 +9,9 @@ use App\router\Router;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 
+/**
+ * Kernel is the entry of the application and catchs all requests.
+ */
 final class Kernel
 {
     private Router $router;
@@ -18,6 +21,9 @@ final class Kernel
         $this->setRouter();
     }
 
+    /**
+     * Calls the route the user requests.
+     */
     public function run(ServerRequest $request): Response
     {
         if (ENV === 'dev') {
@@ -36,7 +42,7 @@ final class Kernel
     }
 
     /**
-     * Create router.
+     * Creates router.
      */
     private function setRouter(): self
     {
@@ -56,7 +62,7 @@ final class Kernel
     }
 
     /**
-     * Affiche l'exception formaté en environnement de dev.
+     * Formats the exception in a pretty page for the dev environment.
      */
     private function displayDevError(): void
     {

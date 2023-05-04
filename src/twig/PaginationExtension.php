@@ -8,6 +8,9 @@ use App\Service\Pagination;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
+/**
+ * PaginationExtension creates a twig function which generate a pagination navigation.
+ */
 class PaginationExtension extends AbstractExtension
 {
     public function getFunctions()
@@ -17,6 +20,9 @@ class PaginationExtension extends AbstractExtension
         ];
     }
 
+    /**
+     * Formats a pagination navigation.
+     */
     public function getPagination(?Pagination $pagination): string
     {
         if (null === $pagination) {

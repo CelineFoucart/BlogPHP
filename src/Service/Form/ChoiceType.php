@@ -19,11 +19,11 @@ final class ChoiceType extends AbstractType
     private array $options = [];
 
     private bool $isMultiple = false;
-    
+
     public function __construct(string $name, bool $required = true)
     {
         parent::__construct($name, $required);
-        $this->inputClass = "form-select";
+        $this->inputClass = 'form-select';
     }
 
     public function render(): string
@@ -36,7 +36,7 @@ final class ChoiceType extends AbstractType
     }
 
     /**
-     * Get the value of options.
+     * Gets the value of options.
      */
     public function getOptions(): array
     {
@@ -44,7 +44,7 @@ final class ChoiceType extends AbstractType
     }
 
     /**
-     * Set the value of options.
+     * Sets the value of options.
      *
      * @param array $options an array of object with an id property that can be converted to string
      */
@@ -70,7 +70,7 @@ final class ChoiceType extends AbstractType
     }
 
     /**
-     * Defined if the select is multiple or not.
+     * Defines if the select is multiple or not.
      */
     public function setIsMultiple(bool $isMultiple): self
     {
@@ -80,18 +80,16 @@ final class ChoiceType extends AbstractType
     }
 
     /**
-     * Render the select field as HTML.
-     *
-     * @return string
+     * Renders the select field as HTML.
      */
     private function renderSelect(): string
     {
         $required = ($this->required) ? 'required' : '';
         $inputClass = $this->getInputClasses();
-        $html = '<select  class="'.$inputClass.'" id="'.$this->id.'" name="'.$this->name.'"' .$required.'>';
+        $html = '<select  class="'.$inputClass.'" id="'.$this->id.'" name="'.$this->name.'"'.$required.'>';
 
         foreach ($this->options as $id => $option) {
-            $selected = ((int)$id === (int)$this->value) ? 'selected' : '';
+            $selected = ((int) $id === (int) $this->value) ? 'selected' : '';
             $html .= '<option value="'.$id.'" '.$selected.'>'.$option.'</option>';
         }
 

@@ -7,9 +7,12 @@ namespace App\Exception;
 use Exception;
 use Throwable;
 
+/**
+ * NotFoundException is used in case of 404 Not Found.
+ */
 final class NotFoundException extends Exception
 {
-    public function __construct(string $url, string $message = '', int $code = 0, Throwable $previous = null)
+    public function __construct(string $message = '', Throwable $previous = null)
     {
         if ('' === $message) {
             $message = "Cette page n'existe pas.";

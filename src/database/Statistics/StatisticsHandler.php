@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Database\Statistics;
 
 use App\Database\Database;
 use App\Database\StatementBuilder;
 
-class StatisticsHandler 
+/**
+ * StatisticsHandler performs a sql count query with a UNION.
+ */
+class StatisticsHandler
 {
     /**
      * @var StatisticsEntity[]
@@ -15,10 +20,13 @@ class StatisticsHandler
     private StatementBuilder $builder;
 
     public function __construct()
-    { 
+    {
         $this->builder = new StatementBuilder(null, Database::getPDO());
     }
 
+    /**
+     * Adds a new table to count.
+     */
     public function addEntity(StatisticsEntity $entity): self
     {
         $this->entities[] = $entity;
@@ -26,17 +34,23 @@ class StatisticsHandler
         return $this;
     }
 
+    /**
+     * Gets an associative array of stats array with the table name and the counts.
+     */
     public function getStatistics(): array
     {
         try {
             $data = $this->builder->fetchAll($this->formatQuery(), [], 'assoc');
+
             return $this->formatStats($data);
         } catch (\Exception $th) {
             return [];
         }
     }
 
-
+    /**
+     * Formats the query.
+     */
     private function formatQuery(): string
     {
         $sql = [];
@@ -45,12 +59,15 @@ class StatisticsHandler
             $sql[] = $entity->getQuery();
         }
 
-        return join(" UNION ", $sql);
+        return join(' UNION ', $sql);
     }
 
-    private function formatStats($stats): array
+    /**
+     * Formats the array of data: the table as key and the counts as value.
+     */
+    private function formatStats(array $stats): array
     {
-        if(empty($stats)) {
+        if (empty($stats)) {
             return [];
         }
 

@@ -4,14 +4,20 @@ declare(strict_types=1);
 
 namespace App\manager;
 
-use App\Entity\Comment;
-use App\Service\Paginator;
-use App\Service\Pagination;
 use App\Database\QueryBuilder;
+use App\Entity\Comment;
 use App\Manager\AbstractManager;
+use App\Service\Pagination;
+use App\Service\Paginator;
 
+/**
+ * CommentManager handles requests to the comment table.
+ */
 class CommentManager extends AbstractManager
 {
+    /**
+     * Gets a pagination of comments.
+     */
     public function findPaginated(int $postId, string $link, int $page = 1): Pagination
     {
         $queryBuilder = $this->getDefaultQuery()->where('c.post_id = ? AND c.is_validated != 0')->setParams([$postId]);
@@ -20,6 +26,9 @@ class CommentManager extends AbstractManager
         return $paginator->getPagination($link, $page, PER_PAGE);
     }
 
+    /**
+     * Gets a pagination of comment with validation filter.
+     */
     public function findPaginatedWithFilter(string $link, int $page = 1, string $option = 'all'): Pagination
     {
         $queryBuilder = $this->getDefaultQuery()
@@ -27,9 +36,9 @@ class CommentManager extends AbstractManager
             ->leftJoin('blog_post b', 'b.id = c.post_id')
         ;
 
-        if ($option === 'validated') {
+        if ('validated' === $option) {
             $queryBuilder->where('c.is_validated != 0');
-        } elseif ($option === 'notValidated') {
+        } elseif ('notValidated' === $option) {
             $queryBuilder->where('c.is_validated = 0');
         }
 
@@ -38,6 +47,9 @@ class CommentManager extends AbstractManager
         return $paginator->getPagination($link, $page, PER_PAGE);
     }
 
+    /**
+     * Finds last not validated comments.
+     */
     public function findLastNotValidated(int $limit = 5): array
     {
         $sql = $this->getDefaultQuery()
@@ -51,6 +63,9 @@ class CommentManager extends AbstractManager
         return $this->getBuilder()->fetchAll($sql);
     }
 
+    /**
+     * Gets a queryBuilder with select field used in all methods.
+     */
     private function getDefaultQuery(): QueryBuilder
     {
         return $this->getQuery()
@@ -61,6 +76,9 @@ class CommentManager extends AbstractManager
         ;
     }
 
+    /**
+     * Creates a comment.
+     */
     public function create(Comment $comment, int $userId): int
     {
         $query = $this->getQuery();
@@ -77,9 +95,11 @@ class CommentManager extends AbstractManager
         ;
 
         return $this->getBuilder()->alter($insertSQL, $query->getParams());
-
     }
 
+    /**
+     * Updates a comment.
+     */
     public function update(Comment $comment): int
     {
         $query = $this->getQuery();
@@ -96,6 +116,9 @@ class CommentManager extends AbstractManager
         return $this->getBuilder()->alter($updateSQL, $query->getParams());
     }
 
+    /**
+     * Deletes a comment.
+     */
     public function delete(Comment $comment): int
     {
         $query = $this->getQuery();
@@ -104,6 +127,9 @@ class CommentManager extends AbstractManager
         return $this->getBuilder()->alter($deleteSQL, ['id' => $comment->getId()]);
     }
 
+    /**
+     * Finds a comment by id.
+     */
     public function findById(int $id): ?Comment
     {
         $sql = $this->getDefaultQuery()

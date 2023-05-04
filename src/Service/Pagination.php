@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+/**
+ * Pagination represents a pagination of value.
+ */
 class Pagination
 {
     private ?int $current;
@@ -21,7 +24,7 @@ class Pagination
     private array $elements = [];
 
     /**
-     * Get the value of current.
+     * Gets the value of current.
      */
     public function getCurrent(): ?int
     {
@@ -29,7 +32,7 @@ class Pagination
     }
 
     /**
-     * Set the value of current.
+     * Sets the value of current.
      */
     public function setCurrent(?int $current): self
     {
@@ -39,7 +42,7 @@ class Pagination
     }
 
     /**
-     * Get the value of pages.
+     * Gets the value of pages.
      */
     public function getPages(): array
     {
@@ -47,7 +50,7 @@ class Pagination
     }
 
     /**
-     * Set the value of pages.
+     * Sets the value of pages.
      */
     public function setPages(array $pages): self
     {
@@ -57,7 +60,7 @@ class Pagination
     }
 
     /**
-     * Get the value of previousLink.
+     * Gets the value of previousLink.
      *
      * @return ?string
      */
@@ -67,7 +70,7 @@ class Pagination
     }
 
     /**
-     * Set the value of previousLink.
+     * Sets the value of previousLink.
      *
      * @param ?string $previousLink
      */
@@ -79,7 +82,7 @@ class Pagination
     }
 
     /**
-     * Get the value of nextLink.
+     * Gets the value of nextLink.
      *
      * @return ?string
      */
@@ -89,7 +92,7 @@ class Pagination
     }
 
     /**
-     * Set the value of nextLink.
+     * Sets the value of nextLink.
      *
      * @param ?string $nextLink
      */
@@ -101,7 +104,7 @@ class Pagination
     }
 
     /**
-     * Get the value of numberItems.
+     * Gets the value of numberItems.
      *
      * @return ?int
      */
@@ -111,7 +114,7 @@ class Pagination
     }
 
     /**
-     * Set the value of numberItems.
+     * Sets the value of numberItems.
      *
      * @param ?int $numberItems
      */
@@ -123,7 +126,7 @@ class Pagination
     }
 
     /**
-     * Get the value of perPage.
+     * Gets the value of perPage.
      *
      * @return ?string
      */
@@ -133,7 +136,7 @@ class Pagination
     }
 
     /**
-     * Set the value of perPage.
+     * Sets the value of perPage.
      *
      * @param ?string $perPage
      */
@@ -145,7 +148,7 @@ class Pagination
     }
 
     /**
-     * Get the value of elements.
+     * Gets the value of elements.
      */
     public function getElements(): array
     {
@@ -153,7 +156,7 @@ class Pagination
     }
 
     /**
-     * Set the value of elements.
+     * Sets the value of elements.
      */
     public function setElements(array $elements): self
     {
@@ -162,6 +165,9 @@ class Pagination
         return $this;
     }
 
+    /**
+     * Counts the elements in the current page of pagination.
+     */
     public function count(): int
     {
         return count($this->elements);

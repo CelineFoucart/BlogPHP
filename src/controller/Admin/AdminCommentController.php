@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use DateTime;
-use App\router\Router;
-use App\Entity\Comment;
-use App\Service\Validator;
-use GuzzleHttp\Psr7\Response;
-use App\manager\CommentManager;
-use App\Service\Form\FormBuilder;
-use GuzzleHttp\Psr7\ServerRequest;
 use App\Controller\AbstractController;
-use Psr\Http\Message\ResponseInterface;
+use App\Entity\Comment;
+use App\manager\CommentManager;
+use App\router\Router;
 use App\Service\CSRF\CsrfInvalidException;
+use App\Service\Form\FormBuilder;
+use App\Service\Validator;
+use DateTime;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\ServerRequest;
+use Psr\Http\Message\ResponseInterface;
 
+/**
+ * AdminCommentController handle the moderation pages for the comments.
+ */
 class AdminCommentController extends AbstractController
 {
     private CommentManager $commentManager;
@@ -24,14 +27,14 @@ class AdminCommentController extends AbstractController
     {
         parent::__construct($router);
         $this->commentManager = $this->getManager(CommentManager::class);
-        
+
         if (!$this->auth->isAdmin()) {
-            $this->createForbidderException("Vous ne pouvez pas consulter cette page.");
+            $this->createForbidderException('Vous ne pouvez pas consulter cette page.');
         }
     }
-    
+
     /**
-     * Display the listing comment page with filters.
+     * Displays the listing comment page with filters.
      */
     public function index(ServerRequest $request): ResponseInterface
     {
@@ -39,11 +42,11 @@ class AdminCommentController extends AbstractController
         $params = $request->getQueryParams();
         $page = isset($params['page']) ? (int) $params['page'] : 1;
         $option = isset($params['option']) ? $params['option'] : 'all';
-        
+
         if (!in_array($option, ['all', 'validated', 'notValidated'])) {
             $option = 'all';
         }
-        
+
         $pagination = $this->commentManager->findPaginatedWithFilter($link, $page, $option);
 
         return $this->render('admin/comment/index.html.twig', [
@@ -53,33 +56,33 @@ class AdminCommentController extends AbstractController
     }
 
     /**
-     * Display the detail page.
+     * Displays the detail page.
      */
     public function show(ServerRequest $request): ResponseInterface
     {
         return $this->render('admin/comment/show.html.twig', [
             'activeComment' => true,
-            'comment' => $this->getComment($request)
+            'comment' => $this->getComment($request),
         ]);
     }
 
     /**
-     * Display the edition page.
+     * Displays the edition page.
      */
     public function edit(ServerRequest $request): ResponseInterface
     {
         $comment = $this->getComment($request);
-        $data = [ 'content' => $comment->getContent(), 'isValidated' => $comment->getIsValidated() ];
+        $data = ['content' => $comment->getContent(), 'isValidated' => $comment->getIsValidated()];
         $errors = [];
         $invalidCSRFMessage = null;
 
         try {
-            if ($request->getMethod() === 'POST') {
+            if ('POST' === $request->getMethod()) {
                 $this->csrf->process($request);
                 $data = $request->getParsedBody();
                 $data['isValidated'] = (isset($data['isValidated'])) ? true : false;
                 $errors = (new Validator($data))->checkLength('content', 3, 10000)->getErrors();
-    
+
                 if (empty($errors)) {
                     $comment
                         ->setContent(htmlspecialchars($data['content']))
@@ -87,7 +90,7 @@ class AdminCommentController extends AbstractController
                         ->setIsValidated($data['isValidated'])
                     ;
                     $this->commentManager->update($comment);
-    
+
                     return $this->redirect('app_admin_comment_show', ['id' => $comment->getId()]);
                 }
             }
@@ -98,7 +101,7 @@ class AdminCommentController extends AbstractController
         $form = (new FormBuilder('POST'))
             ->setData($data)
             ->setErrors($errors)
-            ->addField('content', 'textarea', ['label' => "Contenu du commentaire", 'rows' => 5])
+            ->addField('content', 'textarea', ['label' => 'Contenu du commentaire', 'rows' => 5])
             ->addField('isValidated', 'checkbox', ['label' => 'Valider le commentaire', 'required' => false])
             ->setButton('Enregistrer')
             ->renderForm($this->csrf->generateToken())
@@ -113,7 +116,7 @@ class AdminCommentController extends AbstractController
     }
 
     /**
-     * Update the comment statut to validated or not validated.
+     * Updates the comment statut to validated or not validated.
      */
     public function updateStatus(ServerRequest $request): ResponseInterface
     {
@@ -134,31 +137,31 @@ class AdminCommentController extends AbstractController
         } catch (\Throwable $th) {
             return $this->render('admin/components/error.html.twig', [
                 'errorMessage' => $th->getMessage(),
-                'title' => "Erreur lors de la validation",
+                'title' => 'Erreur lors de la validation',
             ]);
         }
     }
 
     /**
-     * Delete a comment.
+     * Deletes a comment.
      */
     public function delete(ServerRequest $request): ResponseInterface
     {
         try {
             $comment = $this->getComment($request);
-        $this->commentManager->delete($comment);
-        
+            $this->commentManager->delete($comment);
+
             return $this->redirect('app_admin_comment_index');
         } catch (\Exception $th) {
             return $this->render('admin/components/error.html.twig', [
                 'errorMessage' => $th->getMessage(),
-                'title' => "Erreur de suppression",
+                'title' => 'Erreur de suppression',
             ]);
         }
     }
 
     /**
-     * Return the comment by the id given in the url.
+     * Returns the comment by the id given in the url.
      */
     private function getComment(ServerRequest $request): Comment
     {

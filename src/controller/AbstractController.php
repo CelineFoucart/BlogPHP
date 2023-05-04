@@ -4,24 +4,28 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Twig\Environment;
-use App\router\Router;
-use App\Twig\PathExtension;
-use App\Twig\UserExtension;
-use App\Service\Session\Auth;
-use App\Twig\BbcodeExtension;
-use App\Twig\StringExtension;
-use GuzzleHttp\Psr7\Response;
-use App\Service\Session\Session;
-use App\Manager\ManagerInterface;
-use App\Service\CSRF\CsrfManager;
-use App\Twig\PaginationExtension;
-use Twig\Loader\FilesystemLoader;
-use App\Exception\NotFoundException;
-use App\exception\ForbiddenException;
 use App\Exception\BadRequestException;
+use App\exception\ForbiddenException;
+use App\Exception\NotFoundException;
+use App\Manager\AbstractManager;
+use App\router\Router;
+use App\Service\CSRF\CsrfManager;
+use App\Service\Session\Auth;
+use App\Service\Session\Session;
+use App\Twig\BbcodeExtension;
 use App\Twig\CsrfExtension;
+use App\Twig\PaginationExtension;
+use App\Twig\PathExtension;
+use App\Twig\StringExtension;
+use App\Twig\UserExtension;
+use GuzzleHttp\Psr7\Response;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
+/**
+ * AbstractController provides dependencies required in all controller as an instance of Twig
+ * and shortcuts.
+ */
 abstract class AbstractController
 {
     protected Router $router;
@@ -33,7 +37,7 @@ abstract class AbstractController
     private array $twigVariables;
 
     protected Environment $twig;
-    
+
     protected CsrfManager $csrf;
 
     public function __construct(Router $router)
@@ -47,9 +51,7 @@ abstract class AbstractController
     }
 
     /**
-     * Create a twig object and add the extensions.
-     *
-     * @return self
+     * Creates a twig object and add the extensions.
      */
     private function setTwig(): self
     {
@@ -67,12 +69,12 @@ abstract class AbstractController
     }
 
     /**
-     * Return the template in a response.
+     * Returns the template in a response.
      */
     protected function render(string $template, array $params = [], int $statusCode = 200): Response
     {
         $params = array_merge(
-            ['router' => $this->router, 'session_user' => ['id' => $this->auth->getUserId(), 'username' => $this->auth->getUsername()]], 
+            ['router' => $this->router, 'session_user' => ['id' => $this->auth->getUserId(), 'username' => $this->auth->getUsername()]],
             $this->twigVariables['twig_variables'], $params
         );
 
@@ -82,7 +84,7 @@ abstract class AbstractController
     /**
      * Returns a Manager object.
      */
-    protected function getManager(string $classManager, ?string $entityClass = null, ?string $table = null): ManagerInterface
+    protected function getManager(string $classManager, ?string $entityClass = null, ?string $table = null): AbstractManager
     {
         if (!$entityClass) {
             $parts = explode('\\', $classManager);
@@ -101,7 +103,7 @@ abstract class AbstractController
     }
 
     /**
-     * Create a redirection.
+     * Creates a redirection.
      */
     protected function redirect(string $route, array $params = [], int $code = 301): Response
     {
@@ -111,7 +113,7 @@ abstract class AbstractController
     }
 
     /**
-     * Throw a not found exception.
+     * Throws a not found exception.
      *
      * @throws NotFoundException
      */
@@ -121,7 +123,7 @@ abstract class AbstractController
     }
 
     /**
-     * Throw a not found exception.
+     * Throws a not found exception.
      *
      * @throws ForbiddenException
      */
@@ -131,7 +133,7 @@ abstract class AbstractController
     }
 
     /**
-     * Throw a not found exception.
+     * Throws a not found exception.
      *
      * @throws BadRequestException
      */

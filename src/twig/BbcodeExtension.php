@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use Twig\TwigFilter;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
+/**
+ * BbcodeExtension creates a twig filter which convert a bbcode text into html.
+ */
 class BbcodeExtension extends AbstractExtension
 {
     private array $alignTags = [
@@ -64,14 +67,14 @@ class BbcodeExtension extends AbstractExtension
 
     private array $tags = ['ol', 'li', 'ul', 'tr', 'td', 'th', 'code'];
 
-    private array $fontSizes = [ 
+    private array $fontSizes = [
         'size=1' => '10px',
-        'size=2' => '13px', 
-        'size=3' => '16px', 
-        'size=4' => '18px', 
-        'size=5' => '24px', 
-        'size=6' => '32px', 
-        'size=7' => '48px' 
+        'size=2' => '13px',
+        'size=3' => '16px',
+        'size=4' => '18px',
+        'size=5' => '24px',
+        'size=6' => '32px',
+        'size=7' => '48px',
     ];
 
     public function getFilters()
@@ -81,17 +84,20 @@ class BbcodeExtension extends AbstractExtension
         ];
     }
 
+    /**
+     * Parses a bbcode text to html text.
+     */
     public function parseBbcode(string $text): string
     {
         foreach ($this->alignTags as $tag) {
             $pattern = '#\['.$tag['bbcode'].'\](.{0,})\[\/'.$tag['bbcode'].'\]#iUs';
-            $replacement = $tag['htmlLeft'] . '$1' . $tag['htmlRight'];
+            $replacement = $tag['htmlLeft'].'$1'.$tag['htmlRight'];
             $text = preg_replace($pattern, $replacement, $text);
         }
 
         foreach ($this->tags as $tag) {
             $pattern = '#\['.$tag.'\](.{0,})\[\/'.$tag.'\]#iUs';
-            $replacement = '<' . $tag . '>$1</' . $tag .'>';
+            $replacement = '<'.$tag.'>$1</'.$tag.'>';
             $text = preg_replace($pattern, $replacement, $text);
         }
 

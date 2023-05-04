@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+/**
+ * UserRole represents a user role, needed to handle permissions. 
+ * By default, there are two roles: ROLE_ADMIN and ROLE_USER.
+ */
 final class UserRole extends AbstractEntity
 {
     private ?string $name = null;
@@ -11,7 +15,7 @@ final class UserRole extends AbstractEntity
     private ?string $alias = null;
 
     /**
-     * Get the value of name.
+     * Gets the value of name.
      */
     public function getName(): ?string
     {
@@ -19,7 +23,7 @@ final class UserRole extends AbstractEntity
     }
 
     /**
-     * Set the value of name.
+     * Sets the value of name.
      */
     public function setName(?string $name): self
     {
@@ -29,7 +33,7 @@ final class UserRole extends AbstractEntity
     }
 
     /**
-     * Get the value of alias.
+     * Gets the value of alias.
      */
     public function getAlias(): ?string
     {
@@ -37,7 +41,7 @@ final class UserRole extends AbstractEntity
     }
 
     /**
-     * Set the value of alias.
+     * Sets the value of alias.
      */
     public function setAlias(?string $alias): self
     {
