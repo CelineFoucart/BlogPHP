@@ -53,7 +53,7 @@ class FormBuilder
 
     private array $button = [
         'class' => 'btn btn-primary',
-        'text' => 'Soumettre'
+        'text' => 'Soumettre',
     ];
 
     public function __construct(string $method = 'POST')
@@ -62,24 +62,24 @@ class FormBuilder
     }
 
     /**
-     * Add a field to the form.
-     * 
+     * Adds a field to the form.
+     *
      * @param array $options the field options (required, placeholder, label, class, errorClass, errorSectionClass, options for select fields)
      */
     public function addField(string $name, string $type = 'text', array $options = []): self
     {
         $isRequired = (isset($options['required'])) ? $options['required'] : true;
 
-        if ($type === 'select') {
+        if ('select' === $type) {
             $field = new ChoiceType($name, $isRequired);
-            
+
             if (isset($options['options'])) {
                 $field->setOptions($options['options']);
             }
         } else {
             $field = new FieldType($name, $type, $isRequired);
         }
-        
+
         $field = $this->definedFieldOptions($field, $options);
 
         if (isset($this->data[$name])) {
@@ -97,7 +97,7 @@ class FormBuilder
     }
 
     /**
-     * Render the form.
+     * Renders the form.
      *
      * @throws Exception if there is no field
      */
@@ -109,13 +109,11 @@ class FormBuilder
         $formParts = $this->getFormParts($csrfToken);
         $fields = join('', $formParts['fields']);
 
-        return $formParts['start'] . $formParts['errorBlock'] . $fields . $formParts['button'] . $formParts['end'];
+        return $formParts['start'].$formParts['errorBlock'].$fields.$formParts['button'].$formParts['end'];
     }
 
     /**
-     * Generate form parts.
-     *
-     * @return array
+     * Generates form parts.
      */
     public function getFormParts(?string $csrfToken = null): array
     {
@@ -132,13 +130,13 @@ class FormBuilder
             'start' => '<form action="'.$this->action.'" method="'.$this->method.'" class="'.$this->formClasses.'">',
             'errorBlock' => $this->formatErrorGeneralBlock(),
             'fields' => $fields,
-            'button' => '<button type="submit" class="'. $this->button['class'].'">'. $this->button['text'].'</button>',
+            'button' => '<button type="submit" class="'.$this->button['class'].'">'.$this->button['text'].'</button>',
             'end' => '</form>',
         ];
     }
 
     /**
-     * Set the value of errors.
+     * Sets the value of errors.
      */
     public function setErrors(array $errors): self
     {
@@ -148,7 +146,7 @@ class FormBuilder
     }
 
     /**
-     * Set the value of method.
+     * Sets the value of method.
      */
     public function setMethod(string $method): self
     {
@@ -163,7 +161,7 @@ class FormBuilder
     }
 
     /**
-     * Set the value of action.
+     * Sets the value of action.
      */
     public function setAction(string $action): self
     {
@@ -173,7 +171,7 @@ class FormBuilder
     }
 
     /**
-     * Set the value of formClasses.
+     * Sets the value of formClasses.
      */
     public function setFormClasses(string $formClasses): self
     {
@@ -183,9 +181,9 @@ class FormBuilder
     }
 
     /**
-     * Set the value of button.
+     * Sets the value of button.
      */
-    public function setButton(string $title = "Envoyer", string $class = "btn btn-primary"): self
+    public function setButton(string $title = 'Envoyer', string $class = 'btn btn-primary'): self
     {
         $this->button = ['text' => $title, 'class' => $class];
 
@@ -193,7 +191,7 @@ class FormBuilder
     }
 
     /**
-     * Set the value of data.
+     * Sets the value of data.
      */
     public function setData(array $data): self
     {
@@ -203,7 +201,7 @@ class FormBuilder
     }
 
     /**
-     * Generate the error block, to the top of the form.
+     * Generates the error block, to the top of the form.
      */
     private function formatErrorGeneralBlock(): string
     {
@@ -229,10 +227,10 @@ class FormBuilder
     }
 
     /**
-     * Set the options of a field.
+     * Sets the options of a field.
      *
-     * @param FieldType|ChoiceType  $field
-     * @param array                 $options
+     * @param FieldType|ChoiceType $field
+     *
      * @return FieldType|ChoiceType
      */
     private function definedFieldOptions($field, array $options = [])
@@ -252,11 +250,11 @@ class FormBuilder
         if (isset($options['errorClass'])) {
             $field->setErrorClass($options['errorClass']);
         }
-        
+
         if (isset($options['errorSectionClass'])) {
             $field->setErrorSectionClass($options['errorSectionClass']);
         }
-        
+
         if (isset($options['rows'])) {
             $field->setTextareaRows($options['rows']);
         }

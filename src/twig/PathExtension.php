@@ -8,6 +8,9 @@ use App\router\Router;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
+/**
+ * PathExtension creates a twig function which generate an path.
+ */
 class PathExtension extends AbstractExtension
 {
     public function __construct(
@@ -22,6 +25,9 @@ class PathExtension extends AbstractExtension
         ];
     }
 
+    /**
+     * Get a url from a route name.
+     */
     public function getPath(string $name, array $params = []): string
     {
         return $this->router->url($name, $params);

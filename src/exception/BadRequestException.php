@@ -7,9 +7,12 @@ namespace App\Exception;
 use Exception;
 use Throwable;
 
+/**
+ * BadRequestException is used in case of 400 Bad Request.
+ */
 final class BadRequestException extends Exception
 {
-    public function __construct(string $url, string $message = '', int $code = 0, Throwable $previous = null)
+    public function __construct(string $message = '', Throwable $previous = null)
     {
         if ('' === $message) {
             $message = 'Les données soumises sont invalides.';

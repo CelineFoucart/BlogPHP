@@ -9,6 +9,9 @@ use App\Entity\BlogPost;
 use App\Service\Pagination;
 use App\Service\Paginator;
 
+/**
+ * BlogPostManager handles requests to the blog post table.
+ */
 final class BlogPostManager extends AbstractManager
 {
     /**
@@ -64,6 +67,9 @@ final class BlogPostManager extends AbstractManager
         return $this->getBuilder()->alter($updateSQL, $query->getParams());
     }
 
+    /**
+     * Deletes a blog post.
+     */
     public function delete(BlogPost $post): int
     {
         $query = $this->getQuery();

@@ -6,6 +6,14 @@ html, body {
     z-index: 9999;
 }
 
+.sceditor-container {
+	z-index: 4000;
+}
+
+.modal-backdrop {
+    z-index: 5000;
+}
+
 .sidebar {
     width: 4.5rem;
     position: fixed;

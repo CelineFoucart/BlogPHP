@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Database;
 
 /**
@@ -52,7 +54,7 @@ class QueryBuilder
     private array $params = [];
 
     /**
-     * Define the value of $from.
+     * Defines the value of $from.
      */
     public function from(string $table, ?string $alias = null): self
     {
@@ -66,7 +68,7 @@ class QueryBuilder
     }
 
     /**
-     * Define the left join part.
+     * Defines the left join part.
      */
     public function leftJoin(string $table, string $condition): self
     {
@@ -76,7 +78,7 @@ class QueryBuilder
     }
 
     /**
-     * Define the inner join part.
+     * Defines the inner join part.
      */
     public function innerJoin(string $table, string $condition): self
     {
@@ -86,7 +88,7 @@ class QueryBuilder
     }
 
     /**
-     * Define the right join part.
+     * Defines the right join part.
      */
     public function rightJoin(string $table, string $condition): self
     {
@@ -96,7 +98,7 @@ class QueryBuilder
     }
 
     /**
-     * Define the join part.
+     * Defines the join part.
      */
     public function join(string $table, string $condition): self
     {
@@ -106,12 +108,12 @@ class QueryBuilder
     }
 
     /**
-     * Define the value of $columnsOrder.
+     * Defines the value of $columnsOrder.
      */
     public function orderBy(string $columnOrder, ?string $direction = null): self
     {
         $validOrder = ['DESC', 'ASC'];
-        $direction = strtoupper($direction);
+        $direction = $direction ? strtoupper($direction) : 'ASC';
         if (in_array($direction, $validOrder)) {
             $this->columnsOrder[] = "$columnOrder $direction";
         } else {
@@ -122,7 +124,7 @@ class QueryBuilder
     }
 
     /**
-     * Define the value of $limit.
+     * Defines the value of $limit.
      */
     public function limit(int $limit): self
     {
@@ -132,7 +134,7 @@ class QueryBuilder
     }
 
     /**
-     * Define the value of $offset.
+     * Defines the value of $offset.
      */
     public function offset(int $offset): self
     {
@@ -142,7 +144,7 @@ class QueryBuilder
     }
 
     /**
-     * Define the condition.
+     * Defines the condition.
      */
     public function where(string $condition): self
     {
@@ -152,7 +154,7 @@ class QueryBuilder
     }
 
     /**
-     * Define the columns for the select part.
+     * Defines the columns for the select part.
      */
     public function select(string ...$columns): self
     {
@@ -170,7 +172,7 @@ class QueryBuilder
     }
 
     /**
-     * Format a count request.
+     * Formats a count request.
      */
     public function count(?string $field = null): string
     {
@@ -186,6 +188,8 @@ class QueryBuilder
     }
 
     /**
+     * Sets the values of an insert or update query.
+     *
      * @param string[] ...$values
      */
     public function value(string ...$values): self
@@ -200,13 +204,11 @@ class QueryBuilder
     }
 
     /**
-     * Format the sql request, for a select, an update, an insert or a delete.
+     * Formats the sql request, for a select, an update, an insert or a delete.
      *
-     * @param string $action = "select"
-     *
-     * @return string|null
+     * @param string $action (accepted values: 'select', 'insert', 'update' and 'delete')
      */
-    public function toSQL(string $action = 'select')
+    public function toSQL(string $action = 'select'): ?string
     {
         if ('insert' === $action) {
             $this->getInsert();
@@ -223,9 +225,9 @@ class QueryBuilder
     }
 
     /**
-     * Format the table name.
+     * Formats the table name.
      */
-    protected function getTable(): void
+    protected function getTable(): self
     {
         if (null === $this->from) {
             throw new \Exception('La propriété from ne peut être nulle');
@@ -234,12 +236,14 @@ class QueryBuilder
         if (!empty($this->joins)) {
             $this->sql .= ' '.join(' ', $this->joins);
         }
+
+        return $this;
     }
 
     /**
-     * Format the sql ORDER BY part.
+     * Formats the sql ORDER BY part.
      */
-    protected function getColumnsOrder(): void
+    protected function getColumnsOrder(): self
     {
         if (!empty($this->columnsOrder)) {
             $this->sql .= ' ORDER BY ';
@@ -250,12 +254,14 @@ class QueryBuilder
                 $this->sql .= implode(', ', $this->columnsOrder);
             }
         }
+
+        return $this;
     }
 
     /**
-     * Format the sql condition parts.
+     * Formats the sql condition parts.
      */
-    protected function getConditions(): void
+    protected function getConditions(): self
     {
         if (!empty($this->where)) {
             $this->sql .= ' WHERE ';
@@ -275,12 +281,14 @@ class QueryBuilder
         if (null !== $this->offset) {
             $this->sql .= " OFFSET {$this->offset}";
         }
+
+        return $this;
     }
 
     /**
-     * Format the select sql parts.
+     * Formats the select sql parts.
      */
-    protected function getSelectQuery(): void
+    protected function getSelectQuery(): self
     {
         $this->sql = 'SELECT ';
         if (empty($this->selectedColumns)) {
@@ -289,16 +297,18 @@ class QueryBuilder
             $this->sql .= implode(', ', $this->selectedColumns);
         }
         $this->getTable();
+
+        return $this;
     }
 
     /**
-     * Format the insert sql parts.
+     * Formats the insert sql parts.
      */
-    protected function getInsert(): void
+    protected function getInsert(): self
     {
         $columns = join(', ', $this->selectedColumns);
         $keys = array_keys($this->params);
-        
+
         $keys = array_map(function ($item) {
             return ':'.(string) $item;
         }, $keys);
@@ -310,12 +320,14 @@ class QueryBuilder
             $from = $this->from;
         }
         $this->sql = "INSERT INTO {$from}({$columns}) VALUES($alias)";
+
+        return $this;
     }
 
     /**
-     * Format the update sql parts.
+     * Formats the update sql parts.
      */
-    protected function getUpdate(): void
+    protected function getUpdate(): self
     {
         if (preg_match('/AS/', $this->from)) {
             $from = trim(explode('AS', $this->from)[0]);
@@ -329,16 +341,18 @@ class QueryBuilder
             $sql .= " $column = :$column,";
         }
 
-        $sql = trim($sql, ",");
-        $sql .= " WHERE id = :id"; 
+        $sql = trim($sql, ',');
+        $sql .= ' WHERE id = :id';
 
         $this->sql = $sql;
+
+        return $this;
     }
 
     /**
-     * Format the delete sql parts.
+     * Formats the delete sql parts with a limit set to 1.
      */
-    protected function getDelete(): void
+    protected function getDelete(): self
     {
         if (preg_match('/AS/', $this->from)) {
             $from = trim(explode('AS', $this->from)[0]);
@@ -346,10 +360,12 @@ class QueryBuilder
             $from = $this->from;
         }
         $this->sql = "DELETE FROM {$from} WHERE id = :id LIMIT 1";
+
+        return $this;
     }
 
     /**
-     * Get the value of params.
+     * Gets the value of params.
      */
     public function getParams(): array
     {
@@ -357,7 +373,7 @@ class QueryBuilder
     }
 
     /**
-     * Set the value of params.
+     * Sets the value of params.
      */
     public function setParams(array $params): self
     {
@@ -367,7 +383,7 @@ class QueryBuilder
     }
 
     /**
-     * Get the value of alias.
+     * Gets the value of alias.
      *
      * @return ?string
      */

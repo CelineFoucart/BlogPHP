@@ -1,9 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\router;
 
 use GuzzleHttp\Psr7\ServerRequest;
 
+/**
+ * Route represents a route definition.
+ */
 final class Route
 {
     private $path;
@@ -89,7 +94,7 @@ final class Route
     {
         $path = $this->path;
         foreach ($params as $key => $value) {
-            $path = str_replace(":$key", $value, $path);
+            $path = str_replace(":$key", (string) $value, $path);
         }
 
         return '/'.$path;

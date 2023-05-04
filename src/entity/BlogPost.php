@@ -6,6 +6,9 @@ namespace App\Entity;
 
 use DateTime;
 
+/**
+ * BlogPost represents a blog post, persited in the database.
+ */
 final class BlogPost extends AbstractEntity
 {
     private ?string $title = null;
@@ -23,7 +26,7 @@ final class BlogPost extends AbstractEntity
     private ?BlogUser $author = null;
 
     /**
-     * Get the value of title.
+     * Gets the value of title.
      *
      * @return ?string
      */
@@ -33,7 +36,7 @@ final class BlogPost extends AbstractEntity
     }
 
     /**
-     * Set the value of title.
+     * Sets the value of title.
      *
      * @param ?string $title
      */
@@ -45,7 +48,7 @@ final class BlogPost extends AbstractEntity
     }
 
     /**
-     * Get the value of slug.
+     * Gets the value of slug.
      *
      * @return ?string
      */
@@ -55,7 +58,7 @@ final class BlogPost extends AbstractEntity
     }
 
     /**
-     * Set the value of slug.
+     * Sets the value of slug.
      *
      * @param ?string $slug
      */
@@ -67,7 +70,7 @@ final class BlogPost extends AbstractEntity
     }
 
     /**
-     * Get the value of description.
+     * Gets the value of description.
      *
      * @return ?string
      */
@@ -77,7 +80,7 @@ final class BlogPost extends AbstractEntity
     }
 
     /**
-     * Set the value of description.
+     * Sets the value of description.
      *
      * @param ?string $description
      */
@@ -89,7 +92,7 @@ final class BlogPost extends AbstractEntity
     }
 
     /**
-     * Get the value of content.
+     * Gets the value of content.
      *
      * @return ?string
      */
@@ -99,7 +102,7 @@ final class BlogPost extends AbstractEntity
     }
 
     /**
-     * Set the value of content.
+     * Sets the value of content.
      *
      * @param ?string $content
      */
@@ -111,7 +114,7 @@ final class BlogPost extends AbstractEntity
     }
 
     /**
-     * Get the value of createdAt.
+     * Gets the value of createdAt.
      *
      * @return ?DateTime
      */
@@ -121,7 +124,7 @@ final class BlogPost extends AbstractEntity
     }
 
     /**
-     * Set the value of createdAt.
+     * Sets the value of createdAt.
      *
      * @param DateTime|string|null $createdAt
      */
@@ -137,7 +140,7 @@ final class BlogPost extends AbstractEntity
     }
 
     /**
-     * Get the value of updatedAt.
+     * Gets the value of updatedAt.
      *
      * @return ?DateTime
      */
@@ -147,7 +150,7 @@ final class BlogPost extends AbstractEntity
     }
 
     /**
-     * Set the value of updatedAt.
+     * Sets the value of updatedAt.
      *
      * @param DateTime|string|null $updatedAt
      */
@@ -163,7 +166,7 @@ final class BlogPost extends AbstractEntity
     }
 
     /**
-     * Get the value of author.
+     * Gets the value of author.
      *
      * @return ?BlogUser
      */
@@ -177,7 +180,7 @@ final class BlogPost extends AbstractEntity
     }
 
     /**
-     * Set the value of author.
+     * Sets the value of author.
      *
      * @param ?BlogUser $author
      */

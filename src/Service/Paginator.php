@@ -5,6 +5,9 @@ namespace App\Service;
 use App\Database\QueryBuilder;
 use App\Database\StatementBuilder;
 
+/**
+ * Paginator generates a pagination.
+ */
 class Paginator
 {
     private int $current;
@@ -20,6 +23,14 @@ class Paginator
         $this->statementBuilder = $statementBuilder;
     }
 
+    /**
+     * Gets a pagination.
+     *
+     * @param string $link
+     * @param integer $current
+     * @param integer $perPage
+     * @return Pagination
+     */
     public function getPagination(string $link, int $current, int $perPage = 3): Pagination
     {
         $countSQL = $this->queryBuilder->count($this->queryBuilder->getAlias().'.id');
@@ -44,7 +55,7 @@ class Paginator
     }
 
     /**
-     * Set the value of the current page.
+     * Sets the value of the current page.
      *
      * @param mixed $current
      */
@@ -59,6 +70,13 @@ class Paginator
         }
     }
 
+    /**
+     * Gets the previous link.
+     *
+     * @param string $link
+     * @param array $params
+     * @return string|null
+     */
     private function previousLink(string $link, array $params = []): ?string
     {
         $currentPage = $this->current;
@@ -74,7 +92,7 @@ HTML;
     }
 
     /**
-     * @param string $class
+     * Gets the next link.
      */
     private function nextLink(string $link, array $params = []): ?string
     {
@@ -91,7 +109,7 @@ HTML;
     }
 
     /**
-     * Get pages link.
+     * Gets the links of the pages.
      */
     private function getPages(string $link, array $params = []): array
     {
@@ -125,7 +143,10 @@ HTML;
         return $pages;
     }
 
-    private function setLink(string $link, array $params)
+    /**
+     * Formats a link for the pagination.
+     */
+    private function setLink(string $link, array $params): string
     {
         $parts = parse_url($link);
         $query = isset($parts['query']) ? $parts['query'] : [];

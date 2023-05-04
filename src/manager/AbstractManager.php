@@ -8,7 +8,10 @@ use App\Database\Database;
 use App\Database\QueryBuilder;
 use App\Database\StatementBuilder;
 
-class AbstractManager implements ManagerInterface
+/**
+ * AbstractManager provides usefull methods for all managers.
+ */
+class AbstractManager
 {
     protected \PDO $pdo;
     protected string $class;
@@ -21,6 +24,11 @@ class AbstractManager implements ManagerInterface
         $this->table = $table;
     }
 
+    /**
+     * Returns the result of a prepared request or null.
+     *
+     * @return mixed
+     */
     public function findBy(string $column, mixed $value)
     {
         $sql = $this->getQuery()->where($this->table[0].'.'.$column.' = ?')->toSQL();
@@ -28,6 +36,9 @@ class AbstractManager implements ManagerInterface
         return $this->getBuilder()->fetch($sql, [$value]);
     }
 
+    /**
+     * Returns the result as an array of entities.
+     */
     public function findAll(): array
     {
         $sql = $this->getQuery()->toSQL();
@@ -35,6 +46,9 @@ class AbstractManager implements ManagerInterface
         return $this->getBuilder()->fetchAll($sql);
     }
 
+    /**
+     * Counts entities.
+     */
     public function count(?string $where = null, array $params = []): int
     {
         $count = $this->table[0].'.id';
@@ -47,16 +61,30 @@ class AbstractManager implements ManagerInterface
         return (int) $this->getBuilder()->fetch($sql, $params, 'num')[0];
     }
 
+    /**
+     * Gets a new instance of a QueryBuilder, configured to create a SQL query
+     * for the current manager.
+     *
+     * @return QueryBuilder
+     */
     protected function getQuery(): QueryBuilder
     {
         return (new QueryBuilder())->from($this->table, $this->table[0]);
     }
 
+    /**
+     * Gets a new instance of StatementBuilder which performs a SQL query.
+     *
+     * @return StatementBuilder
+     */
     protected function getBuilder(): StatementBuilder
     {
         return new StatementBuilder($this->class, $this->pdo);
     }
 
+    /**
+     * Gets the table name.
+     */
     public function getTable(): ?string
     {
         return $this->table;

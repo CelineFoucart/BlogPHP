@@ -13,6 +13,14 @@
                 <p class="mb-0">Identifiants de connexion invalides.</p>
             </div>
         {% endif %}
+        {% if attemptsError %}
+            <div class="alert alert-danger">
+                <p class="mb-0">
+                    Vous avez dépassé le nombre de tentatives de connexion autorisées, 3. 
+                    Veuillez attendre 15 minutes après votre dernier essai.
+                </p>
+            </div>
+        {% endif %}
         {% if invalidCSRFMessage %}
 			<div class="alert alert-danger alert-dismissible fade show" role="alert">
                 {{ invalidCSRFMessage }}

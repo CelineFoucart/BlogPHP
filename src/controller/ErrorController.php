@@ -7,12 +7,18 @@ namespace App\Controller;
 use Exception;
 use GuzzleHttp\Psr7\Response;
 
+/**
+ * ErrorController handles the error pages.
+ */
 class ErrorController extends AbstractController
 {
     public const NOT_FOUND = 404;
 
     private string $templateFolder = PATH.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR;
 
+    /**
+     * Displays an error page.
+     */
     public function displayError(Exception $exception): Response
     {
         $error = $exception->getCode();
@@ -22,7 +28,7 @@ class ErrorController extends AbstractController
     }
 
     /**
-     * render in a appropriate response the exception.
+     * Renders in a appropriate response the exception.
      */
     private function renderError(string $message, int $code): Response
     {

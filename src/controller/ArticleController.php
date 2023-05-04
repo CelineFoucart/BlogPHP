@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use DateTime;
-use App\Entity\Comment;
 use App\Entity\BlogPost;
-use App\Entity\BlogUser;
-use App\Service\Validator;
-use App\Service\Pagination;
-use App\manager\CommentManager;
+use App\Entity\Comment;
 use App\Manager\BlogPostManager;
+use App\manager\CommentManager;
+use App\Service\CSRF\CsrfInvalidException;
+use App\Service\Pagination;
+use App\Service\Validator;
+use DateTime;
 use GuzzleHttp\Psr7\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
-use App\Service\CSRF\CsrfInvalidException;
 
+/**
+ * ArticleController handles the blog part of the website,
+ * an index page and a show pages with a comment form submission.
+ */
 class ArticleController extends AbstractController
 {
     /**
@@ -43,7 +46,7 @@ class ArticleController extends AbstractController
         $postManager = $this->getPostManager();
         $blogPost = $postManager->findBySlug($slug);
         $errorMessage = null;
-        $commentSubmitted = "";
+        $commentSubmitted = '';
         $successMessage = null;
         $invalidCSRFMessage = null;
 
@@ -54,18 +57,18 @@ class ArticleController extends AbstractController
         $commentPagination = $this->getPostComments($request, $blogPost->getId());
 
         try {
-            if ($request->getMethod() === 'POST') {
+            if ('POST' === $request->getMethod()) {
                 $userId = $this->getUserId();
                 $this->csrf->process($request);
                 $data = $request->getParsedBody();
-    
+
                 $status = $this->createComment($data, $blogPost, $userId);
-    
+
                 if ($status['commentId'] > 0) {
                     $successMessage = $status['message'];
-                }  else {
+                } else {
                     $errorMessage = $status['message'];
-                    $commentSubmitted = (isset($data['content'])) ? htmlspecialchars($data['content']) : "";
+                    $commentSubmitted = (isset($data['content'])) ? htmlspecialchars($data['content']) : '';
                 }
             }
         } catch (CsrfInvalidException $th) {
@@ -85,13 +88,11 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * Create a comment after or returns errors.
+     * Creates a comment after or returns errors.
      *
-     * @param array         $data
-     * @param BlogPost      $post
-     * @param integer|null  $userId
-     * 
-     * @return array     an array with the commentId (0 if fail) and a message
+     * @param int|null $userId
+     *
+     * @return array an array with the commentId (0 if fail) and a message
      */
     private function createComment(array $data, BlogPost $post, int $userId): array
     {
@@ -111,16 +112,15 @@ class ArticleController extends AbstractController
 
             return [
                 'commentId' => $commentId,
-                'message' => "Le commentaire a été enregistré et est en attente de validation.",
+                'message' => 'Le commentaire a été enregistré et est en attente de validation.',
             ];
-
         } else {
             return ['commentId' => 0, 'message' => join('<br>', $errors['content'])];
         }
     }
 
     /**
-     * Get a pagination of post comments.
+     * Gets a pagination of post comments.
      */
     private function getPostComments(ServerRequest $request, int $postId): Pagination
     {
@@ -132,24 +132,30 @@ class ArticleController extends AbstractController
         return $commentManager->findPaginated($postId, $link, $page);
     }
 
+    /**
+     * Gets the blog post manager.
+     */
     private function getPostManager(): BlogPostManager
     {
         return $this->getManager(BlogPostManager::class);
     }
 
+    /**
+     * Gets the comment manager.
+     */
     private function getCommentManager(): CommentManager
     {
         return $this->getManager(CommentManager::class);
     }
 
     /**
-     * Get the id of the current user.
+     * Gets the id of the current user.
      */
     private function getUserId(): int
     {
         $userId = $this->auth->getUserId();
         if (!$userId) {
-            throw new \Exception("Vous devez vous connecter pour poster un commentaire.");
+            throw new \Exception('Vous devez vous connecter pour poster un commentaire.');
         }
 
         return $userId;

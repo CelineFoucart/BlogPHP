@@ -6,6 +6,9 @@ namespace App\manager;
 
 use App\Manager\AbstractManager;
 
+/**
+ * UserRoleManager handles requests to the user role table.
+ */
 class UserRoleManager extends AbstractManager
 {
 }

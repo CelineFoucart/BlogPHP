@@ -1,18 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service\Session;
 
+/**
+ * Auth handles the session user, creating it, destroying it and retrieves the data of the user in session.
+ */
 class Auth
 {
-    protected SessionInterface $session;
+    protected Session $session;
 
-    public function __construct(SessionInterface $session)
+    public function __construct(Session $session)
     {
         $this->session = $session;
     }
 
     /**
-     * Hydrate the session.
+     * Hydrates the session.
      */
     public function session(int $id, int $isAdmin, string $username): self
     {
@@ -22,7 +27,7 @@ class Auth
     }
 
     /**
-     * Check if a user is logged.
+     * Checks if a user is logged.
      */
     public function logged(): bool
     {
@@ -30,7 +35,7 @@ class Auth
     }
 
     /**
-     * Check if a user is admin.
+     * Checks if a user is admin.
      */
     public function isAdmin(): bool
     {
@@ -42,7 +47,7 @@ class Auth
     }
 
     /**
-     * Logout the user.
+     * Logs out the user.
      */
     public function logout(): self
     {
@@ -52,7 +57,7 @@ class Auth
     }
 
     /**
-     * Return user id.
+     * Returns user id.
      */
     public function getUserId(): ?int
     {
@@ -64,7 +69,7 @@ class Auth
     }
 
     /**
-     * Return the username.
+     * Returns the username.
      */
     public function getUsername(): ?string
     {

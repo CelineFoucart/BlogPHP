@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+/**
+ * AbstractEntity provides methodes required in all entities.
+ */
 abstract class AbstractEntity
 {
     protected ?int $id = null;
 
     /**
-     * Get the value of id.
+     * Gets the value of id.
      */
     public function getId(): ?int
     {
@@ -15,7 +18,7 @@ abstract class AbstractEntity
     }
 
     /**
-     * Set the value of id.
+     * Sets the value of id.
      */
     public function setId(?int $id): self
     {
@@ -24,6 +27,9 @@ abstract class AbstractEntity
         return $this;
     }
 
+    /**
+     * Hydrates dynamically the entity.
+     */
     public function __set($name, $value)
     {
         $method = 'set'.str_replace(' ', '', ucwords(str_replace('_', ' ', $name)));

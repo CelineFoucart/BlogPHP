@@ -1,9 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service\Session;
 
-class Session implements SessionInterface
+/**
+ * Session handles the session.
+ */
+class Session
 {
+    /**
+     * Starts a new session if the session has not been started.
+     */
     public function start(): self
     {
         if (PHP_SESSION_NONE === session_status()) {
@@ -13,6 +21,9 @@ class Session implements SessionInterface
         return $this;
     }
 
+    /**
+     * Destroys the session.
+     */
     public function end(): self
     {
         $this->start();
@@ -22,6 +33,11 @@ class Session implements SessionInterface
         return $this;
     }
 
+    /**
+     * Gets an information in session.
+     *
+     * @param mixed $default
+     */
     public function get(string $key, mixed $default = null): mixed
     {
         $this->start();
@@ -32,6 +48,9 @@ class Session implements SessionInterface
         return $default;
     }
 
+    /**
+     * Sets a new information in session.
+     */
     public function set(string $key, mixed $value): self
     {
         $this->start();
@@ -40,6 +59,9 @@ class Session implements SessionInterface
         return $this;
     }
 
+    /**
+     * Tests if a key exists in session.
+     */
     public function exists(string $key): bool
     {
         $this->start();
@@ -47,6 +69,9 @@ class Session implements SessionInterface
         return isset($_SESSION[$key]);
     }
 
+    /**
+     * Deletes a key in session.
+     */
     public function delete(string $key): void
     {
         $this->start();

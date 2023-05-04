@@ -7,9 +7,12 @@ namespace App\exception;
 use Exception;
 use Throwable;
 
+/**
+ * ForbiddenException is used in case of 403 Forbidden.
+ */
 final class ForbiddenException extends Exception
 {
-    public function __construct(string $url, string $message = '', int $code = 0, Throwable $previous = null)
+    public function __construct(string $message = '', Throwable $previous = null)
     {
         if ('' === $message) {
             $message = "Vous n'avez pas la permission d'accéder à cette page.";
