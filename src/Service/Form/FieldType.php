@@ -112,9 +112,10 @@ final class FieldType extends AbstractType
     {
         $required = ($this->required) ? 'required' : '';
         $inputClass = $this->getInputClasses();
+        $placeholder = (strlen($this->placeholder) > 1) ? ' placeholder="'.$this->placeholder.'"' : '';
 
         return '<textarea class="'.$inputClass.'" id="'.$this->id.'" name="'.$this->name.'"
-            placeholder="'.$this->placeholder.'" rows="'.$this->textareaRows.'" '.$required.'>'.$this->value.'</textarea>'
+            '.$placeholder.' rows="'.$this->textareaRows.'" '.$required.'>'.$this->value.'</textarea>'
         ;
     }
 
@@ -127,12 +128,14 @@ final class FieldType extends AbstractType
         $inputClass = $this->getInputClasses();
 
         if (is_bool($this->value)) {
-            $data = ($this->value) ? '" checked ' : '';
+            $data = ($this->value) ? ' checked ' : '';
         } else {
-            $data = '" value="'.$this->value.'" ';
+            $data = ' value="'.$this->value.'" ';
         }
 
+        $placeholder = (strlen($this->placeholder) > 1) ? ' placeholder="'.$this->placeholder.'"' : '';
+
         return '<input type="'.$this->type.'" class="'.$inputClass.'" id="'.$this->id.'" name="'.$this->name.'" 
-            placeholder="'.$this->placeholder.$data.$required.'>';
+            '.$placeholder.$data.$required.'>';
     }
 }

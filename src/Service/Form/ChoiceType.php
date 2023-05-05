@@ -84,9 +84,8 @@ final class ChoiceType extends AbstractType
      */
     private function renderSelect(): string
     {
-        $required = ($this->required) ? 'required' : '';
         $inputClass = $this->getInputClasses();
-        $html = '<select  class="'.$inputClass.'" id="'.$this->id.'" name="'.$this->name.'"'.$required.'>';
+        $html = '<select  class="'.$inputClass.'" id="'.$this->id.'" name="'.$this->name.'">';
 
         foreach ($this->options as $id => $option) {
             $selected = ((int) $id === (int) $this->value) ? 'selected' : '';

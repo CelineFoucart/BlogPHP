@@ -75,7 +75,7 @@
 			</a>
 		</p>
 		<p class="text-center">Envie d'en savoir plus ? Télécharger mon <a href="/assets/CV_Céline_Foucart.pdf">CV</a> ou remplissez le formulaire suivant pour m'envoyer un message.</p>
-		<form action="" method="post" class="needs-validation" novalidate>
+		<form action="{{ path('app_home') }}" method="post" class="needs-validation" novalidate>
 			<div class="row">
 				<div class="col-md-6">
 					{{ form.fields.firstname|raw }}

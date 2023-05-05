@@ -67,7 +67,7 @@
 
             <div class="card-footer">
                 {% if is_logged() %}
-                    {% include "comment/_comment_form.html.twig" %}
+                        {{ include("comment/_comment_form.html.twig", {action: path('app_article_show', {slug: post.slug}) }) }}
                 {% else %}
                     <p class="text-center">
                         Pour poster un commentaire, <a href="{{ path('app_login') }}">connectez-vous</a> ou <a href="{{ path('app_register') }}">inscrivez-vous</a>.

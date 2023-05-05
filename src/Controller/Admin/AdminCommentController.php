@@ -104,6 +104,7 @@ class AdminCommentController extends AbstractController
             ->addField('content', 'textarea', ['label' => 'Contenu du commentaire', 'rows' => 5])
             ->addField('isValidated', 'checkbox', ['label' => 'Valider le commentaire', 'required' => false])
             ->setButton('Enregistrer')
+            ->setAction($this->router->url('app_admin_comment_edit'))
             ->renderForm($this->csrf->generateToken())
         ;
 

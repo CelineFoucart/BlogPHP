@@ -106,7 +106,7 @@ class AdminPostController extends AbstractController
 
         return $this->render('admin/post/edit.html.twig', [
             'post' => $blogPost,
-            'form' => $this->getPostForm($errors, $data, $users),
+            'form' => $this->getPostForm($errors, $data, $users, $this->router->url('app_admin_post_edit', ['id' => $blogPost->getId()])),
             'activeArticle' => true,
             'invalidCSRFMessage' => $invalidCSRFMessage,
         ]);
@@ -153,7 +153,7 @@ class AdminPostController extends AbstractController
         }
 
         return $this->render('admin/post/create.html.twig', [
-            'form' => $this->getPostForm($errors, $data, $users),
+            'form' => $this->getPostForm($errors, $data, $users, $this->router->url('app_admin_post_create')),
             'activeArticle' => true,
             'invalidCSRFMessage' => $invalidCSRFMessage,
         ]);
@@ -196,7 +196,7 @@ class AdminPostController extends AbstractController
     /**
      * Returns the post form.
      */
-    private function getPostForm(array $errors, array $data, array $options): string
+    private function getPostForm(array $errors, array $data, array $options, string $action): string
     {
         $token = $this->csrf->generateToken();
 
@@ -209,6 +209,7 @@ class AdminPostController extends AbstractController
             ->addField('content', 'textarea', ['label' => "Contenu de l'article", 'rows' => 10])
             ->addField('author', 'select', ['label' => 'Auteur', 'options' => $options])
             ->setButton('Enregistrer')
+            ->setAction($action)
             ->renderForm($token)
         ;
     }
