@@ -35,13 +35,14 @@ class Session
 
     /**
      * Gets an information in session.
-     *
-     * @param mixed $default
+     * 
+     * @param string $key    the key to retrieve in session
+     * @param mixed $default  the default value to return if the key is not found
      */
     public function get(string $key, mixed $default = null): mixed
     {
         $this->start();
-        if (array_key_exists($key, $_SESSION)) {
+        if (array_key_exists($key, $_SESSION) === true) {
             return $_SESSION[$key];
         }
 

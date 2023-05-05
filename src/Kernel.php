@@ -26,6 +26,10 @@ final class Kernel
 
     /**
      * Calls the route the user requests.
+     *
+     * @param ServerRequest $request the user's request
+     *
+     * @return Response a response with the requested page or a response with an error page
      */
     public function run(ServerRequest $request): Response
     {
@@ -57,7 +61,7 @@ final class Kernel
             $path = $route[1];
             $callable = $route[2];
             $params = $route[3];
-            $namePath = isset($route[4]) ? $route[4] : $route[2];
+            $namePath = (true === isset($route[4])) ? $route[4] : $route[2];
             $this->router->$method($path, $callable, $params, $namePath);
         }
 

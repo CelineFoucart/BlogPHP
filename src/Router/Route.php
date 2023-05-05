@@ -12,7 +12,7 @@ use GuzzleHttp\Psr7\ServerRequest;
 final class Route
 {
     /**
-     * Undocumented variable.
+     *  @var string the path corresponding to the route
      */
     private string $path;
 
@@ -21,10 +21,20 @@ final class Route
      */
     private $callable;
 
+    /**
+     * @var array the url parts that match with the route params
+     */
     private $matches = [];
 
+    /**
+     * @var array the params of the route
+     */
     private $params = [];
 
+    /**
+     * @param string          $path     the path of the route
+     * @param string|callable $callable the callable of a controller method as Controller#method to call
+     */
     public function __construct(string $path, $callable)
     {
         $this->path = trim($path, '/');
@@ -43,7 +53,7 @@ final class Route
 
     private function paramMatch($match)
     {
-        if (isset($this->params[$match[1]])) {
+        if (true === isset($this->params[$match[1]])) {
             return '('.$this->params[$match[1]].')';
         }
 
@@ -59,7 +69,7 @@ final class Route
         $path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $this->path);
         $regex = "#^$path$#i";
 
-        if (!preg_match($regex, $url, $matches)) {
+        if (false === preg_match($regex, $url, $matches)) {
             return false;
         }
         array_shift($matches);
@@ -67,11 +77,12 @@ final class Route
         $params = [];
         foreach ($this->params as $key => $value) {
             foreach ($matches as $subject) {
-                if (preg_match('('.$value.')', $subject)) {
+                if (true === preg_match('('.$value.')', $subject)) {
                     $params[$key] = $subject;
                 }
             }
         }
+
         $this->matches = $params;
 
         return true;
@@ -82,7 +93,7 @@ final class Route
      */
     public function call(Router $router, ServerRequest $request)
     {
-        if (is_string($this->callable)) {
+        if (true === is_string($this->callable)) {
             $params = explode('#', $this->callable);
 
             $controller = $params[0];
@@ -94,11 +105,14 @@ final class Route
             }
 
             return $controller->$methodName($request);
-        } else {
-            return call_user_func_array($this->callable, [$request]);
         }
+
+        return call_user_func_array($this->callable, [$request]);
     }
 
+    /**
+     * Generates an URL for the route.
+     */
     public function getURL(array $params = []): string
     {
         $path = $this->path;

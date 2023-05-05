@@ -22,6 +22,9 @@ class UserExtension extends AbstractExtension
     {
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getFunctions()
     {
         return [

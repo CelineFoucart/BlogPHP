@@ -12,11 +12,15 @@ use Throwable;
  */
 final class ForbiddenException extends Exception
 {
+    /**
+     * {@inheritDoc}
+     */
     public function __construct(string $message = '', Throwable $previous = null)
     {
         if ('' === $message) {
             $message = "Vous n'avez pas la permission d'accéder à cette page.";
         }
+
         parent::__construct($message, 403, $previous);
     }
 }

@@ -86,6 +86,9 @@ class BbcodeExtension extends AbstractExtension
         'size=7' => '48px',
     ];
 
+    /**
+     * @inheritDoc
+     */
     public function getFilters()
     {
         return [

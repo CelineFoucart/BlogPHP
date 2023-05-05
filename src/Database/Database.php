@@ -37,7 +37,7 @@ final class Database
     private static ?PDO $pdo = null;
 
     /**
-     * Returns an instance of PDO.
+     * @return PDO an instance of PDO.
      */
     public static function getPDO(): PDO
     {

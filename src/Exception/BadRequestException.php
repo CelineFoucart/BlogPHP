@@ -12,11 +12,15 @@ use Throwable;
  */
 final class BadRequestException extends Exception
 {
+    /**
+     * {@inheritDoc}
+     */
     public function __construct(string $message = '', Throwable $previous = null)
     {
         if ('' === $message) {
             $message = 'Les données soumises sont invalides.';
         }
+        
         parent::__construct($message, 400, $previous);
     }
 }
