@@ -13,10 +13,24 @@ use App\Database\StatementBuilder;
  */
 class AbstractManager
 {
+    /**
+     * @var \PDO PDO is used to perform the query
+     */
     protected \PDO $pdo;
+
+    /**
+     * @var string The data will be render in an instance of this class
+     */
     protected string $class;
+
+    /**
+     * @var string the table name in database
+     */
     protected string $table;
 
+    /**
+     * A class name is required to create an instance hydrated with the data.
+     */
     public function __construct(string $class, string $table)
     {
         $this->pdo = Database::getPDO();
@@ -64,8 +78,6 @@ class AbstractManager
     /**
      * Gets a new instance of a QueryBuilder, configured to create a SQL query
      * for the current manager.
-     *
-     * @return QueryBuilder
      */
     protected function getQuery(): QueryBuilder
     {
@@ -74,8 +86,6 @@ class AbstractManager
 
     /**
      * Gets a new instance of StatementBuilder which performs a SQL query.
-     *
-     * @return StatementBuilder
      */
     protected function getBuilder(): StatementBuilder
     {

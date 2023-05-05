@@ -12,8 +12,14 @@ use Psr\Http\Message\RequestInterface;
  */
 final class Router
 {
+    /**
+     * @var array an array of routes without name
+     */
     private array $routes = [];
 
+    /**
+     * An array of named routes.
+     */
     private array $namedRoutes = [];
 
     /**
@@ -40,12 +46,10 @@ final class Router
     /**
      * Creates a new GET route.
      *
-     * @param string $path       the route path
-     * @param mixed $callable    a callable or a controller and method to call as Post#index
-     * @param array $params      the route params.
-     * @param string|null $name  the route name
-     * 
-     * @return self
+     * @param string      $path     the route path
+     * @param mixed       $callable a callable or a controller and method to call as Post#index
+     * @param array       $params   the route params
+     * @param string|null $name     the route name
      */
     public function get(string $path, $callable, array $params = [], ?string $name = null): self
     {
@@ -57,12 +61,10 @@ final class Router
     /**
      * Creates a new POST route.
      *
-     * @param string $path       the route path
-     * @param mixed $callable    a callable or a controller and method to call as Post#index
-     * @param array $params      the route params.
-     * @param string|null $name  the route name
-     * 
-     * @return self
+     * @param string      $path     the route path
+     * @param mixed       $callable a callable or a controller and method to call as Post#index
+     * @param array       $params   the route params
+     * @param string|null $name     the route name
      */
     public function post(string $path, $callable, array $params = [], ?string $name = null): self
     {
@@ -74,12 +76,10 @@ final class Router
     /**
      * Creates a new POST and GET route.
      *
-     * @param string $path       the route path
-     * @param mixed $callable    a callable or a controller and method to call as Post#index
-     * @param array $params      the route params.
-     * @param string|null $name  the route name
-     * 
-     * @return self
+     * @param string      $path     the route path
+     * @param mixed       $callable a callable or a controller and method to call as Post#index
+     * @param array       $params   the route params
+     * @param string|null $name     the route name
      */
     public function mixed(string $path, $callable, array $params = [], ?string $name = null): self
     {
@@ -91,9 +91,6 @@ final class Router
 
     /**
      * Generates a route url.
-     *
-     * @param string $name
-     * @param array  $param
      */
     public function url(string $name, array $param = []): string
     {
@@ -106,8 +103,8 @@ final class Router
 
     /**
      * Calls the route.
-     * 
-     * @throws RouterException if the route doesn't exist.
+     *
+     * @throws RouterException if the route doesn't exist
      */
     public function run(RequestInterface $request): Response
     {

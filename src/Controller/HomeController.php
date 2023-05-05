@@ -33,11 +33,11 @@ class HomeController extends AbstractController
                 $data = $request->getParsedBody();
                 $errors = $this->validateContactForm($data);
 
-                if (!isset($data['agreeTerms'])) {
+                if (isset($data['agreeTerms']) === false) {
                     $errors['agreeTerms'] = ['Vous devez accepter la conservation de vos données pour que votre demande soit traitée.'];
                 }
 
-                if (empty($errors)) {
+                if (empty($errors) === true) {
                     $mailer = (new Mailer())
                         ->setTo(CONTACT_EMAIL)
                         ->setFrom($data['email'], $data['firstname'].' '.$data['lastname'])
@@ -55,10 +55,12 @@ class HomeController extends AbstractController
                 } else {
                     $errorMessage = 'Les champs du formulaire sont mal remplis.';
                 }
+                //end if
             }
         } catch (CsrfInvalidException $th) {
             $invalidCSRFMessage = $th->getMessage();
         }
+        //end try
 
         return $this->render('home/index.html.twig', [
             'form' => $this->getContactForm($data, $errors),

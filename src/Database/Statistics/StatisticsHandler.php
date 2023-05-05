@@ -13,10 +13,13 @@ use App\Database\StatementBuilder;
 class StatisticsHandler
 {
     /**
-     * @var StatisticsEntity[]
+     * @var StatisticsEntity[] an array of StatisticsEntity that represents a table to count
      */
     private array $entities = [];
 
+    /**
+     * @var StatementBuilder perform the query
+     */
     private StatementBuilder $builder;
 
     public function __construct()

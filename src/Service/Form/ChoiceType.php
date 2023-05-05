@@ -16,10 +16,20 @@ namespace App\Service\Form;
  */
 final class ChoiceType extends AbstractType
 {
+    /**
+     * @var array an array of value to render as option of the select
+     */
     private array $options = [];
 
+    /**
+     * @var bool if the select is multuple, set to true
+     */
     private bool $isMultiple = false;
 
+    /**
+     * @param string $name     a name used for the name and the id of the select
+     * @param bool   $required is this select required
+     */
     public function __construct(string $name, bool $required = true)
     {
         parent::__construct($name, $required);

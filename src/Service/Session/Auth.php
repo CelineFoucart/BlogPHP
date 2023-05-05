@@ -9,8 +9,14 @@ namespace App\Service\Session;
  */
 class Auth
 {
+    /**
+     * @var Session the session handler to avoid using directly
+     */
     protected Session $session;
 
+    /**
+     * @param Session $session the session handler
+     */
     public function __construct(Session $session)
     {
         $this->session = $session;

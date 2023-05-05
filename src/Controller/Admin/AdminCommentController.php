@@ -21,8 +21,14 @@ use Psr\Http\Message\ResponseInterface;
  */
 class AdminCommentController extends AbstractController
 {
+    /**
+     * @var CommentManager performs query to the comment table in database
+     */
     private CommentManager $commentManager;
 
+    /**
+     * A router is required to generate urls.
+     */
     public function __construct(Router $router)
     {
         parent::__construct($router);
@@ -40,10 +46,10 @@ class AdminCommentController extends AbstractController
     {
         $link = (string) $request->getUri();
         $params = $request->getQueryParams();
-        $page = isset($params['page']) ? (int) $params['page'] : 1;
+        $page = (true === isset($params['page'])) ? (int) $params['page'] : 1;
         $option = isset($params['option']) ? $params['option'] : 'all';
 
-        if (!in_array($option, ['all', 'validated', 'notValidated'])) {
+        if (false === in_array($option, ['all', 'validated', 'notValidated'])) {
             $option = 'all';
         }
 
@@ -72,7 +78,10 @@ class AdminCommentController extends AbstractController
     public function edit(ServerRequest $request): ResponseInterface
     {
         $comment = $this->getComment($request);
-        $data = ['content' => $comment->getContent(), 'isValidated' => $comment->getIsValidated()];
+        $data = [
+            'content' => $comment->getContent(),
+            'isValidated' => $comment->getIsValidated(),
+        ];
         $errors = [];
         $invalidCSRFMessage = null;
 
@@ -80,10 +89,10 @@ class AdminCommentController extends AbstractController
             if ('POST' === $request->getMethod()) {
                 $this->csrf->process($request);
                 $data = $request->getParsedBody();
-                $data['isValidated'] = (isset($data['isValidated'])) ? true : false;
+                $data['isValidated'] = isset($data['isValidated']);
                 $errors = (new Validator($data))->checkLength('content', 3, 10000)->getErrors();
 
-                if (empty($errors)) {
+                if (empty($errors) === true) {
                     $comment
                         ->setContent(htmlspecialchars($data['content']))
                         ->setUpdatedAt(new DateTime())
@@ -97,6 +106,7 @@ class AdminCommentController extends AbstractController
         } catch (CsrfInvalidException $th) {
             $invalidCSRFMessage = $th->getMessage();
         }
+        //end try
 
         $form = (new FormBuilder('POST'))
             ->setData($data)
@@ -126,11 +136,11 @@ class AdminCommentController extends AbstractController
             $comment = $this->getComment($request);
 
             $data = $request->getParsedBody();
-            $isValidated = (isset($data['isValidated'])) ? true : false;
+            $isValidated = isset($data['isValidated']);
             $comment->setIsValidated($isValidated)->setUpdatedAt(new DateTime());
             $this->commentManager->update($comment);
 
-            if (isset($data['redirect'])) {
+            if (isset($data['redirect']) === true) {
                 return new Response(301, ['location' => $data['redirect']]);
             }
 

@@ -13,7 +13,7 @@ use GuzzleHttp\Psr7\Response;
 class ErrorController extends AbstractController
 {
     public const NOT_FOUND = 404;
-
+    
     private string $templateFolder = PATH.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR;
 
     /**

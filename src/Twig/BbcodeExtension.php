@@ -12,6 +12,9 @@ use Twig\TwigFilter;
  */
 class BbcodeExtension extends AbstractExtension
 {
+    /**
+     * @var array the tags with a different name in HTML
+     */
     private array $alignTags = [
         [
             'bbcode' => 'justify',
@@ -65,8 +68,14 @@ class BbcodeExtension extends AbstractExtension
         ],
     ];
 
+    /**
+     * @var array the tags with the same name
+     */
     private array $tags = ['ol', 'li', 'ul', 'tr', 'td', 'th', 'code'];
 
+    /**
+     * @var array the available font sizes
+     */
     private array $fontSizes = [
         'size=1' => '10px',
         'size=2' => '13px',
@@ -122,4 +131,5 @@ class BbcodeExtension extends AbstractExtension
 
         return $text;
     }
+    
 }

@@ -22,8 +22,14 @@ use Psr\Http\Message\ResponseInterface;
  */
 class AdminPostController extends AbstractController
 {
+    /**
+     * @var BlogPostManager performs query to the blog_post table in database
+     */
     private BlogPostManager $postManager;
 
+    /**
+     * A router is required to generate urls.
+     */
     public function __construct(Router $router)
     {
         parent::__construct($router);

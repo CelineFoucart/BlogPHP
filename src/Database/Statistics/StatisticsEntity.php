@@ -9,10 +9,19 @@ namespace App\Database\Statistics;
  */
 class StatisticsEntity
 {
+    /**
+     * @var string the query to perform
+     */
     private string $query;
 
+    /**
+     * @var string the table to count
+     */
     private string $table;
 
+    /**
+     * @param string $table the name of the table we need to count
+     */
     public function __construct(string $table)
     {
         $this->table = $table;

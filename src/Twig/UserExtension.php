@@ -14,6 +14,10 @@ use Twig\TwigFunction;
  */
 class UserExtension extends AbstractExtension
 {
+    /**
+     * @param Session $session to interact with the session
+     * @param Auth    $auth    to interect with the user in session
+     */
     public function __construct(private Session $session, private Auth $auth)
     {
     }

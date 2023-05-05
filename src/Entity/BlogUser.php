@@ -11,26 +11,48 @@ use DateTime;
  */
 final class BlogUser extends AbstractEntity
 {
+    /**
+     * @var string|null the user's name
+     */
     private ?string $username = null;
 
+    /**
+     * @var string|null the firt name of the user
+     */
     private ?string $firstname = null;
 
+    /**
+     * @var string|null the last name of the user
+     */
     private ?string $lastname = null;
 
+    /**
+     * @var string|null the password of the user
+     */
     private ?string $password = null;
 
+    /**
+     * @var string|null the email of the user
+     */
     private ?string $email = null;
 
+    /**
+     * @var UserRole|null the role of the user
+     */
     private ?UserRole $role = null;
 
+    /**
+     * @var int|null the number of login attempts of the user
+     */
     private int $attempts = 0;
 
+    /**
+     * @var DateTime|null the last login attempt of the user
+     */
     private ?DateTime $lastAttempt = null;
 
     /**
      * Gets the value of username.
-     *
-     * @return ?string
      */
     public function getUsername(): ?string
     {
@@ -39,8 +61,6 @@ final class BlogUser extends AbstractEntity
 
     /**
      * Sets the value of username.
-     *
-     * @param ?string $username
      */
     public function setUsername(?string $username): self
     {
@@ -51,8 +71,6 @@ final class BlogUser extends AbstractEntity
 
     /**
      * Gets the value of firstName.
-     *
-     * @return ?string
      */
     public function getFirstname(): ?string
     {
@@ -61,8 +79,6 @@ final class BlogUser extends AbstractEntity
 
     /**
      * Sets the value of firstName.
-     *
-     * @param ?string $firstName
      */
     public function setFirstname(?string $firstname): self
     {
@@ -73,8 +89,6 @@ final class BlogUser extends AbstractEntity
 
     /**
      * Gets the value of lastName.
-     *
-     * @return ?string
      */
     public function getLastname(): ?string
     {
@@ -83,8 +97,6 @@ final class BlogUser extends AbstractEntity
 
     /**
      * Sets the value of lastName.
-     *
-     * @param ?string $lastName
      */
     public function setLastname(?string $lastname): self
     {
@@ -95,8 +107,6 @@ final class BlogUser extends AbstractEntity
 
     /**
      * Gets the value of password.
-     *
-     * @return ?string
      */
     public function getPassword(): ?string
     {
@@ -105,8 +115,6 @@ final class BlogUser extends AbstractEntity
 
     /**
      * Sets the value of password.
-     *
-     * @param ?string $password
      */
     public function setPassword(?string $password): self
     {
@@ -117,8 +125,6 @@ final class BlogUser extends AbstractEntity
 
     /**
      * Gets the value of email.
-     *
-     * @return ?string
      */
     public function getEmail(): ?string
     {
@@ -127,8 +133,6 @@ final class BlogUser extends AbstractEntity
 
     /**
      * Sets the value of email.
-     *
-     * @param ?string $email
      */
     public function setEmail(?string $email): self
     {
@@ -161,8 +165,6 @@ final class BlogUser extends AbstractEntity
 
     /**
      * Gets the value of lastAttempt.
-     *
-     * @return ?DateTime
      */
     public function getLastAttempt(): ?DateTime
     {
@@ -178,7 +180,7 @@ final class BlogUser extends AbstractEntity
     {
         if ($lastAttempt instanceof DateTime) {
             $this->lastAttempt = $lastAttempt;
-        } elseif (is_string($lastAttempt)) {
+        } elseif (true === is_string($lastAttempt)) {
             $this->lastAttempt = new DateTime($lastAttempt);
         }
 
@@ -203,6 +205,9 @@ final class BlogUser extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string The user's name
+     */
     public function __toString()
     {
         return $this->username;

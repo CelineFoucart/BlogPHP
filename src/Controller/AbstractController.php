@@ -28,18 +28,39 @@ use Twig\Loader\FilesystemLoader;
  */
 abstract class AbstractController
 {
+    /**
+     * @var Router generates route url for redirections and link in templates
+     */
     protected Router $router;
 
+    /**
+     * @var Session handles sessions
+     */
     protected Session $session;
 
+    /**
+     * @var Auth retrieves user informations in sessions
+     */
     protected Auth $auth;
 
+    /**
+     * @var array an array of global variables for twig templates
+     */
     private array $twigVariables;
 
+    /**
+     * @var Environment renders templates
+     */
     protected Environment $twig;
 
+    /**
+     * @var CsrfManager handles CSRF protection
+     */
     protected CsrfManager $csrf;
 
+    /**
+     * A router is required to generate urls.
+     */
     public function __construct(Router $router)
     {
         $this->router = $router;
