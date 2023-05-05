@@ -77,7 +77,7 @@ class CsrfManager
                 $this->reject();
             } else {
                 $csrfList = $this->session->get($this->sessionKey) ?? [];
-                if (in_array($params[$this->formKey], $csrfList)) {
+                if (in_array($params[$this->formKey], $csrfList) === true) {
                     $this->useToken($params[$this->formKey]);
 
                     return true;
@@ -129,8 +129,8 @@ class CsrfManager
      */
     private function useToken(string $token): void
     {
-        $tokens = array_filter($this->session->get($this->sessionKey), function ($t) use ($token) {
-            return $token !== $t;
+        $tokens = array_filter($this->session->get($this->sessionKey), function ($tokenInSession) use ($token) {
+            return $token !== $tokenInSession;
         });
         $this->session->set($this->sessionKey, $tokens);
     }

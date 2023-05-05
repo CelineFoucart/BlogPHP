@@ -131,4 +131,5 @@ class BbcodeExtension extends AbstractExtension
 
         return $text;
     }
+    
 }
