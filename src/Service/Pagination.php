@@ -9,18 +9,39 @@ namespace App\Service;
  */
 class Pagination
 {
+    /**
+     * @var int|null The current page
+     */
     private ?int $current;
 
+    /**
+     * @var array The available pages for the pagination
+     */
     private array $pages = [];
 
+    /**
+     * @var string|null the previous page link if there is a previous page
+     */
     private ?string $previousLink;
 
+    /**
+     * @var string|null the next page link if there is a next page
+     */
     private ?string $nextLink;
 
+    /**
+     * @var int|null The total of items
+     */
     private ?int $numberItems;
 
+    /**
+     * @var string|null number of items per page
+     */
     private ?string $perPage;
 
+    /**
+     * @var array the elements in the current page
+     */
     private array $elements = [];
 
     /**

@@ -11,24 +11,43 @@ use DateTime;
  */
 final class BlogPost extends AbstractEntity
 {
+    /**
+     * @var string|null the title of the post
+     */
     private ?string $title = null;
 
+    /**
+     * @var string|null the slug of the post
+     */
     private ?string $slug = null;
 
+    /**
+     * @var string|null a short description of the post
+     */
     private ?string $description = null;
 
+    /**
+     * @var string|null the body of the post
+     */
     private ?string $content = null;
 
+    /**
+     * @var DateTime|null The publication date of the post
+     */
     private ?DateTime $createdAt = null;
 
+    /**
+     * @var DateTime|null The last updated date of the post
+     */
     private ?DateTime $updatedAt = null;
 
+    /**
+     * @var BlogUser|null The author of the post
+     */
     private ?BlogUser $author = null;
 
     /**
      * Gets the value of title.
-     *
-     * @return ?string
      */
     public function getTitle(): ?string
     {
@@ -37,8 +56,6 @@ final class BlogPost extends AbstractEntity
 
     /**
      * Sets the value of title.
-     *
-     * @param ?string $title
      */
     public function setTitle(?string $title): self
     {
@@ -49,8 +66,6 @@ final class BlogPost extends AbstractEntity
 
     /**
      * Gets the value of slug.
-     *
-     * @return ?string
      */
     public function getSlug(): ?string
     {
@@ -59,8 +74,6 @@ final class BlogPost extends AbstractEntity
 
     /**
      * Sets the value of slug.
-     *
-     * @param ?string $slug
      */
     public function setSlug(?string $slug): self
     {
@@ -71,8 +84,6 @@ final class BlogPost extends AbstractEntity
 
     /**
      * Gets the value of description.
-     *
-     * @return ?string
      */
     public function getDescription(): ?string
     {
@@ -81,8 +92,6 @@ final class BlogPost extends AbstractEntity
 
     /**
      * Sets the value of description.
-     *
-     * @param ?string $description
      */
     public function setDescription(?string $description): self
     {
@@ -93,8 +102,6 @@ final class BlogPost extends AbstractEntity
 
     /**
      * Gets the value of content.
-     *
-     * @return ?string
      */
     public function getContent(): ?string
     {
@@ -103,8 +110,6 @@ final class BlogPost extends AbstractEntity
 
     /**
      * Sets the value of content.
-     *
-     * @param ?string $content
      */
     public function setContent(?string $content): self
     {
@@ -115,8 +120,6 @@ final class BlogPost extends AbstractEntity
 
     /**
      * Gets the value of createdAt.
-     *
-     * @return ?DateTime
      */
     public function getCreatedAt(): ?DateTime
     {
@@ -132,7 +135,7 @@ final class BlogPost extends AbstractEntity
     {
         if ($createdAt instanceof DateTime) {
             $this->createdAt = $createdAt;
-        } elseif (is_string($createdAt)) {
+        } elseif (is_string($createdAt) === true) {
             $this->createdAt = new DateTime($createdAt);
         }
 
@@ -141,8 +144,6 @@ final class BlogPost extends AbstractEntity
 
     /**
      * Gets the value of updatedAt.
-     *
-     * @return ?DateTime
      */
     public function getUpdatedAt(): ?DateTime
     {
@@ -167,8 +168,6 @@ final class BlogPost extends AbstractEntity
 
     /**
      * Gets the value of author.
-     *
-     * @return ?BlogUser
      */
     public function getAuthor(): ?BlogUser
     {
@@ -181,8 +180,6 @@ final class BlogPost extends AbstractEntity
 
     /**
      * Sets the value of author.
-     *
-     * @param ?BlogUser $author
      */
     public function setAuthor(?BlogUser $author): self
     {

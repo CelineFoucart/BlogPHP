@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file provides global variables for Twig.
  */

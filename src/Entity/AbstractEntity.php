@@ -7,7 +7,9 @@ namespace App\Entity;
  */
 abstract class AbstractEntity
 {
-    
+    /**
+     * @var int|null the unique identifier of the entity in the database
+     */
     protected ?int $id = null;
 
     /**

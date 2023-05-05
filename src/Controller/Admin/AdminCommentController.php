@@ -21,8 +21,14 @@ use Psr\Http\Message\ResponseInterface;
  */
 class AdminCommentController extends AbstractController
 {
+    /**
+     * @var CommentManager performs query to the comment table in database
+     */
     private CommentManager $commentManager;
 
+    /**
+     * A router is required to generate urls.
+     */
     public function __construct(Router $router)
     {
         parent::__construct($router);

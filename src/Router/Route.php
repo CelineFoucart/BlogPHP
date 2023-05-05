@@ -11,7 +11,10 @@ use GuzzleHttp\Psr7\ServerRequest;
  */
 final class Route
 {
-    private $path;
+    /**
+     * Undocumented variable.
+     */
+    private string $path;
 
     /**
      * @var string|callable a callable or a controller name like App\Controller\PostController#show
@@ -28,6 +31,9 @@ final class Route
         $this->callable = $callable;
     }
 
+    /**
+     * Adds a param to the route.
+     */
     public function with(string $param, string $regex): self
     {
         $this->params[$param] = str_replace('(', '(?:', $regex);
@@ -44,7 +50,10 @@ final class Route
         return '([^/]+)';
     }
 
-    public function match(string $url)
+    /**
+     * Checks if the given url matchs one of the routes.
+     */
+    public function match(string $url): bool
     {
         $url = trim($url, '/');
         $path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $this->path);

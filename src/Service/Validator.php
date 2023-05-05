@@ -11,10 +11,19 @@ use App\Manager\AbstractManager;
  */
 class Validator
 {
+    /**
+     * @var array the data to validate
+     */
     private array $data = [];
 
+    /**
+     * @var array the errors after the validation
+     */
     private array $errors = [];
 
+    /**
+     * @var array the available messages
+     */
     private array $messages = [
         'exist' => 'Un champ obligatoire est manquant dans le formulaire.',
         'empty' => 'Ce champ ne peut être vide.',
@@ -27,6 +36,9 @@ class Validator
         'select' => "L'option choisie pour ce champ n'est pas valide.",
     ];
 
+    /**
+     * @param array $data The data to validate
+     */
     public function __construct(array $data)
     {
         $this->data = $data;

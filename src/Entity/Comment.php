@@ -11,22 +11,38 @@ use DateTime;
  */
 final class Comment extends AbstractEntity
 {
+    /**
+     * @var BlogUser|null The comment author
+     */
     private ?BlogUser $author = null;
 
+    /**
+     * @var string|null The message of the comment
+     */
     private ?string $content = null;
 
+    /**
+     * @var DateTime|null The publication date of the comment
+     */
     private ?DateTime $createdAt = null;
 
+    /**
+     * @var DateTime|null The last updated date of the comment
+     */
     private ?DateTime $updatedAt = null;
 
+    /**
+     * @var BlogPost|null The blog post the message comments
+     */
     private ?BlogPost $post = null;
 
+    /**
+     * @var bool true if the admin has validated the comment
+     */
     private bool $isValidated = false;
 
     /**
      * Gets the value of content.
-     *
-     * @return ?string
      */
     public function getContent(): ?string
     {
@@ -35,8 +51,6 @@ final class Comment extends AbstractEntity
 
     /**
      * Sets the value of content.
-     *
-     * @param ?string $content
      */
     public function setContent(?string $content): self
     {
@@ -47,8 +61,6 @@ final class Comment extends AbstractEntity
 
     /**
      * Gets the value of createdAt.
-     *
-     * @return ?DateTime
      */
     public function getCreatedAt(): ?DateTime
     {
@@ -64,7 +76,7 @@ final class Comment extends AbstractEntity
     {
         if ($createdAt instanceof DateTime) {
             $this->createdAt = $createdAt;
-        } elseif (is_string($createdAt)) {
+        } elseif (is_string($createdAt) === true) {
             $this->createdAt = new DateTime($createdAt);
         }
 
@@ -73,8 +85,6 @@ final class Comment extends AbstractEntity
 
     /**
      * Gets the value of updatedAt.
-     *
-     * @return ?DateTime
      */
     public function getUpdatedAt(): ?DateTime
     {
@@ -121,8 +131,6 @@ final class Comment extends AbstractEntity
 
     /**
      * Gets the value of author.
-     *
-     * @return ?BlogUser
      */
     public function getAuthor(): ?BlogUser
     {
@@ -135,8 +143,6 @@ final class Comment extends AbstractEntity
 
     /**
      * Sets the value of author.
-     *
-     * @param ?BlogUser $author
      */
     public function setAuthor(?BlogUser $author): self
     {

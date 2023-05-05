@@ -13,6 +13,9 @@ use Twig\TwigFunction;
  */
 class PathExtension extends AbstractExtension
 {
+    /**
+     * @param Router $router a router to render an url with a route name
+     */
     public function __construct(
         private Router $router
     ) {

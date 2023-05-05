@@ -9,20 +9,38 @@ namespace App\Service;
  */
 class Mailer
 {
+    /**
+     * @var array the mail headers parts
+     */
     private array $header = [
         'from' => '',
         'contentType' => 'Content-Type: text/html; charset="UTF-8"'."\r\n",
         'mime' => 'MIME-Version: 1.0'."\r\n",
     ];
 
+    /**
+     * @var string|null the email of the author of the mail
+     */
     private ?string $from = null;
 
+    /**
+     * @var string the name of the author
+     */
     private string $fromName;
 
+    /**
+     * @var string|null The addressee email
+     */
     private ?string $to = null;
 
+    /**
+     * @var string|null The body of the email
+     */
     private ?string $body = null;
 
+    /**
+     * @var string The subject of the email
+     */
     private string $subject = 'No subject';
 
     /**

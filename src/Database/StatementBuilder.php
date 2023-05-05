@@ -11,6 +11,9 @@ use PDO;
  */
 class StatementBuilder
 {
+    /**
+     * @var PDO PDO is used to perform the query
+     */
     private PDO $pdo;
 
     /**
@@ -18,6 +21,9 @@ class StatementBuilder
      */
     private ?string $entity = null;
 
+    /**
+     * If the entity is null, the data will be returned as an associative array.
+     */
     public function __construct(?string $entity, PDO $pdo)
     {
         $this->setEntity($entity);

@@ -14,6 +14,9 @@ use GuzzleHttp\Psr7\ServerRequest;
  */
 final class Kernel
 {
+    /**
+     * @var Router a router to generate and find routes
+     */
     private Router $router;
 
     public function __construct()

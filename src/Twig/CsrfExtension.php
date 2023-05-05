@@ -13,6 +13,9 @@ use Twig\TwigFunction;
  */
 class CsrfExtension extends AbstractExtension
 {
+    /**
+     * @param CsrfManager $csrfManager The CSRF handler
+     */
     public function __construct(
         private CsrfManager $csrfManager
     ) {

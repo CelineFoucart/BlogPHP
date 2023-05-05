@@ -10,13 +10,36 @@ use App\Database\StatementBuilder;
  */
 class Paginator
 {
+    /**
+     * @var int The current page
+     */
     private int $current;
+
+    /**
+     * @var int The total number of pages
+     */
     private int $totalPage;
+    /**
+     * @var int the total number of items
+     */
     private int $numberItems;
+    /**
+     * @var int the number of items per page
+     */
     private int $perPage;
+    /**
+     * @var QueryBuilder An instance of QueryBuilder to build a SQL query
+     */
     private QueryBuilder $queryBuilder;
+
+    /**
+     * @var StatementBuilder an instance of StatementBuilder to perform the query
+     */
     private StatementBuilder $statementBuilder;
 
+    /**
+     * A QueryBuilder and a StatementBuilder are required to perform the query to build the pagination.
+     */
     public function __construct(QueryBuilder $queryBuilder, StatementBuilder $statementBuilder)
     {
         $this->queryBuilder = $queryBuilder;
@@ -25,11 +48,6 @@ class Paginator
 
     /**
      * Gets a pagination.
-     *
-     * @param string $link
-     * @param integer $current
-     * @param integer $perPage
-     * @return Pagination
      */
     public function getPagination(string $link, int $current, int $perPage = 3): Pagination
     {
@@ -56,26 +74,22 @@ class Paginator
 
     /**
      * Sets the value of the current page.
-     *
-     * @param mixed $current
      */
-    private function setCurrent($current): int
+    private function setCurrent(int $current): int
     {
         if ($current <= 0) {
             return 1;
-        } elseif ($current > $this->totalPage) {
-            return $this->totalPage;
-        } else {
-            return $current;
         }
+        
+        if ($current > $this->totalPage) {
+            return $this->totalPage;
+        } 
+        
+        return $current;
     }
 
     /**
      * Gets the previous link.
-     *
-     * @param string $link
-     * @param array $params
-     * @return string|null
      */
     private function previousLink(string $link, array $params = []): ?string
     {

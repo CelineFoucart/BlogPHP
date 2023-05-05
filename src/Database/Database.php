@@ -7,14 +7,33 @@ namespace App\Database;
 use PDO;
 
 /**
- * Creates a new connexion to the database.
+ * Creates a new connexion to the database with the database configurations const in the file env.php.
  */
 final class Database
 {
+    /**
+     * The host name, for example localhost.
+     */
     public const HOST = DB_HOST;
+
+    /**
+     * The password for the connection.
+     */
     public const PASSWORD = DB_PASSWORD;
+
+    /**
+     * The user name for the connection.
+     */
     public const USER = DB_USER;
+
+    /**
+     * The name of the database.
+     */
     public const NAME = DB_NAME;
+
+    /**
+     * @var PDO|null PDO is used to perform the query
+     */
     private static ?PDO $pdo = null;
 
     /**
