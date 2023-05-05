@@ -17,6 +17,8 @@ class CommentManager extends AbstractManager
 {
     /**
      * Gets a pagination of comments.
+     * 
+     * @return Pagination a pagination of Comment objects
      */
     public function findPaginated(int $postId, string $link, int $page = 1): Pagination
     {
@@ -33,7 +35,7 @@ class CommentManager extends AbstractManager
     {
         $queryBuilder = $this->getDefaultQuery()
             ->select('b.id AS post_id', 'b.title AS post_title', 'b.slug AS post_slug')
-            ->leftJoin('blog_post b', 'b.id = c.post_id')
+            ->setLeftJoin('blog_post b', 'b.id = c.post_id')
         ;
 
         if ('validated' === $option) {
@@ -54,7 +56,7 @@ class CommentManager extends AbstractManager
     {
         $sql = $this->getDefaultQuery()
             ->select('b.id AS post_id', 'b.title AS post_title', 'b.slug AS post_slug')
-            ->leftJoin('blog_post b', 'b.id = c.post_id')
+            ->setLeftJoin('blog_post b', 'b.id = c.post_id')
             ->setLimit($limit)
             ->where(('c.is_validated = 0'))
             ->toSQL()
@@ -71,8 +73,8 @@ class CommentManager extends AbstractManager
         return $this->getQuery()
             ->select('c.content', 'c.created_at', 'c.updated_at', 'c.id', 'c.is_validated')
             ->select('u.username AS author_username', 'u.id AS author_id')
-            ->leftJoin('blog_user u', 'u.id = c.author_id')
-            ->orderBy('c.created_at', 'DESC')
+            ->setLeftJoin('blog_user u', 'u.id = c.author_id')
+            ->setOrderBy('c.created_at', 'DESC')
         ;
     }
 
@@ -134,7 +136,7 @@ class CommentManager extends AbstractManager
     {
         $sql = $this->getDefaultQuery()
             ->select('b.id AS post_id', 'b.title AS post_title', 'b.slug AS post_slug')
-            ->leftJoin('blog_post b', 'b.id = c.post_id')
+            ->setLeftJoin('blog_post b', 'b.id = c.post_id')
             ->where('c.id = ?')
             ->toSQL()
         ;

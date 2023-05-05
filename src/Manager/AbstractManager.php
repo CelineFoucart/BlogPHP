@@ -81,7 +81,7 @@ class AbstractManager
      */
     protected function getQuery(): QueryBuilder
     {
-        return (new QueryBuilder())->from($this->table, $this->table[0]);
+        return (new QueryBuilder())->setFrom($this->table, $this->table[0]);
     }
 
     /**

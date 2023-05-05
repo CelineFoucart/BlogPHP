@@ -35,6 +35,11 @@ final class FieldType extends AbstractType
      */
     private int $textareaRows = 5;
 
+    /**
+     * @param string $name     the field name, also used for the id
+     * @param string $type     the field type
+     * @param bool   $required if the field is required
+     */
     public function __construct(string $name, string $type = 'text', bool $required = true)
     {
         parent::__construct($name, $required);

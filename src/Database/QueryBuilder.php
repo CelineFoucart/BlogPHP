@@ -56,7 +56,7 @@ class QueryBuilder
     /**
      * Defines the value of $from.
      */
-    public function from(string $table, ?string $alias = null): self
+    public function setFrom(string $table, ?string $alias = null): self
     {
         $this->from = "$table";
         if (null !== $alias) {
@@ -70,7 +70,7 @@ class QueryBuilder
     /**
      * Defines the left join part.
      */
-    public function leftJoin(string $table, string $condition): self
+    public function setLeftJoin(string $table, string $condition): self
     {
         $this->joins[] = "LEFT JOIN $table ON $condition";
 
@@ -80,7 +80,7 @@ class QueryBuilder
     /**
      * Defines the inner join part.
      */
-    public function innerJoin(string $table, string $condition): self
+    public function setInnerJoin(string $table, string $condition): self
     {
         $this->joins[] = "INNER JOIN $table ON $condition";
 
@@ -90,7 +90,7 @@ class QueryBuilder
     /**
      * Defines the right join part.
      */
-    public function rightJoin(string $table, string $condition): self
+    public function setRightJoin(string $table, string $condition): self
     {
         $this->joins[] = "RIGHT JOIN $table ON $condition";
 
@@ -100,7 +100,7 @@ class QueryBuilder
     /**
      * Defines the join part.
      */
-    public function join(string $table, string $condition): self
+    public function setJoin(string $table, string $condition): self
     {
         $this->joins[] = "JOIN $table ON $condition";
 
@@ -110,7 +110,7 @@ class QueryBuilder
     /**
      * Defines the value of $columnsOrder.
      */
-    public function orderBy(string $columnOrder, ?string $direction = null): self
+    public function setOrderBy(string $columnOrder, ?string $direction = null): self
     {
         $validOrder = ['DESC', 'ASC'];
         $direction = $direction ? strtoupper($direction) : 'ASC';

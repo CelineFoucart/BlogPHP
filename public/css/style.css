@@ -72,6 +72,51 @@ body {
 }
 
 /* ===================== 
+ * CARD
+/* ===================== */
+.news .date {
+	padding-bottom: 10px;
+	font-size: 0.9rem;
+	margin-bottom: 5px;
+}
+
+.news h2 {
+	color: inherit;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.content h3 {
+	margin-top: 20px;
+}
+
+.gap {
+	gap: 20px;
+}
+
+.alert p {
+	margin-bottom: 0;
+}
+
+/* ===================== 
+ * ASIDE
+/* ===================== */
+.aside {
+	padding: 0 20px;
+}
+
+aside h2 {
+	font-size: 30px;
+	color: #000;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+aside form input {
+	width: calc(100% - 38px);
+}
+
+/* ===================== 
  * HEADER
 /* ===================== */
 nav a {
@@ -118,6 +163,22 @@ nav a.nav-link {
 }
 
 /* ===================== 
+ * FOOTER
+/* ===================== */
+
+footer.main-footer {
+	padding: 25px;
+	color: #000;
+	line-height: 25px;
+	text-align: center;
+}
+
+footer.main-footer p {
+	margin: 0;
+	font-size: 14px;
+}
+
+/* ===================== 
  * MAIN SECTIONS
 /* ===================== */
 
@@ -144,10 +205,6 @@ nav a.nav-link {
 	border-left: 3px solid #6c757d;
 }
 
-.quote p:last-child {
-	margin-bottom: 0;
-}
-
 .post-footer {
 	background-color: rgba(0, 0, 0, .03);
 	border: 1px solid rgba(0, 0, 0, .125);
@@ -164,30 +221,7 @@ nav a.nav-link {
 	font-size: 15px;
 }
 
-/* ===================== 
- * CARD
-/* ===================== */
-.news .date {
-	padding-bottom: 10px;
-	font-size: 0.9rem;
-	margin-bottom: 5px;
-}
-
-.news h2 {
-	color: inherit;
-	font-weight: 700;
-	text-transform: uppercase;
-}
-
-.content h3 {
-	margin-top: 20px;
-}
-
-.gap {
-	gap: 20px;
-}
-
-.alert p {
+.quote p:last-child {
 	margin-bottom: 0;
 }
 
@@ -220,24 +254,6 @@ nav a.nav-link {
 	background-color: rgba(237, 237, 237, 0.3);
 	border-radius: 8px;
 	border: 1px solid rgba(0, 0, 0, .125);
-}
-
-/* ===================== 
- * ASIDE
-/* ===================== */
-.aside {
-	padding: 0 20px;
-}
-
-aside h2 {
-	font-size: 30px;
-	color: #000;
-	margin-top: 20px;
-	margin-bottom: 20px;
-}
-
-aside form input {
-	width: calc(100% - 38px);
 }
 
 /* ===================== 
@@ -279,22 +295,6 @@ aside form input {
 	text-decoration: none;
 	color: inherit;
 	font-size: 1.8rem;
-}
-
-/* ===================== 
- * FOOTER
-/* ===================== */
-
-footer.main-footer {
-	padding: 25px;
-	color: #000;
-	line-height: 25px;
-	text-align: center;
-}
-
-footer.main-footer p {
-	margin: 0;
-	font-size: 14px;
 }
 
 /* ===================== 

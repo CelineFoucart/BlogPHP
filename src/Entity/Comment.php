@@ -100,7 +100,7 @@ final class Comment extends AbstractEntity
     {
         if ($updatedAt instanceof DateTime) {
             $this->updatedAt = $updatedAt;
-        } elseif (is_string($updatedAt)) {
+        } elseif (is_string($updatedAt) === true) {
             $this->updatedAt = new DateTime($updatedAt);
         }
 

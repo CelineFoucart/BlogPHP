@@ -163,9 +163,9 @@ HTML;
     private function setLink(string $link, array $params): string
     {
         $parts = parse_url($link);
-        $query = isset($parts['query']) ? $parts['query'] : [];
+        $query = (isset($parts['query']) === true) ? $parts['query'] : [];
 
-        if (isset($parts['query'])) {
+        if (isset($parts['query']) === true) {
             parse_str($query, $query);
             $parts['query'] = $query;
         } else {
