@@ -94,7 +94,7 @@ final class Router
      */
     public function url(string $name, array $param = []): string
     {
-        if (isset($this->namedRoutes[$name]) === false) {
+        if (!isset($this->namedRoutes[$name])) {
             throw new RouterException("$name is not a named route");
         }
 

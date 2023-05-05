@@ -53,7 +53,7 @@ final class Route
 
     private function paramMatch($match)
     {
-        if (true === isset($this->params[$match[1]])) {
+        if (isset($this->params[$match[1]])) {
             return '('.$this->params[$match[1]].')';
         }
 
@@ -69,7 +69,7 @@ final class Route
         $path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $this->path);
         $regex = "#^$path$#i";
 
-        if (false === preg_match($regex, $url, $matches)) {
+        if (!preg_match($regex, $url, $matches)) {
             return false;
         }
         array_shift($matches);
@@ -77,12 +77,12 @@ final class Route
         $params = [];
         foreach ($this->params as $key => $value) {
             foreach ($matches as $subject) {
-                if (true === preg_match('('.$value.')', $subject)) {
+                if (preg_match('('.$value.')', $subject)) {
                     $params[$key] = $subject;
                 }
             }
         }
-
+        
         $this->matches = $params;
 
         return true;
@@ -93,7 +93,7 @@ final class Route
      */
     public function call(Router $router, ServerRequest $request)
     {
-        if (true === is_string($this->callable)) {
+        if (is_string($this->callable)) {
             $params = explode('#', $this->callable);
 
             $controller = $params[0];
@@ -105,9 +105,9 @@ final class Route
             }
 
             return $controller->$methodName($request);
+        } else {
+            return call_user_func_array($this->callable, [$request]);
         }
-
-        return call_user_func_array($this->callable, [$request]);
     }
 
     /**
