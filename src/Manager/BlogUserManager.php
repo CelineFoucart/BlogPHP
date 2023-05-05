@@ -20,7 +20,7 @@ class BlogUserManager extends AbstractManager
         $sql = $this->getQuery()
             ->select('b.id', 'b.username', 'b.email', 'b.password', 'b.attempts', 'b.last_attempt')
             ->select('r.id AS role_id', 'r.name AS role_name', 'r.alias AS role_alias')
-            ->leftJoin('user_role r', 'r.id = b.role_id')
+            ->setLeftJoin('user_role r', 'r.id = b.role_id')
             ->where('b.username = ?')
             ->toSQL()
         ;
@@ -33,7 +33,7 @@ class BlogUserManager extends AbstractManager
      */
     public function findUserList(): array
     {
-        $sql = $this->getQuery()->select('b.id AS id', 'b.username AS username')->orderBy('b.username')->toSQL();
+        $sql = $this->getQuery()->select('b.id AS id', 'b.username AS username')->setOrderBy('b.username')->toSQL();
 
         return $this->getBuilder()->fetchAll($sql);
     }

@@ -19,7 +19,7 @@ final class BlogPostManager extends AbstractManager
      */
     public function findPaginated(string $link, int $page = 1): Pagination
     {
-        $queryBuilder = $this->getDefaultQuery()->orderBy('b.updated_at', 'DESC');
+        $queryBuilder = $this->getDefaultQuery()->setOrderBy('b.updated_at', 'DESC');
         $paginator = new Paginator($queryBuilder, $this->getBuilder());
 
         return $paginator->getPagination($link, $page, PER_PAGE);
@@ -108,7 +108,7 @@ final class BlogPostManager extends AbstractManager
         return $this->getQuery()
             ->select('b.title', 'b.slug', 'b.title', 'b.id', 'b.content', 'b.description', 'b.created_at', 'b.updated_at')
             ->select('u.id AS author_id', 'u.username AS author_username')
-            ->leftJoin('blog_user u', 'u.id = b.author_id')
+            ->setLeftJoin('blog_user u', 'u.id = b.author_id')
         ;
     }
 }

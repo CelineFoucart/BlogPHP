@@ -64,7 +64,9 @@ class FormBuilder
     /**
      * Adds a field to the form.
      *
-     * @param array $options the field options (required, placeholder, label, class, errorClass, errorSectionClass, options for select fields)
+     * @param string $name    the field name
+     * @param string $type    the field type
+     * @param array  $options the field options (required, placeholder, label, class, errorClass, errorSectionClass, options for select fields)
      */
     public function addField(string $name, string $type = 'text', array $options = []): self
     {

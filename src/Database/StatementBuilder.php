@@ -93,6 +93,7 @@ class StatementBuilder
      * Defines the fetch mode.
      *
      * @param PDOStatement|false $query
+     * @param string             $mode  the fetch mode, as array, assoc or class
      *
      * @return PDOStatement|false
      */

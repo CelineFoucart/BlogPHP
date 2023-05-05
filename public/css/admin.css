@@ -238,7 +238,6 @@ blockquote {
 
 /* table responsive */
 @media (max-width: 991px) {
-
     .table-responsive thead,
     .table-responsive th {
         display: none;

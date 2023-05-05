@@ -88,6 +88,8 @@ class BbcodeExtension extends AbstractExtension
 
     /**
      * @inheritDoc
+     * 
+     * @return TwigFilter[]
      */
     public function getFilters()
     {
@@ -134,5 +136,4 @@ class BbcodeExtension extends AbstractExtension
 
         return $text;
     }
-    
 }

@@ -114,7 +114,7 @@ abstract class AbstractController
             $entityClass = $managerNameParts[0];
         }
 
-        if (!$table) {
+        if ($table === null) {
             $tableNameParts = preg_split('/(?=[A-Z])/', $entityClass);
             $table = join('_', $tableNameParts);
             $table = strtolower(trim($table, '_'));
