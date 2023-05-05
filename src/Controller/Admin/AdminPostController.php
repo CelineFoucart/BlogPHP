@@ -35,7 +35,7 @@ class AdminPostController extends AbstractController
         parent::__construct($router);
         $this->postManager = $this->getManager(BlogPostManager::class);
 
-        if (!$this->auth->isAdmin()) {
+        if ($this->auth->isAdmin() === false) {
             $this->createForbidderException('Vous ne pouvez pas consulter cette page.');
         }
     }

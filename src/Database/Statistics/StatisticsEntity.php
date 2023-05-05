@@ -31,6 +31,8 @@ class StatisticsEntity
 
     /**
      * Gets the sql query. The query counts the id as counts and returned the table name as element.
+     * 
+     * @return string the SQL query
      */
     public function getQuery(): string
     {

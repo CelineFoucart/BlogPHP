@@ -21,6 +21,9 @@ class PathExtension extends AbstractExtension
     ) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getFunctions()
     {
         return [
@@ -30,6 +33,8 @@ class PathExtension extends AbstractExtension
 
     /**
      * Get a url from a route name.
+     *
+     * @return string the url generated
      */
     public function getPath(string $name, array $params = []): string
     {

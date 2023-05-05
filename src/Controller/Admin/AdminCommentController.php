@@ -34,7 +34,7 @@ class AdminCommentController extends AbstractController
         parent::__construct($router);
         $this->commentManager = $this->getManager(CommentManager::class);
 
-        if (!$this->auth->isAdmin()) {
+        if ($this->auth->isAdmin() === false) {
             $this->createForbidderException('Vous ne pouvez pas consulter cette page.');
         }
     }

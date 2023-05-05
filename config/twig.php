@@ -8,6 +8,6 @@ return [
     'twig_variables' => [
         'website_name' => 'Céline Foucart',
         'website_description' => "Développeuse web fullstack",
-        'request_uri' => isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/',
+        'request_uri' => (isset($_SERVER['REQUEST_URI']) === true) ? $_SERVER['REQUEST_URI'] : '/',
     ],
 ];

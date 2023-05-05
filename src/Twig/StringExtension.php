@@ -12,6 +12,9 @@ use Twig\TwigFunction;
  */
 class StringExtension extends AbstractExtension
 {
+    /**
+     * @inheritDoc
+     */
     public function getFunctions()
     {
         return [
@@ -30,6 +33,7 @@ class StringExtension extends AbstractExtension
         if (strlen($text) <= $length) {
             return $text;
         }
+        
         $excerpt = mb_substr($text, 0, $length);
         $last = mb_strripos($excerpt, ' ');
 

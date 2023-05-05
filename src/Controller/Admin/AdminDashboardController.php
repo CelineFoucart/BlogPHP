@@ -10,7 +10,7 @@ use App\Database\Statistics\StatisticsHandler;
 use App\Manager\CommentManager;
 use Psr\Http\Message\ResponseInterface;
 
-/** 
+/**
  * AdminDashboardController generates the admin dashboard page.
  */
 class AdminDashboardController extends AbstractController
@@ -20,10 +20,10 @@ class AdminDashboardController extends AbstractController
      */
     public function dashboard(): ResponseInterface
     {
-        if (!$this->auth->logged()) {
+        if ($this->auth->logged() === false) {
             return $this->redirect('app_login');
         }
-        if (!$this->auth->isAdmin()) {
+        if ($this->auth->isAdmin() === false) {
             $this->createForbidderException('Vous ne pouvez pas consulter cette page.');
         }
 
@@ -41,5 +41,4 @@ class AdminDashboardController extends AbstractController
             'stats' => $stats,
         ]);
     }
-    
 }

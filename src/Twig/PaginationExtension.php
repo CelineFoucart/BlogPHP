@@ -13,6 +13,9 @@ use Twig\TwigFunction;
  */
 class PaginationExtension extends AbstractExtension
 {
+    /**
+     * @inheritDoc
+     */
     public function getFunctions()
     {
         return [

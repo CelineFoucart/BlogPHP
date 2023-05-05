@@ -73,18 +73,18 @@ class CsrfManager
     {
         if (in_array($request->getMethod(), ['POST', 'PUT', 'DELETE'])) {
             $params = $request->getParsedBody() ?: [];
-            if (!array_key_exists($this->formKey, $params)) {
+            if (false === array_key_exists($this->formKey, $params)) {
                 $this->reject();
-            } else {
-                $csrfList = $this->session->get($this->sessionKey) ?? [];
-                if (in_array($params[$this->formKey], $csrfList) === true) {
-                    $this->useToken($params[$this->formKey]);
-
-                    return true;
-                } else {
-                    $this->reject();
-                }
             }
+
+            $csrfList = $this->session->get($this->sessionKey) ?? [];
+            if (true === in_array($params[$this->formKey], $csrfList)) {
+                $this->useToken($params[$this->formKey]);
+
+                return true;
+            }
+
+            $this->reject();
         }
 
         return true;
@@ -121,6 +121,7 @@ class CsrfManager
         if (count($tokens) > $this->limit) {
             array_shift($tokens);
         }
+
         $this->session->set($this->sessionKey, $tokens);
     }
 
@@ -132,6 +133,7 @@ class CsrfManager
         $tokens = array_filter($this->session->get($this->sessionKey), function ($tokenInSession) use ($token) {
             return $token !== $tokenInSession;
         });
+
         $this->session->set($this->sessionKey, $tokens);
     }
 

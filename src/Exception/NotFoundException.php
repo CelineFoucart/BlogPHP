@@ -12,11 +12,15 @@ use Throwable;
  */
 final class NotFoundException extends Exception
 {
+    /**
+     * {@inheritDoc}
+     */
     public function __construct(string $message = '', Throwable $previous = null)
     {
         if ('' === $message) {
             $message = "Cette page n'existe pas.";
         }
+        
         parent::__construct($message, 404, $previous);
     }
 }

@@ -21,6 +21,9 @@ class CsrfExtension extends AbstractExtension
     ) {
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getFunctions()
     {
         return [
