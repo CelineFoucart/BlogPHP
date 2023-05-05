@@ -183,8 +183,8 @@ class AdminPostController extends AbstractController
      */
     private function getPost(ServerRequest $request): BlogPost
     {
-        $id = $request->getAttribute('id');
-        $blogPost = $this->postManager->findById((int) $id);
+        $postId = $request->getAttribute('id');
+        $blogPost = $this->postManager->findById((int) $postId);
 
         if (null === $blogPost) {
             $this->createNotFoundException("Cet article n'existe pas.");

@@ -55,7 +55,7 @@ class CommentManager extends AbstractManager
         $sql = $this->getDefaultQuery()
             ->select('b.id AS post_id', 'b.title AS post_title', 'b.slug AS post_slug')
             ->leftJoin('blog_post b', 'b.id = c.post_id')
-            ->limit($limit)
+            ->setLimit($limit)
             ->where(('c.is_validated = 0'))
             ->toSQL()
         ;

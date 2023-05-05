@@ -41,7 +41,7 @@ class Paginator
         $this->current = $this->setCurrent((int) $current);
         $offset = $this->perPage * ($this->current - 1);
         $offset = ($offset < 0) ? 0 : $offset;
-        $sql = $this->queryBuilder->limit($this->perPage)->offset($offset)->toSQL();
+        $sql = $this->queryBuilder->setLimit($this->perPage)->setOffset($offset)->toSQL();
         $elements = $this->statementBuilder->fetchAll($sql, $this->queryBuilder->getParams());
 
         return (new Pagination())

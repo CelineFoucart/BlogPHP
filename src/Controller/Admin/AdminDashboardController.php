@@ -41,4 +41,5 @@ class AdminDashboardController extends AbstractController
             'stats' => $stats,
         ]);
     }
+    
 }

@@ -221,7 +221,7 @@ class FormBuilder
             }
         }
 
-        $otherMessages = (!empty($errors)) ? '<p>'.join('<br>', $errorsWithNotFields).'</p>' : '';
+        $otherMessages = (!empty($errorsWithNotFields)) ? '<p>'.join('<br>', $errorsWithNotFields).'</p>' : '';
 
         return '<div class="alert alert-danger">'.$message.$otherMessages.'</div>';
     }

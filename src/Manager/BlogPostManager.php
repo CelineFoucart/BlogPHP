@@ -38,11 +38,11 @@ final class BlogPostManager extends AbstractManager
     /**
      * Returns a blog post if the id is found in the database.
      */
-    public function findById(int $id): ?BlogPost
+    public function findById(int $postId): ?BlogPost
     {
         $sql = $this->getDefaultQuery()->where('b.id = ?')->toSQL();
 
-        return $this->getBuilder()->fetch($sql, [$id]);
+        return $this->getBuilder()->fetch($sql, [$postId]);
     }
 
     /**

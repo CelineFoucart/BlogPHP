@@ -166,8 +166,8 @@ class AdminCommentController extends AbstractController
      */
     private function getComment(ServerRequest $request): Comment
     {
-        $id = $request->getAttribute('id');
-        $comment = $this->commentManager->findById((int) $id);
+        $commentId = $request->getAttribute('id');
+        $comment = $this->commentManager->findById((int) $commentId);
 
         if (null === $comment) {
             $this->createNotFoundException("Ce commentaire n'existe pas.");

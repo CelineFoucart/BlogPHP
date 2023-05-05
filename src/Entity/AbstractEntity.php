@@ -7,6 +7,7 @@ namespace App\Entity;
  */
 abstract class AbstractEntity
 {
+    
     protected ?int $id = null;
 
     /**

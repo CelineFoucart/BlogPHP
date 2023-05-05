@@ -3,6 +3,7 @@
 /*
  * This file provides global variables for Twig.
  */
+
 return [
     'website_name' => 'Céline Foucart',
     'twig_variables' => [

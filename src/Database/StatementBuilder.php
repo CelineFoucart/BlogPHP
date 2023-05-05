@@ -13,6 +13,9 @@ class StatementBuilder
 {
     private PDO $pdo;
 
+    /**
+     * The entity name to hydrate.
+     */
     private ?string $entity = null;
 
     public function __construct(?string $entity, PDO $pdo)

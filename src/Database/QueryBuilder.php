@@ -126,7 +126,7 @@ class QueryBuilder
     /**
      * Defines the value of $limit.
      */
-    public function limit(int $limit): self
+    public function setLimit(int $limit): self
     {
         $this->limit = $limit;
 
@@ -136,7 +136,7 @@ class QueryBuilder
     /**
      * Defines the value of $offset.
      */
-    public function offset(int $offset): self
+    public function setOffset(int $offset): self
     {
         $this->offset = $offset;
 

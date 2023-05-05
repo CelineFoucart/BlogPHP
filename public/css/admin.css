@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     height: 100vh;
 }
 
@@ -7,7 +8,7 @@ html, body {
 }
 
 .sceditor-container {
-	z-index: 4000;
+    z-index: 4000;
 }
 
 .modal-backdrop {
@@ -23,7 +24,7 @@ html, body {
     z-index: 3000;
     padding: 1rem 0;
     background-color: #343a40;
-    box-shadow: 0 14px 28px rgba(0,0,0,.25),0 10px 10px rgba(0,0,0,.22);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, .25), 0 10px 10px rgba(0, 0, 0, .22);
 }
 
 .wrapper {
@@ -74,21 +75,22 @@ html, body {
     background-color: transparent;
 }
 
-.sidebar .nav-item .nav-link, .nav-item {
+.sidebar .nav-item .nav-link,
+.nav-item {
     color: #fff;
 }
 
 .sidebar .nav-item {
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 }
 
 .sidebar .nav-item:hover {
-    background-color: rgba(255,255,255,.1);
+    background-color: rgba(255, 255, 255, .1);
 }
 
 .sidebar .nav-item.active {
     position: relative;
-    background-color: rgba(255,255,255,.1);
+    background-color: rgba(255, 255, 255, .1);
 }
 
 .sidebar .nav-item.active::before {
@@ -179,25 +181,27 @@ h1 {
 }
 
 /* Pagination */
-.button-outline, .button:hover {
-	color: #0d6efd;
-	background: transparent;
-	text-decoration: none;
-	border: 1px solid #0d6efd;
+.button-outline,
+.button:hover {
+    color: #0d6efd;
+    background: transparent;
+    text-decoration: none;
+    border: 1px solid #0d6efd;
 }
 
-.button-outline:hover, .outline-active {
-	color: #fff !important;
-	border-color: #0d6efd;
-	background: #0d6efd;
+.button-outline:hover,
+.outline-active {
+    color: #fff;
+    border-color: #0d6efd;
+    background: #0d6efd;
 }
 
 .navigation {
-	height: 38px;
+    height: 38px;
 }
 
 .btn-group .init {
-	width: 120px;
+    width: 120px;
 }
 
 .alert p {
@@ -219,14 +223,14 @@ blockquote {
 .truncate-full {
     border-radius: 8px;
     background-color: #fff;
-    border: 1px solid rgba(0,0,0,.1);
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+    border: 1px solid rgba(0, 0, 0, .1);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .15);
     padding: 0.25rem;
     display: none;
     z-index: 1000;
 }
 
-.truncate-title:hover + .truncate-full {
+.truncate-title:hover+.truncate-full {
     display: block;
     position: absolute;
     top: 90%;
@@ -234,9 +238,12 @@ blockquote {
 
 /* table responsive */
 @media (max-width: 991px) {
-    .table-responsive thead, .table-responsive th {
+
+    .table-responsive thead,
+    .table-responsive th {
         display: none;
     }
+
     .table-responsive tr {
         display: block;
     }

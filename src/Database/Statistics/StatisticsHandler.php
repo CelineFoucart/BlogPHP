@@ -21,7 +21,8 @@ class StatisticsHandler
 
     public function __construct()
     {
-        $this->builder = new StatementBuilder(null, Database::getPDO());
+        $pdo = Database::getPDO();
+        $this->builder = new StatementBuilder(null, $pdo);
     }
 
     /**
