@@ -7,9 +7,7 @@
 
 define('ENV', 'dev');
 
-/**
- * Database configurations
- */
+/* Database configurations */
 define('DB_HOST', 'localhost');
 
 define('DB_NAME', 'blog_php');
@@ -18,12 +16,8 @@ define('DB_USER', 'root');
 
 define('DB_PASSWORD', '');
 
-/**
- * Email contact
- */
+/* Email contact */
 define('CONTACT_EMAIL', 'contact@celine-foucart.com');
 
-/**
- * Pagination configuration
- */
+/* Pagination configuration */
 define('PER_PAGE', 12);
