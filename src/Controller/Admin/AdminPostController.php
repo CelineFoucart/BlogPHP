@@ -35,7 +35,7 @@ class AdminPostController extends AbstractController
         parent::__construct($router);
         $this->postManager = $this->getManager(BlogPostManager::class);
 
-        if ($this->auth->isAdmin() === false) {
+        if (false === $this->auth->isAdmin()) {
             $this->createForbidderException('Vous ne pouvez pas consulter cette page.');
         }
     }
@@ -89,7 +89,7 @@ class AdminPostController extends AbstractController
             if ('POST' === $request->getMethod()) {
                 $this->csrf->process($request);
                 $data = $request->getParsedBody();
-                $errors = $this->validateForm($data, false, array_keys($users));
+                $errors = $this->validateForm($data, false, $users);
 
                 if (empty($errors)) {
                     $blogPost
@@ -132,7 +132,7 @@ class AdminPostController extends AbstractController
             if ('POST' === $request->getMethod()) {
                 $this->csrf->process($request);
                 $data = $request->getParsedBody();
-                $errors = $this->validateForm($data, true, array_keys($users));
+                $errors = $this->validateForm($data, true, $users);
 
                 if (empty($errors)) {
                     $userId = $this->auth->getUserId();
@@ -222,14 +222,24 @@ class AdminPostController extends AbstractController
 
     /**
      * Validates a post form submitted.
+     *
+     * @param array      $data          the data  to validate
+     * @param bool       $isforCreation check if the post is edited or not
+     * @param BlogPost[] $users         an array of available authors
      */
-    private function validateForm(array $data, bool $isforCreation = false, array $usersIds = []): array
+    private function validateForm(array $data, bool $isforCreation = false, array $users = []): array
     {
+        $validUsers = [];
+        foreach ($users as $user) {
+            $validUsers[] = (string)$user->getId();
+        }
+
         $validator = (new Validator($data))
             ->checkLength('title', 3, 150)
             ->checkLength('slug', 3, 200)
             ->checkLength('content', 3, 20000)
             ->checkLength('description', 3, 255)
+            ->selectIsValid('author', $validUsers)
             ->slug('slug')
         ;
 
