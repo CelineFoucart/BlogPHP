@@ -2,7 +2,7 @@
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/062c6e63a89e47be9f482c26526b3279)](https://app.codacy.com/gh/CelineFoucart/BlogPHP/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
-This project is a small blog developped with PHP, as part of the Openclassrooms Program PHP/Symfony.
+This project is a small blog developed with PHP, as part of the Openclassrooms Program PHP/Symfony.
 
 ## Getting Started
 
